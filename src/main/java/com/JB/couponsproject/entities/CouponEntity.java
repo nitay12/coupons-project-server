@@ -29,7 +29,7 @@ public class CouponEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name="companyID", nullable = false)
+    @Column(name="company_id", nullable = false)
     private long companyID;
     @Column(name="category", nullable = false)
     private Category category;
@@ -37,9 +37,9 @@ public class CouponEntity {
     private String title;
     @Column(name="description", nullable = false)
     private String description;
-    @Column(name="startDate", nullable = false)
+    @Column(name="start_date", nullable = false)
     private LocalDate startDate;
-    @Column(name="endDate", nullable = false)
+    @Column(name="end_date", nullable = false)
     private LocalDate endDate;
     @Column(name="amount", nullable = false)
     private int amount;

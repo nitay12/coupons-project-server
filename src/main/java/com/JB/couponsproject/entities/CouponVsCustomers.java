@@ -4,17 +4,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
+@Entity
 @Table
 @Data
 @NoArgsConstructor
-public class CouponVsCustomers {
+public class CouponVsCustomers implements Serializable {
 
+    @Id
     @ManyToOne
-    @JoinColumn(name="couponID",referencedColumnName = "id", nullable = false)
+    @JoinColumn(name="coupon_iD",referencedColumnName = "id", nullable = false)
     public CouponEntity coupon;
 
+    @Id
     @ManyToOne
-    @JoinColumn(name="customerId",referencedColumnName = "id",nullable = false )
+    @JoinColumn(name="customer_id",referencedColumnName = "id",nullable = false )
     public CustomerEntity customer;
 }
