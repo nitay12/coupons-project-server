@@ -1,4 +1,4 @@
 package com.JB.couponsproject.entities;
 
-public class Company {
+public class CustomerEntity {
 }

@@ -2,7 +2,8 @@ package com.JB.couponsproject.dto;
 
 import com.JB.couponsproject.enums.Category;
 
-import java.sql.Date;
+import java.time.LocalDate;
+
 /**
  * A data transfer object for the coupon entity
  */
@@ -12,8 +13,8 @@ public class CouponDto {
     private Category category;
     private String title;
     private String description;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private int amount;
     private double price;
     private String image;
