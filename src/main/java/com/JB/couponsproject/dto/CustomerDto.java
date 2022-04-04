@@ -1,19 +1,19 @@
 package com.JB.couponsproject.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * A data transfer object for the company entity
+ * A data transfer object for the customer entity
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompanyDto {
+public class CustomerDto {
     private long id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
 }
