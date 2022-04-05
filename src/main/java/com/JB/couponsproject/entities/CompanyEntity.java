@@ -1,10 +1,10 @@
 package com.JB.couponsproject.entities;
+
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(name = "companies")
@@ -22,16 +22,24 @@ public class CompanyEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name="name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name="email", nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
-    @Column(name="password", nullable = false)
+    @Column(name = "password", nullable = false)
     private int password;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "companyEntity")
-    private List<CouponEntity> coupons;
+    //TODO: Check if the coupons list is needed
+//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "companyEntity")
+//    private List<CouponEntity> coupons;
 
+    //    public List<CouponEntity> getCoupons() {
+//        return coupons;
+//    }
+//
+//    public void setCoupons(List<CouponEntity> coupons) {
+//        this.coupons = coupons;
+//    }
     public long getId() {
         return id;
     }
@@ -64,11 +72,4 @@ public class CompanyEntity implements Serializable {
         this.password = password;
     }
 
-    public List<CouponEntity> getCoupons() {
-        return coupons;
-    }
-
-    public void setCoupons(List<CouponEntity> coupons) {
-        this.coupons = coupons;
-    }
 }
