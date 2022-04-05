@@ -48,10 +48,6 @@ public class MockDataInserter {
                     "customer" + i + "@email.com",
                     "123456"
             ));
-            couponVsCustomersRepository.save(new CouponVsCustomers(
-                    newCoupon,
-                    newCustomer
-            ));
         }
     }
 }
