@@ -1,15 +1,16 @@
 package com.JB.couponsproject.entities;
-
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "companies")
-@Data
 @NoArgsConstructor
-public class CompanyEntity {
+@ToString
+public class CompanyEntity implements Serializable {
 
     public CompanyEntity(String name, String email, String password) {
         this.name = name;
@@ -28,5 +29,46 @@ public class CompanyEntity {
     @Column(name="password", nullable = false)
     private int password;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "companyEntity")
+    private List<CouponEntity> coupons;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getPassword() {
+        return password;
+    }
+
+    public void setPassword(int password) {
+        this.password = password;
+    }
+
+    public List<CouponEntity> getCoupons() {
+        return coupons;
+    }
+
+    public void setCoupons(List<CouponEntity> coupons) {
+        this.coupons = coupons;
+    }
 }
