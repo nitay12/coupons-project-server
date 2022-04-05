@@ -33,6 +33,7 @@ public class CouponEntity implements Serializable {
     @JoinColumn(name="company_id")
     private CompanyEntity companyEntity;
     @Column(name="category", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Category category;
     @Column(name="title", nullable = false)
     private String title;
