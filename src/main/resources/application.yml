@@ -1,5 +1,9 @@
+logging:
+  level:
+    root: INFO
 spring:
   jpa:
+    debug: true
     database: mysql
     hibernate:
       ddl-auto: create

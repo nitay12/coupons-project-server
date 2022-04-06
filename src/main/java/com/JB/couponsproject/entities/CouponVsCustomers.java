@@ -5,20 +5,16 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 @Entity
-@Table(name="coupons_vs_customers")
+@Table(name = "coupons_vs_customers")
 @AllArgsConstructor
 @NoArgsConstructor
-@IdClass(CouponCustomerID.class)
 public class CouponVsCustomers {
-    @Id
+    @ManyToOne
+    @JoinColumn(name = "couponID", referencedColumnName = "id", nullable = false)
     private Long customerId;
-    @Id
+    @ManyToOne
+    @JoinColumn(name = "customerId", referencedColumnName = "id", nullable = false)
     private Long couponId;
-
-    public CouponVsCustomers(CouponCustomerID couponCustomerID) {
-        this.customerId = couponCustomerID.getCustomerId();
-        this.couponId = couponCustomerID.getCouponId();
-    }
 
     public Long getCustomerId() {
         return customerId;

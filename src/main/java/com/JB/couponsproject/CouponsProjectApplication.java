@@ -10,8 +10,8 @@ public class CouponsProjectApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(CouponsProjectApplication.class, args);
-		final MockDataInserter mockDataInserter = ctx.getBean(MockDataInserter.class);
-		mockDataInserter.insert();
+//		final MockDataInserter mockDataInserter = ctx.getBean(MockDataInserter.class);
+//		mockDataInserter.insert();
 	}
 
 }

@@ -20,12 +20,10 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity,Long> {
 
     boolean existsByName(String name);
 
-    ArrayList<CompanyEntity> getCompaniesArrayList();
-
-    void deleteByID(long companyId);
-
-    @Modifying(clearAutomatically = true)
-    @Query("UPDATE companies SET password = :password WHERE id = :companyId")
-    public void updateCompany(@Param("password") int password, @Param("companyId") int companyId);
+//    ArrayList<CompanyEntity> getCompaniesArrayList();
+//
+//    @Modifying(clearAutomatically = true)
+//    @Query("UPDATE companies SET password = :password WHERE id = :companyId")
+//    public void updateCompany(@Param("password") int password, @Param("companyId") int companyId);
 
 }
