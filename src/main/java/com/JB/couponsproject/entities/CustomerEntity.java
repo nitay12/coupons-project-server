@@ -35,7 +35,7 @@ public class CustomerEntity {
             joinColumns = @JoinColumn(name="customer_id"),
             inverseJoinColumns = @JoinColumn(name = "coupon_id")
     )
-    private List<CouponEntity> coupons;
+    private List<CouponEntity> coupons = new ArrayList<>();
 
     public void purchaseCoupon(CouponEntity coupon){
         coupons.add(coupon);
