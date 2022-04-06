@@ -2,25 +2,23 @@ package com.JB.couponsproject.util;
 
 import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CouponEntity;
-import com.JB.couponsproject.entities.CouponVsCustomers;
 import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.repositories.CompanyRepository;
 import com.JB.couponsproject.repositories.CouponRepository;
-import com.JB.couponsproject.repositories.CouponVsCustomersRepository;
 import com.JB.couponsproject.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
-//@Component
+@Component
 @RequiredArgsConstructor
 public class MockDataInserter {
     final CompanyRepository companyRepository;
     final CouponRepository couponRepository;
     final CustomerRepository customerRepository;
-    final CouponVsCustomersRepository couponVsCustomersRepository;
+//    final CouponVsCustomersRepository couponVsCustomersRepository;
 
     public void insert() {
         for (int i = 1; i <= 10; i++) {
@@ -48,6 +46,8 @@ public class MockDataInserter {
                     "customer" + i + "@email.com",
                     "123456"
             ));
+            newCustomer.purchaseCoupon(newCoupon);
+            customerRepository.save(newCustomer);
         }
     }
 }

@@ -49,7 +49,7 @@ public class CouponEntity implements Serializable {
     @Column(name = "image")
     private String image;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

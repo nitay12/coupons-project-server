@@ -3,6 +3,8 @@ package com.JB.couponsproject.entities;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "customers")
@@ -19,7 +21,6 @@ public class CustomerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name="first_name", nullable = false)
     private String firstName;
     @Column(name="last_name", nullable = false)
@@ -28,8 +29,17 @@ public class CustomerEntity {
     private String email;
     @Column(name="password", nullable = false)
     private int password;
-
-    public long getId() {
+    @ManyToMany
+    @JoinTable(
+            name="coupon_vs_customer",
+            joinColumns = @JoinColumn(name="customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "coupon_id")
+    )
+    private List<CouponEntity> coupons = new ArrayList<>();
+    public void purchaseCoupon(CouponEntity coupon){
+        coupons.add(coupon);
+    }
+    public Long getId() {
         return id;
     }
 
