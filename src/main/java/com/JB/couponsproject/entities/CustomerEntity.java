@@ -29,13 +29,14 @@ public class CustomerEntity {
     private String email;
     @Column(name="password", nullable = false)
     private int password;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade =  { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name="coupon_vs_customer",
             joinColumns = @JoinColumn(name="customer_id"),
             inverseJoinColumns = @JoinColumn(name = "coupon_id")
     )
-    private List<CouponEntity> coupons = new ArrayList<>();
+    private List<CouponEntity> coupons;
+
     public void purchaseCoupon(CouponEntity coupon){
         coupons.add(coupon);
     }
