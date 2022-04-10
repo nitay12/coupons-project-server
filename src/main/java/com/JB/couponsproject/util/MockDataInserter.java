@@ -29,7 +29,7 @@ public class MockDataInserter {
             ));
             final CouponEntity newCoupon = couponRepository.save(
                     new CouponEntity(
-                            newCompany,
+                            newCompany.getId(),
                             Category.ELECTRICITY,
                             "title",
                             "desc",
