@@ -1,9 +1,8 @@
 package com.JB.couponsproject.entities;
 
 import com.JB.couponsproject.enums.Category;
-import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -13,8 +12,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class CouponEntity implements Serializable {
 
-    public CouponEntity(CompanyEntity companyEntity, Category category, String title, String description, LocalDate startDate, LocalDate endDate, int amount, double price, String image) {
-        this.companyEntity = companyEntity;
+    public CouponEntity(Long companyId, Category category, String title, String description, LocalDate startDate, LocalDate endDate, int amount, double price, String image) {
+        this.companyId = companyId;
         this.category = category;
         this.title = title;
         this.description = description;
@@ -29,25 +28,36 @@ public class CouponEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="company_id")
-    private CompanyEntity companyEntity;
-    @Column(name="category", nullable = false)
+    @Column(name = "company_id")
+    private Long companyId;
+    @Column(name = "category", nullable = false)
     @Enumerated(EnumType.STRING)
     private Category category;
     @Column(name="title", nullable = false)
     private String title;
     @Column(name="description", nullable = false)
     private String description;
-    @Column(name="start_date", nullable = false)
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
-    @Column(name="end_date", nullable = false)
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
-    @Column(name="amount", nullable = false)
+    @Column(name = "amount", nullable = false)
     private int amount;
-    @Column(name="price", nullable = false)
+    @Column(name = "price", nullable = false)
     private double price;
     @Column(name = "image")
     private String image;
+
+    public CouponEntity(Category category, String title, String description, LocalDate startDate, LocalDate endDate, int amount, double price, String image) {
+        this.category = category;
+        this.title = title;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.amount = amount;
+        this.price = price;
+        this.image = image;
+    }
 
     public Long getId() {
         return id;
@@ -57,12 +67,13 @@ public class CouponEntity implements Serializable {
         this.id = id;
     }
 
-    public CompanyEntity getCompanyEntity() {
-        return companyEntity;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setCompanyEntity(CompanyEntity companyEntity) {
-        this.companyEntity = companyEntity;
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public Category getCategory() {
