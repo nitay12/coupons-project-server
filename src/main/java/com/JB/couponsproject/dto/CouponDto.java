@@ -1,15 +1,21 @@
 package com.JB.couponsproject.dto;
 
 import com.JB.couponsproject.enums.Category;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 /**
  * A data transfer object for the coupon entity
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CouponDto {
-    private long id;
-    private long companyID;
+    private Long id;
+    private Long companyID;
     private Category category;
     private String title;
     private String description;
@@ -19,4 +25,14 @@ public class CouponDto {
     private double price;
     private String image;
 
+    public CouponDto(Category category, String title, String description, LocalDate startDate, LocalDate endDate, int amount, double price, String image) {
+        this.category = category;
+        this.title = title;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.amount = amount;
+        this.price = price;
+        this.image = image;
+    }
 }
