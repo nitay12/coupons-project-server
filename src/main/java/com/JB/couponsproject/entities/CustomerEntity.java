@@ -40,6 +40,7 @@ public class CustomerEntity {
     public void purchaseCoupon(CouponEntity coupon){
         coupons.add(coupon);
     }
+
     public Long getId() {
         return id;
     }

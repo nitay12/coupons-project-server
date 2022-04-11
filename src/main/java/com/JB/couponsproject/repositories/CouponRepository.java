@@ -20,11 +20,11 @@ public interface CouponRepository extends JpaRepository<CouponEntity,Long> {
     List<CouponEntity> getCustomerCoupons(long customerID);
 
     @Query(value = "SELECT * FROM coupons AS c JOIN coupon_vs_customers AS cc" +
-                   " ON c.id = cc.coupon_id WHERE cc.customer_id = ?1", nativeQuery = true)
+                   " ON c.id = cc.coupon_id WHERE cc.customer_id = ?1 AND c.category = ?2", nativeQuery = true)
     List<CouponEntity> getCustomerCouponsByCategory(long customerID, Category category);
 
     @Query(value = "SELECT * FROM coupons AS c JOIN coupon_vs_customers AS cc" +
-                   " ON c.id = cc.coupon_id WHERE cc.customer_id = ?1", nativeQuery = true)
+                   " ON c.id = cc.coupon_id WHERE cc.customer_id = ?1 And c.price <= ?2", nativeQuery = true)
     List<CouponEntity> findCustomerCouponsByPriceLessThan(long customerID, double maxPrice);
 
     @Query(value = "SELECT * FROM coupons AS c WHERE " +
@@ -35,7 +35,4 @@ public interface CouponRepository extends JpaRepository<CouponEntity,Long> {
                    "c.company_id = ?1", nativeQuery = true)
     List<CouponEntity> getCompanyCouponsByCategory(long companyID, Category category);
 
-    @Query(value = "SELECT * FROM coupons AS c WHERE " +
-                   "c.company_id = ?1", nativeQuery = true)
-    List<CouponEntity> getCompanyCouponsByPriceLessThan(long companyID, double maxPrice);
 }
