@@ -7,12 +7,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CustomerRepository extends JpaRepository<CustomerEntity,Long> {
 
-    CustomerEntity getDetailById(long customerId);
-
-    CustomerEntity getDetailByEmail(String email);
+    CustomerEntity findByEmail(String email);
 
     boolean existsByEmailAndPassword(String email,String password);
-
+    boolean existsByCouponsId(long id);
     boolean existsByEmail(String email);
 
 //    @Modifying(clearAutomatically = true)
