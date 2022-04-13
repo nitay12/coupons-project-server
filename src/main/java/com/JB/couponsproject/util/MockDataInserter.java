@@ -4,9 +4,11 @@ import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.Category;
+import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.repositories.CompanyRepository;
 import com.JB.couponsproject.repositories.CouponRepository;
 import com.JB.couponsproject.repositories.CustomerRepository;
+import com.JB.couponsproject.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +20,10 @@ public class MockDataInserter {
     final CompanyRepository companyRepository;
     final CouponRepository couponRepository;
     final CustomerRepository customerRepository;
+    final CustomerService customerService;
 //    final CouponVsCustomersRepository couponVsCustomersRepository;
 
-    public void insert() {
+    public void insert() throws ApplicationException {
         for (int i = 1; i <= 10; i++) {
             final CompanyEntity newCompany = companyRepository.save(new CompanyEntity(
                     "company" + i,
@@ -46,7 +49,7 @@ public class MockDataInserter {
                     "customer" + i + "@email.com",
                     "123456"
             ));
-            newCustomer.purchaseCoupon(newCoupon);
+            customerService.purchaseCoupon(newCoupon.getId(),newCustomer.getId());
             customerRepository.save(newCustomer);
         }
     }

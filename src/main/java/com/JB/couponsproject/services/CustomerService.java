@@ -48,7 +48,7 @@ public class CustomerService {
 
     //Methods: purchaseCoupon
     //verify values: coupon id exist, user id exist, user coupon relation wasn't established yet
-    public CustomerDto purchaseCoupon(final Long couponId, final Long customerId) throws ApplicationException {
+    public void purchaseCoupon(final Long couponId, final Long customerId) throws ApplicationException {
         final Optional<CouponEntity> tmpCoupon = couponRepository.findById(couponId);
         if (tmpCoupon.isEmpty()){
             throw new ApplicationException("Coupon doesn't exist in the system.");
@@ -67,7 +67,8 @@ public class CustomerService {
         CustomerEntity customer = tmpCustomer.get();
         customer.getCoupons().add(coupon);
         coupon.setAmount(coupon.getAmount()-1);
-        return ObjectMappingUtil.customerEntityToDto(customerRepository.save(customer));
+        //customer.purchaseCoupon(coupon);
+        ObjectMappingUtil.customerEntityToDto(customerRepository.save(customer));
 
     }
 
