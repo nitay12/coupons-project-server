@@ -38,9 +38,7 @@ public class CouponsProjectApplication {
 					10,
 					"url"
 			);
-			System.out.println(companyService.addCoupon(
-					ObjectMappingUtil.couponDtoToEntity(testCouponDto)
-			));
+			System.out.println(companyService.addCoupon(testCouponDto));
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 		}

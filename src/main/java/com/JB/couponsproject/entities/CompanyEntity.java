@@ -1,11 +1,15 @@
 package com.JB.couponsproject.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
+@Builder
+@AllArgsConstructor
 @Entity
 @Table(name = "companies")
 @NoArgsConstructor

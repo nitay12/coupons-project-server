@@ -2,12 +2,14 @@ package com.JB.couponsproject.dto;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
  * A data transfer object for the company entity
  */
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

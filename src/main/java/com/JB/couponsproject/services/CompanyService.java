@@ -1,5 +1,6 @@
 package com.JB.couponsproject.services;
 
+import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.exceptions.ApplicationException;
@@ -8,6 +9,7 @@ import com.JB.couponsproject.exceptions.WrongCertificationsException;
 import com.JB.couponsproject.repositories.CompanyRepository;
 import com.JB.couponsproject.repositories.CouponRepository;
 import com.JB.couponsproject.repositories.CustomerRepository;
+import com.JB.couponsproject.util.ObjectMappingUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,20 +39,42 @@ public class CompanyService {
             throw new WrongCertificationsException("Wrong email or password");
     }
 
-    public Long addCoupon(CouponEntity coupon) throws ApplicationException {
+    public long addCoupon(CouponDto couponDto) throws ApplicationException {
         //Verifications
         //Same title
-        final List<CouponEntity> companyCoupons = couponRepository.getCompanyCoupons(companyId);
-        for (CouponEntity companyCoupon :
-                companyCoupons) {
-            if (companyCoupon.getTitle().equalsIgnoreCase(coupon.getTitle())) {
-                throw new TitleExistException("This title is already exist");
-            }
+        if(isTitleExistByCompanyId(companyId,couponDto)){
+            throw new TitleExistException("This title is already exist");
         }
-        coupon.setCompanyId(companyId);
-        final CouponEntity newCoupon = couponRepository.save(coupon);
+        couponDto.setCompanyId(companyId);
+        final CouponEntity newCoupon = couponRepository.save(ObjectMappingUtil.couponDtoToEntity(couponDto));
         return newCoupon.getId();
     }
-
-
+    public long update(CouponDto couponDto) throws TitleExistException {
+        if(isTitleExistByCompanyId(companyId,couponDto)){
+            throw new TitleExistException("This title is already exist");
+        }
+        couponDto.setCompanyId(companyId);
+        final CouponEntity newCoupon = ObjectMappingUtil.couponDtoToEntity(couponDto);
+        couponRepository.updateCoupon(newCoupon.getCategory(),
+                newCoupon.getTitle(),
+                newCoupon.getDescription(),
+                newCoupon.getStartDate(),
+                newCoupon.getEndDate(),
+                newCoupon.getAmount(),
+                newCoupon.getPrice(),
+                newCoupon.getImage());
+        
+        return newCoupon.getId();
+    }
+    
+    public boolean isTitleExistByCompanyId(long companyId,CouponDto couponDto){
+        final List<CouponEntity> companyCouponsById = couponRepository.getByCompanyId(companyId);
+        for (CouponEntity companyCoupon :
+                companyCouponsById) {
+            if (companyCoupon.getTitle().equalsIgnoreCase(couponDto.getTitle())) {
+                return true;
+            }
+        }
+            return false;
+    }
 }

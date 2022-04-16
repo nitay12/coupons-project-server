@@ -1,12 +1,16 @@
 package com.JB.couponsproject.entities;
 
 import com.JB.couponsproject.enums.Category;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+@Builder
+@AllArgsConstructor
 @Entity
 @Table(name = "coupons")
 @NoArgsConstructor
