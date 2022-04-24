@@ -57,7 +57,7 @@ public class CustomerService {
         if (tmpCustomer.isEmpty()){
             throw new ApplicationException("Customer ID isn't valid");
         }
-        if (customerRepository.findById(couponId) != null){
+        if (tmpCustomer.get().getCoupons().contains(tmpCoupon.get())){
             throw new ApplicationException("Coupon already in customer's coupons list");
         }
         CouponEntity coupon = tmpCoupon.get();
