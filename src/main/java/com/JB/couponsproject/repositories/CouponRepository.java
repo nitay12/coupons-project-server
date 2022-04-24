@@ -31,10 +31,4 @@ public interface CouponRepository extends JpaRepository<CouponEntity,Long> {
     List<CouponEntity> getByCompanyId(long companyID);
 
     List<CouponEntity> getByCompanyIdAndCategory(long companyID, Category category);
-
-    @Query(value = "UPDATE coupons SET category = ?1,title = ?2,description = ?3,start_date = ?4,end_date = ?5, amount = ?6," +
-            "price = ?7,image = ?8",nativeQuery = true)
-    CouponEntity updateCoupon(Category category, String title, String description, LocalDate starDate,
-                               LocalDate endDate,int amount,double price,String image);
-
 }

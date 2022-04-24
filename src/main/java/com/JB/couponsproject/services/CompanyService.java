@@ -55,19 +55,11 @@ public class CompanyService {
         }
         couponDto.setCompanyId(companyId);
         final CouponEntity newCoupon = ObjectMappingUtil.couponDtoToEntity(couponDto);
-        couponRepository.updateCoupon(newCoupon.getCategory(),
-                newCoupon.getTitle(),
-                newCoupon.getDescription(),
-                newCoupon.getStartDate(),
-                newCoupon.getEndDate(),
-                newCoupon.getAmount(),
-                newCoupon.getPrice(),
-                newCoupon.getImage());
-        
+        couponRepository.save(newCoupon);
         return newCoupon.getId();
     }
     
-    public boolean isTitleExistByCompanyId(long companyId,CouponDto couponDto){
+    private boolean isTitleExistByCompanyId(long companyId,CouponDto couponDto){
         final List<CouponEntity> companyCouponsById = couponRepository.getByCompanyId(companyId);
         for (CouponEntity companyCoupon :
                 companyCouponsById) {
