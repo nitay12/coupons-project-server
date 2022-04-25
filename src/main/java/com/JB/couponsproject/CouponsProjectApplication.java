@@ -21,10 +21,6 @@ public class CouponsProjectApplication {
 
 	public static void main(String[] args) throws ApplicationException {
 		ApplicationContext ctx = SpringApplication.run(CouponsProjectApplication.class, args);
-		final MockDataInserter mockDataInserter = ctx.getBean(MockDataInserter.class);
-		mockDataInserter.insert();
-
-
 		final CompanyService companyService = ctx.getBean(CompanyService.class);
 		try {
 			companyService.login("company2@email.com", "123456");
