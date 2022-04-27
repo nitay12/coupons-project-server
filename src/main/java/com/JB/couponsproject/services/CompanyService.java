@@ -3,7 +3,10 @@ package com.JB.couponsproject.services;
 import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CouponEntity;
+import com.JB.couponsproject.enums.EntityType;
+import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.exceptions.ApplicationException;
+import com.JB.couponsproject.exceptions.EntityNotFoundException;
 import com.JB.couponsproject.exceptions.TitleExistException;
 import com.JB.couponsproject.exceptions.WrongCertificationsException;
 import com.JB.couponsproject.repositories.CompanyRepository;
@@ -42,7 +45,7 @@ public class CompanyService {
     public long addCoupon(CouponDto couponDto) throws ApplicationException {
         //Verifications
         //Same title
-        if(isTitleExistByCompanyId(companyId,couponDto)){
+        if (isTitleExistByCompanyId(companyId, couponDto)) {
             throw new TitleExistException("This title is already exist");
         }
         couponDto.setCompanyId(companyId);
@@ -62,8 +65,27 @@ public class CompanyService {
         couponRepository.save(couponEntity);
         return couponEntity.getId();
     }
-    
-    private boolean isTitleExistByCompanyId(long companyId,CouponDto couponDto){
+
+    public void deleteCoupon(Long id) throws EntityNotFoundException {
+        if (!couponRepository.existsById(id)) {
+            throw new EntityNotFoundException(EntityType.coupon, id);
+        }
+        couponRepository.deleteById(id);
+    }
+
+    public List<CouponEntity> getCompanyCoupons() {
+        return couponRepository.getByCompanyId(companyId);
+    }
+
+    public List<CouponEntity> getCompanyCoupons(Category category) {
+        return couponRepository.getByCompanyIdAndCategory(companyId, category);
+    }
+
+    public List<CouponEntity> getCompanyCoupons(double maxPrice) {
+        return couponRepository.findByPriceLessThan(maxPrice);
+    }
+
+    private boolean isTitleExistByCompanyId(long companyId, CouponDto couponDto) {
         final List<CouponEntity> companyCouponsById = couponRepository.getByCompanyId(companyId);
         for (CouponEntity companyCoupon :
                 companyCouponsById) {
@@ -71,6 +93,6 @@ public class CompanyService {
                 return true;
             }
         }
-            return false;
+        return false;
     }
 }
