@@ -33,7 +33,7 @@ public class CustomerEntity {
     @Column(name="password", nullable = false)
     private int password;
     @Getter
-    @ManyToMany(fetch = FetchType.EAGER , cascade =  { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade =  { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name="coupon_vs_customer",
             joinColumns = @JoinColumn(name="customer_id"),

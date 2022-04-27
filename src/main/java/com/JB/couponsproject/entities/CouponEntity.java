@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -51,6 +52,8 @@ public class CouponEntity implements Serializable {
     private double price;
     @Column(name = "image")
     private String image;
+    @ManyToMany(mappedBy = "coupons", cascade = {CascadeType.REMOVE})
+    private List<CustomerEntity> buyers;
 
     public CouponEntity(Category category, String title, String description, LocalDate startDate, LocalDate endDate, int amount, double price, String image) {
         this.category = category;
