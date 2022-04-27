@@ -10,6 +10,7 @@ import com.JB.couponsproject.entities.CustomerEntity;
 public class ObjectMappingUtil {
     public static CouponEntity couponDtoToEntity(CouponDto couponDto){
         return CouponEntity.builder()
+                .id(couponDto.getId())
                 .category(couponDto.getCategory())
                 .title(couponDto.getTitle())
                 .description(couponDto.getDescription())

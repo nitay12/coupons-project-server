@@ -49,14 +49,18 @@ public class CompanyService {
         final CouponEntity newCoupon = couponRepository.save(ObjectMappingUtil.couponDtoToEntity(couponDto));
         return newCoupon.getId();
     }
-    public long update(CouponDto couponDto) throws TitleExistException {
-        if(isTitleExistByCompanyId(companyId,couponDto)){
+
+    public long updateCoupon(CouponDto couponDto) throws ApplicationException {
+        if(!couponRepository.existsById(couponDto.getId())){
+            throw new EntityNotFoundException(EntityType.coupon, couponDto.getId());
+        }
+        if (isTitleExistByCompanyId(companyId, couponDto)) {
             throw new TitleExistException("This title is already exist");
         }
         couponDto.setCompanyId(companyId);
-        final CouponEntity newCoupon = ObjectMappingUtil.couponDtoToEntity(couponDto);
-        couponRepository.save(newCoupon);
-        return newCoupon.getId();
+        final CouponEntity couponEntity = ObjectMappingUtil.couponDtoToEntity(couponDto);
+        couponRepository.save(couponEntity);
+        return couponEntity.getId();
     }
     
     private boolean isTitleExistByCompanyId(long companyId,CouponDto couponDto){
