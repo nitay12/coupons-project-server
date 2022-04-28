@@ -107,7 +107,4 @@ public class CustomerService {
         final List<CouponEntity> coupons = couponRepository.findCustomerCouponsByPriceLessThan(customerId, price);
         return coupons;
     }
-
-
-
 }
