@@ -3,12 +3,9 @@ package com.JB.couponsproject.services;
 import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CouponEntity;
-import com.JB.couponsproject.enums.EntityType;
 import com.JB.couponsproject.enums.Category;
-import com.JB.couponsproject.exceptions.ApplicationException;
-import com.JB.couponsproject.exceptions.EntityNotFoundException;
-import com.JB.couponsproject.exceptions.TitleExistException;
-import com.JB.couponsproject.exceptions.WrongCertificationsException;
+import com.JB.couponsproject.enums.EntityType;
+import com.JB.couponsproject.exceptions.*;
 import com.JB.couponsproject.repositories.CompanyRepository;
 import com.JB.couponsproject.repositories.CouponRepository;
 import com.JB.couponsproject.repositories.CustomerRepository;
@@ -17,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +22,9 @@ public class CompanyService {
     //Dependencies
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
-    private final CustomerRepository customerRepository;
     //State
     //TODO: Make the login functionality stateless
-    Long companyId;
+    private Long companyId;
 
     //Methods
     public void login(String email, String password) throws ApplicationException {
@@ -54,13 +51,19 @@ public class CompanyService {
     }
 
     public long updateCoupon(CouponDto couponDto) throws ApplicationException {
-        if(!couponRepository.existsById(couponDto.getId())){
+        //Verifications
+        //Coupon already exist
+        if (!couponRepository.existsById(couponDto.getId())) {
             throw new EntityNotFoundException(EntityType.coupon, couponDto.getId());
         }
+        //Title already exist (from logged in company coupons)
         if (isTitleExistByCompanyId(companyId, couponDto)) {
             throw new TitleExistException("This title is already exist");
         }
-        couponDto.setCompanyId(companyId);
+        //Company Id updated
+        if (!couponRepository.existsByIdAndCompanyId(couponDto.getId(), companyId)) {
+            throw new UpdateException("The company id cannot be updated");
+        }
         final CouponEntity couponEntity = ObjectMappingUtil.couponDtoToEntity(couponDto);
         couponRepository.save(couponEntity);
         return couponEntity.getId();
@@ -85,6 +88,16 @@ public class CompanyService {
         return couponRepository.findByPriceLessThan(maxPrice);
     }
 
+    public CompanyEntity getLoggedInCompany() throws ApplicationException {
+        if (Objects.nonNull(companyId)) {
+            return companyRepository.getById(companyId);
+        }
+        else{
+            throw new ApplicationException("No company logged in");
+        }
+    }
+
+    //TODO: add isExistByTitleAndCompanyId to companyRepo instead of this method for better performance
     private boolean isTitleExistByCompanyId(long companyId, CouponDto couponDto) {
         final List<CouponEntity> companyCouponsById = couponRepository.getByCompanyId(companyId);
         for (CouponEntity companyCoupon :

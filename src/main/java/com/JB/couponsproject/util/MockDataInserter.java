@@ -42,7 +42,7 @@ public class MockDataInserter implements CommandLineRunner {
                             "title",
                             "desc",
                             LocalDate.of(2022, 2, 2),
-                            LocalDate.of(2022, 4, 10),
+                            LocalDate.of(2022, 5, 10),
                             300,
                             100,
                             "https://company/image.jpg"
