@@ -73,9 +73,12 @@ public class CompanyService {
         return couponEntity.getId();
     }
 
-    public void deleteCoupon(Long id) throws EntityNotFoundException {
+    public void deleteCoupon(Long id) throws EntityNotFoundException, DeleteException {
         if (!couponRepository.existsById(id)) {
             throw new EntityNotFoundException(EntityType.coupon, id);
+        }
+        if (!couponRepository.existsByIdAndCompanyId(id, companyId)){
+            throw new DeleteException("Only coupon of the logged in company can be deleted");
         }
         couponRepository.deleteById(id);
     }
@@ -89,11 +92,11 @@ public class CompanyService {
     }
 
     public List<CouponEntity> getCompanyCoupons(double maxPrice) {
-        return couponRepository.findByPriceLessThan(maxPrice);
+        return couponRepository.findByCompanyIdAndPriceLessThan(companyId, maxPrice);
     }
     public CompanyEntity getLoggedInCompany() throws ApplicationException {
         if (Objects.nonNull(companyId)) {
-            return companyRepository.getById(companyId);
+            return companyRepository.findById(companyId).get();
         }
         else{
             throw new ApplicationException("No company logged in");

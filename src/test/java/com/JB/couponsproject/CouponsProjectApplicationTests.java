@@ -19,7 +19,7 @@ class CouponsProjectApplicationTests {
 	void contextLoads() {
 		System.out.println(companyRepository.findAll());
 		System.out.println(couponRepository.findByCategory(Category.ELECTRICITY));
-		System.out.println(couponRepository.findByPriceLessThan(5.0));
+//		System.out.println(couponRepository.findByPriceLessThan(5.0));
 		System.out.println(companyRepository.findById(1L));
 		System.out.println(couponRepository.getCustomerCoupons(2L));
 		System.out.println(couponRepository.getCustomerCouponsByCategory(1L,Category.FOOD));
