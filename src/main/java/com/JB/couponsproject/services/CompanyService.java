@@ -8,7 +8,6 @@ import com.JB.couponsproject.enums.EntityType;
 import com.JB.couponsproject.exceptions.*;
 import com.JB.couponsproject.repositories.CompanyRepository;
 import com.JB.couponsproject.repositories.CouponRepository;
-import com.JB.couponsproject.repositories.CustomerRepository;
 import com.JB.couponsproject.util.ObjectMappingUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,7 +41,10 @@ public class CompanyService {
     public long addCoupon(CouponDto couponDto) throws ApplicationException {
         //Verifications
         //Same title
-        if (isTitleExistByCompanyId(companyId, couponDto)) {
+        if (
+                couponRepository.existsByTitleAndCompanyId(couponDto.getTitle(),companyId)
+//                isTitleExistByCompanyId(companyId, couponDto)
+        ) {
             throw new TitleExistException("This title is already exist");
         }
         couponDto.setCompanyId(companyId);
@@ -57,7 +59,9 @@ public class CompanyService {
             throw new EntityNotFoundException(EntityType.coupon, couponDto.getId());
         }
         //Title already exist (from logged in company coupons)
-        if (isTitleExistByCompanyId(companyId, couponDto)) {
+        if (
+            isTitleExistByCompanyId(companyId, couponDto)
+        ) {
             throw new TitleExistException("This title is already exist");
         }
         //Company Id updated
@@ -87,7 +91,6 @@ public class CompanyService {
     public List<CouponEntity> getCompanyCoupons(double maxPrice) {
         return couponRepository.findByPriceLessThan(maxPrice);
     }
-
     public CompanyEntity getLoggedInCompany() throws ApplicationException {
         if (Objects.nonNull(companyId)) {
             return companyRepository.getById(companyId);
@@ -97,12 +100,15 @@ public class CompanyService {
         }
     }
 
-    //TODO: add isExistByTitleAndCompanyId to companyRepo instead of this method for better performance
+    //TODO: check if can be done by JPA init methods
     private boolean isTitleExistByCompanyId(long companyId, CouponDto couponDto) {
         final List<CouponEntity> companyCouponsById = couponRepository.getByCompanyId(companyId);
         for (CouponEntity companyCoupon :
                 companyCouponsById) {
             if (companyCoupon.getTitle().equalsIgnoreCase(couponDto.getTitle())) {
+                if(companyCoupon.getId().equals(couponDto.getId())){
+                    continue;
+                }
                 return true;
             }
         }

@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface CouponRepository extends JpaRepository<CouponEntity,Long> {
     boolean existsByIdAndCompanyId(Long id, Long companyId);
+    boolean existsByTitleAndCompanyId(String title, Long companyId);
     List<CouponEntity> findByCategory(Category category);
 
     List<CouponEntity> findByPriceLessThan(double maxPrice);

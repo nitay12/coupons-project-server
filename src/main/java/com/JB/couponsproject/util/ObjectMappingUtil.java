@@ -11,6 +11,7 @@ public class ObjectMappingUtil {
     public static CouponEntity couponDtoToEntity(CouponDto couponDto){
         return CouponEntity.builder()
                 .id(couponDto.getId())
+                .companyId(couponDto.getCompanyId())
                 .category(couponDto.getCategory())
                 .title(couponDto.getTitle())
                 .description(couponDto.getDescription())
@@ -25,6 +26,7 @@ public class ObjectMappingUtil {
     public static CouponDto couponEntityToCouponDto(CouponEntity couponEntity){
         return CouponDto.builder()
                 .id(couponEntity.getId())
+                .companyId(couponEntity.getCompanyId())
                 .category(couponEntity.getCategory())
                 .title(couponEntity.getTitle())
                 .description(couponEntity.getDescription())
