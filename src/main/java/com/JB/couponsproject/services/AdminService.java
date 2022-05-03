@@ -1,5 +1,6 @@
 package com.JB.couponsproject.services;
 
+import com.JB.couponsproject.dto.CompanyDto;
 import com.JB.couponsproject.dto.CustomerDto;
 import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
@@ -33,19 +34,52 @@ public class AdminService {
         throw new WrongCertificationsException("Wrong email or password");
     }
 
-    public CustomerDto create(final CustomerDto customerDto) throws ApplicationException {
+    public CustomerDto createCustomer(final CustomerDto customerDto) throws ApplicationException {
         if(!customerRepository.existsByEmail(customerDto.getEmail())){
             final CustomerEntity customerEntity = ObjectMappingUtil.customerDtoToEntity(customerDto);
             return ObjectMappingUtil.customerEntityToDto(customerRepository.save(customerEntity));
         }
         else {
-            throw new ApplicationException("Email already exist in system.");
+            throw new ApplicationException("Email already exist in the system.");
         }
     }
 
+    public CompanyDto createCompany(final CompanyDto companyDto) throws ApplicationException {
+        if (companyRepository.existsByName(companyDto.getName())){
+            throw new ApplicationException("Name already exist in the system.");
+        }
+        if (companyRepository.existsByEmail(companyDto.getEmail())){
+            throw new ApplicationException("Email already exist in the system.");
+        }
+        else {
+            final CompanyEntity companyEntity = ObjectMappingUtil.companyDtoToCompanyEntity(companyDto);
+            return ObjectMappingUtil.companyEntityToCompanyDto(companyRepository.save(companyEntity));
+        }
+    }
 
+    public void updateCustomer(CustomerDto customerDto) throws ApplicationException{
+        List<CustomerEntity> customerEntities = customerRepository.findById(customerDto.getId());
+        if(customerEntities.size()>=Texts.LISTSIZE){
+            throw new ApplicationException("Cannot change customer ");
+        }
+        else{
+            final CustomerEntity customerEntity = ObjectMappingUtil.customerDtoToEntity(customerDto);
+            customerRepository.save(customerEntity);
+        }
+    }
 
+    public void updateCompany(){}
 
+    public void deleteCustomer(){}
 
+    public void deleteCompany(){}
+
+    public void getAllCustomers(){}
+
+    public void getAllCompanies(){}
+
+    public void getCustomerById(){}
+
+    public void getCompanyById(){}
 
 }
