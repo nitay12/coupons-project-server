@@ -39,13 +39,6 @@ public class CustomerService {
         throw new WrongCertificationsException("Wrong email or password");
     }
 
-
-    //Methods: Create customer dto from customer entity
-    public CustomerDto create(final CustomerDto customerDto) {
-        final CustomerEntity customerEntity = ObjectMappingUtil.customerDtoToEntity(customerDto);
-        return ObjectMappingUtil.customerEntityToDto(customerRepository.save(customerEntity));
-    }
-
     //Methods: purchaseCoupon
     //verify values: coupon id exist, user id exist, user coupon relation wasn't established yet
     public void purchaseCoupon(final Long couponId, final Long customerId) throws ApplicationException {
