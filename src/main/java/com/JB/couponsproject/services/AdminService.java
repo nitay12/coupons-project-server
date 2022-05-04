@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -58,28 +59,47 @@ public class AdminService {
     }
 
     public void updateCustomer(CustomerDto customerDto) throws ApplicationException{
-        List<CustomerEntity> customerEntities = customerRepository.findById(customerDto.getId());
+        List<CustomerEntity> customerEntities = customerRepository.findAllById(customerDto.getId());
         if(customerEntities.size()>=Texts.LISTSIZE){
-            throw new ApplicationException("Cannot change customer ");
+            throw new ApplicationException("Cannot update customer, duplicated customer id: "+ customerDto.getId());
         }
         else{
             final CustomerEntity customerEntity = ObjectMappingUtil.customerDtoToEntity(customerDto);
             customerRepository.save(customerEntity);
+            logger.info("Customer "+ customerDto.getId() +" was updated");
         }
     }
 
-    public void updateCompany(){}
+    public void updateCompany(CompanyDto companyDto) throws ApplicationException{
+        List<CompanyEntity> companyEntities = companyRepository.findAllById(companyDto.getId());
+        if (companyEntities.size()>=Texts.LISTSIZE){
+            throw new ApplicationException("Cannot update company, duplicated company id: "+ companyDto.getId());
+        }
+        else {
+            final CompanyEntity companyEntity = ObjectMappingUtil.companyDtoToCompanyEntity(companyDto);
+            companyRepository.save(companyEntity);
+            logger.info("Company "+ companyDto.getId() +" was updated");
+        }
+    }
 
     public void deleteCustomer(){}
 
     public void deleteCompany(){}
 
-    public void getAllCustomers(){}
+    public List<CustomerEntity> getAllCustomers(){
+        return customerRepository.findAll();
+    }
 
-    public void getAllCompanies(){}
+    public List<CompanyEntity> getAllCompanies(){
+        return companyRepository.findAll();
+    }
 
-    public void getCustomerById(){}
+    public Optional<CustomerEntity> getCustomerById(Long id){
+        return customerRepository.findById(id);
+    }
 
-    public void getCompanyById(){}
+    public Optional<CompanyEntity> getCompanyById(Long id){
+        return companyRepository.findById(id);
+    }
 
 }
