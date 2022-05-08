@@ -7,6 +7,7 @@ import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.repositories.CouponRepository;
+import com.JB.couponsproject.services.AdminService;
 import com.JB.couponsproject.services.CompanyService;
 import com.JB.couponsproject.util.ObjectMappingUtil;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class CouponsProjectApplication {
 		ApplicationContext ctx = SpringApplication.run(CouponsProjectApplication.class, args);
 		DailyJob dailyJob = ctx.getBean(DailyJob.class);
 		dailyJob.checkExpiredCoupons();
+		final AdminService adminService = ctx.getBean(AdminService.class);
 		final CompanyService companyService = ctx.getBean(CompanyService.class);
 		final CouponRepository couponRepository = ctx.getBean(CouponRepository.class);
 		try {
@@ -63,6 +65,12 @@ public class CouponsProjectApplication {
 			System.out.println(companyService.getCompanyCoupons(Category.ELECTRICITY));
 			System.out.println("All company coupons up to 500 (max price)");
 			System.out.println(companyService.getCompanyCoupons(500d));
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+		}
+		try {
+			adminService.deleteCustomer(ObjectMappingUtil.customerEntityToDto(adminService.getCustomerById(6L)));
+			adminService.deleteCompany(ObjectMappingUtil.companyEntityToCompanyDto(adminService.getCompanyById(9L)));
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 		}

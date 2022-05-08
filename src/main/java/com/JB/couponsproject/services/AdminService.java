@@ -4,7 +4,9 @@ import com.JB.couponsproject.dto.CompanyDto;
 import com.JB.couponsproject.dto.CustomerDto;
 import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
+import com.JB.couponsproject.enums.EntityType;
 import com.JB.couponsproject.exceptions.ApplicationException;
+import com.JB.couponsproject.exceptions.EntityNotFoundException;
 import com.JB.couponsproject.exceptions.WrongCertificationsException;
 import com.JB.couponsproject.repositories.CompanyRepository;
 import com.JB.couponsproject.repositories.CouponRepository;
@@ -58,8 +60,8 @@ public class AdminService {
         }
     }
 
-    public void updateCustomer(CustomerDto customerDto) throws ApplicationException{
-        List<CustomerEntity> customerEntities = customerRepository.findAllById(customerDto.getId());
+    /*public void updateCustomer(CustomerDto customerDto) throws ApplicationException{
+        List<CustomerEntity> customerEntities = customerRepository.finalAllById(customerDto.getId());
         if(customerEntities.size()>=Texts.LISTSIZE){
             throw new ApplicationException("Cannot update customer, duplicated customer id: "+ customerDto.getId());
         }
@@ -68,9 +70,9 @@ public class AdminService {
             customerRepository.save(customerEntity);
             logger.info("Customer "+ customerDto.getId() +" was updated");
         }
-    }
+    }*/
 
-    public void updateCompany(CompanyDto companyDto) throws ApplicationException{
+    /*public void updateCompany(CompanyDto companyDto) throws ApplicationException{
         List<CompanyEntity> companyEntities = companyRepository.findAllById(companyDto.getId());
         if (companyEntities.size()>=Texts.LISTSIZE){
             throw new ApplicationException("Cannot update company, duplicated company id: "+ companyDto.getId());
@@ -80,11 +82,23 @@ public class AdminService {
             companyRepository.save(companyEntity);
             logger.info("Company "+ companyDto.getId() +" was updated");
         }
+    }*/
+
+    public void deleteCustomer(CustomerDto customerDto) throws ApplicationException{
+        if (!customerRepository.existsById(customerDto.getId())){
+            throw new EntityNotFoundException(EntityType.customer, customerDto.getId());
+        }
+        logger.info("Customer been deleted, id: "+customerDto.getId());
+        customerRepository.deleteById(customerDto.getId());
     }
 
-    public void deleteCustomer(){}
-
-    public void deleteCompany(){}
+    public void deleteCompany(CompanyDto companyDto) throws ApplicationException{
+        if (!companyRepository.existsById(companyDto.getId())){
+            throw new EntityNotFoundException(EntityType.company, companyDto.getId());
+        }
+        logger.info("Company been deleted, id: "+companyDto.getId());
+        companyRepository.deleteById(companyDto.getId());
+    }
 
     public List<CustomerEntity> getAllCustomers(){
         return customerRepository.findAll();
@@ -94,12 +108,12 @@ public class AdminService {
         return companyRepository.findAll();
     }
 
-    public Optional<CustomerEntity> getCustomerById(Long id){
-        return customerRepository.findById(id);
+    public CustomerEntity getCustomerById(Long id){
+        return customerRepository.findById(id).get();
     }
 
-    public Optional<CompanyEntity> getCompanyById(Long id){
-        return companyRepository.findById(id);
+    public CompanyEntity getCompanyById(Long id){
+        return companyRepository.findById(id).get();
     }
 
 }

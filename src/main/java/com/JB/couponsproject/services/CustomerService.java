@@ -2,6 +2,7 @@ package com.JB.couponsproject.services;
 
 
 import com.JB.couponsproject.dto.CustomerDto;
+import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.Category;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -99,5 +101,14 @@ public class CustomerService {
     public List<CouponEntity> getCustomerCoupons(final double price, final Long customerId) {
         final List<CouponEntity> coupons = couponRepository.findCustomerCouponsByPriceLessThan(customerId, price);
         return coupons;
+    }
+
+    public CustomerEntity getLoggedInCustomer() throws ApplicationException {
+        if (Objects.nonNull(customerId)) {
+            return customerRepository.findById(customerId).get();
+        }
+        else{
+            throw new ApplicationException("No customer logged in");
+        }
     }
 }
