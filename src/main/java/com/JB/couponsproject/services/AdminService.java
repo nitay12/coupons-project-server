@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,7 +73,7 @@ public class AdminService {
         }
     }*/
 
-    /*public void updateCompany(CompanyDto companyDto) throws ApplicationException{
+    public void updateCompany(CompanyDto companyDto) throws ApplicationException{
         List<CompanyEntity> companyEntities = companyRepository.findAllById(companyDto.getId());
         if (companyEntities.size()>=Texts.LISTSIZE){
             throw new ApplicationException("Cannot update company, duplicated company id: "+ companyDto.getId());
@@ -82,7 +83,7 @@ public class AdminService {
             companyRepository.save(companyEntity);
             logger.info("Company "+ companyDto.getId() +" was updated");
         }
-    }*/
+    }
 
     public void deleteCustomer(CustomerDto customerDto) throws ApplicationException{
         if (!customerRepository.existsById(customerDto.getId())){
@@ -91,13 +92,14 @@ public class AdminService {
         logger.info("Customer been deleted, id: "+customerDto.getId());
         customerRepository.deleteById(customerDto.getId());
     }
-
+@Transactional
     public void deleteCompany(CompanyDto companyDto) throws ApplicationException{
         if (!companyRepository.existsById(companyDto.getId())){
             throw new EntityNotFoundException(EntityType.company, companyDto.getId());
         }
-        logger.info("Company been deleted, id: "+companyDto.getId());
+        couponRepository.deleteAllByCompanyId(companyDto.getId());
         companyRepository.deleteById(companyDto.getId());
+        logger.info("Company been deleted, id: "+companyDto.getId());
     }
 
     public List<CustomerEntity> getAllCustomers(){

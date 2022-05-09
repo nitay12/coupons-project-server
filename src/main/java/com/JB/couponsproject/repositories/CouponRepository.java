@@ -35,4 +35,6 @@ public interface CouponRepository extends JpaRepository<CouponEntity,Long> {
 
     @Query(value = "SELECT * FROM coupons AS c WHERE end_date < CURDATE()",nativeQuery = true)
     List<CouponEntity> getExpiredCoupons();
+
+    void deleteAllByCompanyId(long id);
 }
