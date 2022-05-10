@@ -29,30 +29,51 @@ public class CompanyServiceTest implements CommandLineRunner {
         try {
             //Tests
             //Login test
+            try {
+                logger.info("Login failed test (throws exception)");
+                companyService.login("company2@email.com", "WRONG PASSWORD");
+            } catch (ApplicationException e) {
+                e.printStackTrace();
+            }
+            logger.info("Login succeed test");
             companyService.login("company2@email.com", "123456");
-            logger.info("WELCOME "+ companyService.getLoggedInCompany().getName().toUpperCase());
+            logger.info("WELCOME " + companyService.getLoggedInCompany().getName().toUpperCase());
             //Add coupon test
-            logger.info("Adding coupon...");
-            final CouponDto testCouponDto = new CouponDto(
-                    Category.ELECTRICITY,
-                    "test title",
-                    "test desc",
-                    LocalDate.now(),
-                    LocalDate.now(),
-                    10,
-                    10,
-                    "url"
-            );
+            logger.info("Add coupon test");
+            final CouponDto testCouponDto = CouponDto.builder()
+                    .category(Category.ELECTRICITY)
+                    .title("test title")
+                    .description("test desc")
+                    .startDate(LocalDate.now())
+                    .endDate(LocalDate.now())
+                    .amount(10)
+                    .price(10)
+                    .image("http://image.url.jpg")
+                    .build();
             Long newCouponId = companyService.addCoupon(testCouponDto);
-            logger.info("Coupon added (id:"+newCouponId+")");
+            logger.info("Coupon added (id:" + newCouponId + ")");
+            logger.info("Add coupon with same title test (throws exception)");
+            try {
+                companyService.addCoupon(testCouponDto);
+            } catch (ApplicationException e) {
+                e.printStackTrace();
+            }
             CouponEntity newCoupon = couponRepository.findById(newCouponId).get();
             //Update coupon test
-            logger.info("Updating coupon...");
+            logger.info("Update coupon test");
             newCoupon.setDescription("updated desc");
             final CouponDto newCouponDto = ObjectMappingUtil.couponEntityToCouponDto(newCoupon);
             companyService.updateCoupon(newCouponDto);
-            logger.info("Updated coupon:");
+            logger.info("Updated coupon description:");
             logger.info(couponRepository.findById(newCouponId).get().toString());
+            logger.info("Update coupon id test (throws exception)");
+            try {
+                newCouponDto.setTitle("AnotherTestTitle");
+                newCouponDto.setId(3L);
+                companyService.updateCoupon(newCouponDto);
+            } catch (ApplicationException e) {
+                e.printStackTrace();
+            }
             // Delete coupon test
             logger.info("Deleting coupon...");
             companyService.deleteCoupon(2L);
