@@ -103,7 +103,7 @@ public class CompanyService {
             throw new ApplicationException("No company logged in");
         }
         final Optional<CompanyEntity> loggedInCompany = companyRepository.findById(companyId);
-        if(!loggedInCompany.isEmpty()){
+        if(loggedInCompany.isEmpty()){
             throw new ApplicationException("Cannot retrieve logged in company");
         }
         else{
