@@ -1,6 +1,7 @@
 package com.JB.couponsproject.tests;
 
 import com.JB.couponsproject.dto.CompanyDto;
+import com.JB.couponsproject.login.LoginManager;
 import com.JB.couponsproject.services.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

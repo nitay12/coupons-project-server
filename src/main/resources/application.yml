@@ -7,7 +7,7 @@ spring:
     database: mysql
     hibernate:
       enable_lazy_load_no_trans: true
-      ddl-auto: update
+      ddl-auto: create
     properties.hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 
   datasource:

@@ -13,21 +13,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CompanyService {
+public class CompanyService implements ClientService {
     //Dependencies
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
-    //State
-    //TODO: Make the login functionality stateless
-    private Long companyId;
 
     //Methods
-    public void login(String email, String password) throws ApplicationException {
+    public boolean login(String email, String password) throws ApplicationException {
         if (!companyRepository.existsByEmail(email)) {
             throw new EntityNotFoundException("This email is not exist in the DB");
         }
@@ -35,19 +30,17 @@ public class CompanyService {
         for (CompanyEntity company :
                 allCompanies) {
             if (company.getEmail().equalsIgnoreCase(email) & company.getPassword() == password.hashCode()) {
-                companyId = company.getId();
-                return;
+                return true;
             }
         }
         throw new WrongCertificationsException("Wrong email or password");
     }
 
-    public long addCoupon(CouponDto couponDto) throws ApplicationException {
+    public long addCoupon(CouponDto couponDto,long companyId) throws ApplicationException {
         //Verifications
         //Same title
         if (
                 couponRepository.existsByTitleAndCompanyId(couponDto.getTitle(),companyId)
-//                isTitleExistByCompanyId(companyId, couponDto)
         ) {
             throw new TitleExistException("This title is already exist");
         }
@@ -56,15 +49,15 @@ public class CompanyService {
         return newCoupon.getId();
     }
 
-    public long updateCoupon(CouponDto couponDto) throws ApplicationException {
+    public long updateCoupon(CouponDto couponDto, long companyId) throws ApplicationException {
         //Verifications
         //Coupon not exist
         if (!couponRepository.existsById(couponDto.getId())) {
-            throw new EntityNotFoundException(EntityType.coupon, couponDto.getId());
+            throw new EntityNotFoundException(EntityType.COUPON, couponDto.getId());
         }
         //Title already exist (from logged in company coupons)
         if (
-            isTitleExistByCompanyId(companyId, couponDto)
+                couponRepository.existsByTitleAndCompanyId(couponDto.getTitle(),companyId)
         ) {
             throw new TitleExistException("This title is already exist");
         }
@@ -77,9 +70,9 @@ public class CompanyService {
         return couponEntity.getId();
     }
 
-    public void deleteCoupon(Long id) throws EntityNotFoundException, DeleteException {
+    public void deleteCoupon(Long id,long companyId) throws EntityNotFoundException, DeleteException {
         if (!couponRepository.existsById(id)) {
-            throw new EntityNotFoundException(EntityType.coupon, id);
+            throw new EntityNotFoundException(EntityType.COUPON, id);
         }
         if (!couponRepository.existsByIdAndCompanyId(id, companyId)){
             throw new DeleteException("Only coupon of the logged in company can be deleted");
@@ -87,29 +80,31 @@ public class CompanyService {
         couponRepository.deleteById(id);
     }
 
-    public List<CouponEntity> getCompanyCoupons() {
+    public List<CouponEntity> getCompanyCoupons(long companyId) {
         return couponRepository.getByCompanyId(companyId);
     }
 
-    public List<CouponEntity> getCompanyCoupons(Category category) {
+    public List<CouponEntity> getCompanyCoupons(Category category,long companyId) {
         return couponRepository.getByCompanyIdAndCategory(companyId, category);
     }
 
-    public List<CouponEntity> getCompanyCoupons(double maxPrice) {
+    public List<CouponEntity> getCompanyCoupons(double maxPrice,long companyId) {
         return couponRepository.findByCompanyIdAndPriceLessThan(companyId, maxPrice);
     }
-    public CompanyEntity getLoggedInCompany() throws ApplicationException {
-        if (Objects.isNull(companyId)) {
-            throw new ApplicationException("No company logged in");
-        }
-        final Optional<CompanyEntity> loggedInCompany = companyRepository.findById(companyId);
-        if(loggedInCompany.isEmpty()){
-            throw new ApplicationException("Cannot retrieve logged in company");
-        }
-        else{
-            return loggedInCompany.get();
-        }
-    }
+
+    // Consider Removing this function
+//    public CompanyEntity getLoggedInCompany() throws ApplicationException {
+//        if (Objects.isNull(companyId)) {
+//            throw new ApplicationException("No company logged in");
+//        }
+//        final Optional<CompanyEntity> loggedInCompany = companyRepository.findById(companyId);
+//        if(loggedInCompany.isEmpty()){
+//            throw new ApplicationException("Cannot retrieve logged in company");
+//        }
+//        else{
+//            return loggedInCompany.get();
+//        }
+//    }
 
     //TODO: check if can be done by JPA init methods
     private boolean isTitleExistByCompanyId(long companyId, CouponDto couponDto) {

@@ -50,7 +50,7 @@ public class MockDataInserter implements CommandLineRunner {
                             300,
                             100,
                             "https://company/image.jpg"
-                    )
+                    ),1L
             );
             final CustomerDto newCustomer = adminService.createCustomer(new CustomerDto(
                     "customer" + i,

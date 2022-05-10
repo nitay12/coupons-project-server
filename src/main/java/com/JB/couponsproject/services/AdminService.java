@@ -20,20 +20,19 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AdminService {
+public class AdminService implements ClientService {
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
     private final CustomerRepository customerRepository;
     Logger logger = LoggerFactory.getLogger(AdminService.class);
 
-    public void login(String email, String password) throws ApplicationException {
+    public boolean login(String email, String password) throws ApplicationException {
         if (email.equals(Texts.ADMIN_EMAIL) & password.equals(Texts.AMDIN_PASSWORD)) {
             logger.info("Administrator logged into the system.");
-            return;
+            return true;
         }
         throw new WrongCertificationsException("Wrong email or password");
     }
@@ -87,7 +86,7 @@ public class AdminService {
 
     public void deleteCustomer(CustomerDto customerDto) throws ApplicationException{
         if (!customerRepository.existsById(customerDto.getId())){
-            throw new EntityNotFoundException(EntityType.customer, customerDto.getId());
+            throw new EntityNotFoundException(EntityType.CUSTOMER, customerDto.getId());
         }
         logger.info("Customer been deleted, id: "+customerDto.getId());
         customerRepository.deleteById(customerDto.getId());
@@ -95,7 +94,7 @@ public class AdminService {
 @Transactional
     public void deleteCompany(CompanyDto companyDto) throws ApplicationException{
         if (!companyRepository.existsById(companyDto.getId())){
-            throw new EntityNotFoundException(EntityType.company, companyDto.getId());
+            throw new EntityNotFoundException(EntityType.COMPANY, companyDto.getId());
         }
         couponRepository.deleteAllByCompanyId(companyDto.getId());
         companyRepository.deleteById(companyDto.getId());

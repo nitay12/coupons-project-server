@@ -20,22 +20,19 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerService {
+public class CustomerService implements ClientService {
     //Dependencies
     private final CouponRepository couponRepository;
     private final CustomerRepository customerRepository;
     //State
-    //TODO: Make the login functionality stateless
-    Long customerId;
 
     //Methods: Login
-    public void login(final String email, final String password) throws ApplicationException {
+    public boolean login(final String email, final String password) throws ApplicationException {
         final List<CustomerEntity> allCustomers = customerRepository.findAll();
         for (CustomerEntity customer :
                 allCustomers) {
             if (customer.getEmail().equalsIgnoreCase(email) & customer.getPassword() == password.hashCode()) {
-                customerId = customer.getId();
-                return;
+                return true;
             }
         }
         throw new WrongCertificationsException("Wrong email or password");
@@ -69,7 +66,7 @@ public class CustomerService {
 
     //Methods: get Customer's Coupons - all
     //customer id taken from state
-    public List<CouponEntity> getCustomerCoupons() {
+    public List<CouponEntity> getCustomerCoupons(long customerId) {
         final List<CouponEntity> coupons = couponRepository.getCustomerCoupons(customerId);
         return coupons;
     }
@@ -80,20 +77,19 @@ public class CustomerService {
     }
 
     //Methods: get Customer's Coupons - from category id
-    //customer id taken from state
-    public List<CouponEntity> getCustomerCoupons(final Category category) {
+    public List<CouponEntity> getCustomerCoupons(final Category category,long customerId) {
         final List<CouponEntity> coupons = couponRepository.getCustomerCouponsByCategory(customerId, category);
         return coupons;
     }
-
-    public List<CouponEntity> getCustomerCoupons(final Category category, final Long customerId) {
-        final List<CouponEntity> coupons = couponRepository.getCustomerCouponsByCategory(customerId, category);
-        return coupons;
-    }
+// seems like duplicate function
+//    public List<CouponEntity> getCustomerCoupons(final Category category, final Long customerId) {
+//        final List<CouponEntity> coupons = couponRepository.getCustomerCouponsByCategory(customerId, category);
+//        return coupons;
+//    }
 
     //Methods: get Customer's Coupons - up to price x
     //customer id taken from state
-    public List<CouponEntity> getCustomerCoupons(final double price) {
+    public List<CouponEntity> getCustomerCoupons(final double price, long customerId) {
         final List<CouponEntity> coupons = couponRepository.findCustomerCouponsByPriceLessThan(customerId, price);
         return coupons;
     }
@@ -103,7 +99,7 @@ public class CustomerService {
         return coupons;
     }
 
-    public CustomerEntity getLoggedInCustomer() throws ApplicationException {
+    public CustomerEntity getLoggedInCustomer(long customerId) throws ApplicationException {
         if (Objects.nonNull(customerId)) {
             return customerRepository.findById(customerId).get();
         }

@@ -7,6 +7,7 @@ import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.exceptions.ApplicationException;
+import com.JB.couponsproject.login.Login;
 import com.JB.couponsproject.repositories.CouponRepository;
 import com.JB.couponsproject.services.AdminService;
 import com.JB.couponsproject.services.CompanyService;
@@ -23,6 +24,8 @@ public class CouponsProjectApplication {
 
 	public static void main(String[] args) throws ApplicationException {
 		ApplicationContext ctx = SpringApplication.run(CouponsProjectApplication.class, args);
+		Login login = ctx.getBean(Login.class);
+		login.login();
 		DailyJob dailyJob = ctx.getBean(DailyJob.class);
 		dailyJob.checkExpiredCoupons();
 	}
