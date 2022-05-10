@@ -18,4 +18,10 @@ public class CompanyDto {
     private String name;
     private String email;
     private int password;
+
+    public CompanyDto(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password.hashCode();
+    }
 }
