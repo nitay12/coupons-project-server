@@ -1,13 +1,15 @@
 package com.JB.couponsproject.util;
 
-import com.JB.couponsproject.entities.CompanyEntity;
-import com.JB.couponsproject.entities.CouponEntity;
-import com.JB.couponsproject.entities.CustomerEntity;
+import com.JB.couponsproject.dto.CompanyDto;
+import com.JB.couponsproject.dto.CouponDto;
+import com.JB.couponsproject.dto.CustomerDto;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.repositories.CompanyRepository;
 import com.JB.couponsproject.repositories.CouponRepository;
 import com.JB.couponsproject.repositories.CustomerRepository;
+import com.JB.couponsproject.services.AdminService;
+import com.JB.couponsproject.services.CompanyService;
 import com.JB.couponsproject.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -22,26 +24,26 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 @Order(1)
 public class MockDataInserter implements CommandLineRunner {
-    final CompanyRepository companyRepository;
-    final CouponRepository couponRepository;
-    final CustomerRepository customerRepository;
-    final CustomerService customerService;
-//    final CouponVsCustomersRepository couponVsCustomersRepository;
-    Logger logger = LoggerFactory.getLogger(MockDataInserter.class);
+    private final AdminService adminService;
+    private final CustomerService customerService;
+    private final CompanyService companyService;
+    private final Logger logger = LoggerFactory.getLogger(MockDataInserter.class);
     public void insert() throws ApplicationException {
         logger.info("Inserting mock data to the DB");
         for (int i = 1; i <= 10; i++) {
-            final CompanyEntity newCompany = companyRepository.save(new CompanyEntity(
+            final CompanyDto newCompany = adminService.createCompany
+                    (new CompanyDto(
                     "company" + i,
                     "company" + i + "@email.com",
-                    "123456"
-            ));
-            logger.info("New company added:" + newCompany.toString());
-            final CouponEntity newCoupon = couponRepository.save(
-                    new CouponEntity(
-                            newCompany.getId(),
+                    "123456"));
+            logger.debug("New company added:" + newCompany.toString());
+            companyService.login(
+                    newCompany.getEmail(),"123456"
+            );
+            final Long newCouponId = companyService.addCoupon(
+                    new CouponDto(
                             Category.ELECTRICITY,
-                            "title",
+                            "title"+i,
                             "desc",
                             LocalDate.of(2022, 2, 2),
                             LocalDate.of(2022, 5, 10),
@@ -50,16 +52,15 @@ public class MockDataInserter implements CommandLineRunner {
                             "https://company/image.jpg"
                     )
             );
-            final CustomerEntity newCustomer = customerRepository.save(new CustomerEntity(
+            final CustomerDto newCustomer = adminService.createCustomer(new CustomerDto(
                     "customer" + i,
                     "last name",
                     "customer" + i + "@email.com",
                     "123456"
             ));
-            logger.info("New customer was added to the DB: " + newCustomer.toString());
-            customerService.purchaseCoupon(newCoupon.getId(),newCustomer.getId());
-            customerRepository.save(newCustomer);
-            logger.info(newCustomer.getFirstName()+" purchased coupon");
+            logger.debug("New customer was added to the DB: " + newCustomer.toString());
+            customerService.purchaseCoupon(newCouponId,newCustomer.getId());
+            logger.debug(newCustomer.getFirstName()+" purchased coupon");
 
         }
     }
