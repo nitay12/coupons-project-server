@@ -3,6 +3,8 @@ package com.JB.couponsproject.util;
 import com.JB.couponsproject.dto.CompanyDto;
 import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.dto.CustomerDto;
+import com.JB.couponsproject.entities.CompanyEntity;
+import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.repositories.CompanyRepository;
@@ -31,8 +33,8 @@ public class MockDataInserter implements CommandLineRunner {
     public void insert() throws ApplicationException {
         logger.info("Inserting mock data to the DB");
         for (int i = 1; i <= 10; i++) {
-            final CompanyDto newCompany = adminService.createCompany
-                    (new CompanyDto(
+            final CompanyEntity newCompany = adminService.createCompany
+                    (new CompanyEntity(
                     "company" + i,
                     "company" + i + "@email.com",
                     "123456"));
@@ -52,7 +54,7 @@ public class MockDataInserter implements CommandLineRunner {
                             "https://company/image.jpg"
                     ),1L
             );
-            final CustomerDto newCustomer = adminService.createCustomer(new CustomerDto(
+            final CustomerEntity newCustomer = adminService.createCustomer(new CustomerEntity(
                     "customer" + i,
                     "last name",
                     "customer" + i + "@email.com",

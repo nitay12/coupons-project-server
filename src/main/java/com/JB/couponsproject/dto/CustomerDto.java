@@ -10,18 +10,11 @@ import lombok.*;
 @ToString
 @RequiredArgsConstructor
 public class CustomerDto {
-    private long id;
+    private final long id;
     private String firstName;
     private String lastName;
     private String email;
     private int password;
-
-    public CustomerDto(String firstName, String lastName, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password.hashCode();
-    }
 
     public long getId() {
         return id;

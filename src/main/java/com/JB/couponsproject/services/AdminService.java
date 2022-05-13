@@ -37,51 +37,37 @@ public class AdminService implements ClientService {
         throw new WrongCertificationsException("Wrong email or password");
     }
 
-    public CustomerDto createCustomer(final CustomerDto customerDto) throws ApplicationException {
-        if(!customerRepository.existsByEmail(customerDto.getEmail())){
-            final CustomerEntity customerEntity = ObjectMappingUtil.customerDtoToEntity(customerDto);
-            return ObjectMappingUtil.customerEntityToDto(customerRepository.save(customerEntity));
+    public CustomerEntity createCustomer(final CustomerEntity customerEntity) throws ApplicationException {
+        if(!customerRepository.existsByEmail(customerEntity.getEmail())){
+            return customerRepository.save(customerEntity);
         }
         else {
             throw new ApplicationException("Email already exist in the system.");
         }
     }
 
-    public CompanyDto createCompany(final CompanyDto companyDto) throws ApplicationException {
-        if (companyRepository.existsByName(companyDto.getName())){
+    public CompanyEntity createCompany(final CompanyEntity companyEntity) throws ApplicationException {
+        if (companyRepository.existsByName(companyEntity.getName())){
             throw new ApplicationException("Name already exist in the system.");
         }
-        if (companyRepository.existsByEmail(companyDto.getEmail())){
+        if (companyRepository.existsByEmail(companyEntity.getEmail())){
             throw new ApplicationException("Email already exist in the system.");
         }
         else {
-            final CompanyEntity companyEntity = ObjectMappingUtil.companyDtoToCompanyEntity(companyDto);
-            return ObjectMappingUtil.companyEntityToCompanyDto(companyRepository.save(companyEntity));
+            return companyRepository.save(companyEntity);
         }
     }
 
-    /*public void updateCustomer(CustomerDto customerDto) throws ApplicationException{
-        List<CustomerEntity> customerEntities = customerRepository.finalAllById(customerDto.getId());
-        if(customerEntities.size()>=Texts.LISTSIZE){
-            throw new ApplicationException("Cannot update customer, duplicated customer id: "+ customerDto.getId());
-        }
-        else{
-            final CustomerEntity customerEntity = ObjectMappingUtil.customerDtoToEntity(customerDto);
-            customerRepository.save(customerEntity);
-            logger.info("Customer "+ customerDto.getId() +" was updated");
-        }
-    }*/
+    public void updateCustomer(CustomerDto customerDto) throws ApplicationException {
+        final CustomerEntity customerEntity = ObjectMappingUtil.customerDtoToEntity(customerDto);
+        customerRepository.save(customerEntity);
+        logger.info("Customer " + customerDto.getId() + " was updated");
+    }
 
     public void updateCompany(CompanyDto companyDto) throws ApplicationException{
-        List<CompanyEntity> companyEntities = companyRepository.findAllById(companyDto.getId());
-        if (companyEntities.size()>=Texts.LISTSIZE){
-            throw new ApplicationException("Cannot update company, duplicated company id: "+ companyDto.getId());
-        }
-        else {
-            final CompanyEntity companyEntity = ObjectMappingUtil.companyDtoToCompanyEntity(companyDto);
-            companyRepository.save(companyEntity);
-            logger.info("Company "+ companyDto.getId() +" was updated");
-        }
+        final CompanyEntity companyEntity = ObjectMappingUtil.companyDtoToCompanyEntity(companyDto);
+        companyRepository.save(companyEntity);
+        logger.info("Company "+ companyDto.getId() +" was updated");
     }
 
     public void deleteCustomer(CustomerDto customerDto) throws ApplicationException{
@@ -91,7 +77,8 @@ public class AdminService implements ClientService {
         logger.info("Customer been deleted, id: "+customerDto.getId());
         customerRepository.deleteById(customerDto.getId());
     }
-@Transactional
+
+    @Transactional
     public void deleteCompany(CompanyDto companyDto) throws ApplicationException{
         if (!companyRepository.existsById(companyDto.getId())){
             throw new EntityNotFoundException(EntityType.COMPANY, companyDto.getId());
@@ -109,12 +96,39 @@ public class AdminService implements ClientService {
         return companyRepository.findAll();
     }
 
-    public CustomerEntity getCustomerById(Long id){
-        return customerRepository.findById(id).get();
+    public CustomerDto getCustomerById(Long id) throws ApplicationException {
+        if (!customerRepository.existsById(id)){
+            throw new ApplicationException("No customer under the id: "+id);
+        }
+        return ObjectMappingUtil.customerEntityToDto(customerRepository.findById(id).get());
     }
 
-    public CompanyEntity getCompanyById(Long id){
-        return companyRepository.findById(id).get();
+    public CompanyDto getCompanyById(Long id) throws ApplicationException {
+        if (!companyRepository.existsById(id)){
+            throw new ApplicationException("No company under the id: "+id);
+        }
+        return ObjectMappingUtil.companyEntityToCompanyDto(companyRepository.findById(id).get());
+    }
+
+    public CustomerDto getCustomerByEmail(String email) throws ApplicationException {
+        if (!customerRepository.existsByEmail(email)){
+            throw new ApplicationException("No customer under the email: "+email);
+        }
+        return customerRepository.findByEmail(email).get(0);
+    }
+
+    public CompanyDto getCompanyByEmail(String email) throws ApplicationException {
+        if(!companyRepository.existsByEmail(email)){
+            throw new ApplicationException("No company under the email: "+email);
+        }
+        return companyRepository.findByEmail(email).get(0);
+    }
+
+    public CompanyDto getCompanyByName(String name) throws ApplicationException {
+        if(!companyRepository.existsByName(name)){
+            throw new ApplicationException("No company under the name: "+name);
+        }
+        return companyRepository.findByName(name).get(0);
     }
 
 }
