@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.io.Serializable;
 
 @Builder
@@ -28,6 +29,8 @@ public class CompanyEntity implements Serializable {
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
+
+    @Email
     @Column(name = "email", nullable = false)
     private String email;
     @Column(name = "password", nullable = false)

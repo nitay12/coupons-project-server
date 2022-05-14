@@ -3,6 +3,7 @@ package com.JB.couponsproject.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,8 @@ public class CustomerEntity {
     private String firstName;
     @Column(name="last_name", nullable = false)
     private String lastName;
+
+    @Email
     @Column(name="email", nullable = false, unique = true)
     private String email;
     @Column(name="password", nullable = false)

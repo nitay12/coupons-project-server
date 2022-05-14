@@ -72,7 +72,7 @@ public class AdminServiceTest implements CommandLineRunner {
         logger.info("Get all companies :\n"+ companies.toString());
         List<CustomerEntity> customers = adminService.getAllCustomers();
         logger.info("Get all customers :\n"+ customers.toString());
-        
+
         //delete company test
         logger.info("About to delete company: "+companyDto.getName());
         adminService.deleteCompany(companyDto);

@@ -1,10 +1,7 @@
 package com.JB.couponsproject.dto;
 
 import com.JB.couponsproject.enums.Category;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -13,11 +10,12 @@ import java.time.LocalDate;
  */
 @Builder
 @Data
+@ToString
 @AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class CouponDto {
-    private Long id;
-    private Long companyId;
+    private final Long id;
+    private final Long companyId;
     private Category category;
     private String title;
     private String description;
@@ -27,14 +25,4 @@ public class CouponDto {
     private double price;
     private String image;
 
-    public CouponDto(Category category, String title, String description, LocalDate startDate,LocalDate endDate, int amount, double price, String image) {
-        this.category = category;
-        this.title = title;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.amount = amount;
-        this.price = price;
-        this.image = image;
-    }
 }

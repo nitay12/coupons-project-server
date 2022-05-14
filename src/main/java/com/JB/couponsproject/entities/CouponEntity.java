@@ -1,16 +1,17 @@
 package com.JB.couponsproject.entities;
 
 import com.JB.couponsproject.enums.Category;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 @Builder
+@Data
+@ToString
 @AllArgsConstructor
 @Entity
 @Table(name = "coupons")
@@ -46,9 +47,13 @@ public class CouponEntity implements Serializable {
     private LocalDate startDate;
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
+
+    @Positive
     @Column(name = "amount", nullable = false)
     private int amount;
+    @Positive
     @Column(name = "price", nullable = false)
+
     private double price;
     @Column(name = "image")
     private String image;
@@ -66,99 +71,4 @@ public class CouponEntity implements Serializable {
         this.image = image;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    @Override
-    public String toString() {
-        return "CouponEntity{" +
-                "id=" + id +
-                ", category=" + category +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", amount=" + amount +
-                ", price=" + price +
-                ", image='" + image + '\'' +
-                '}';
-    }
 }
