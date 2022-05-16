@@ -11,7 +11,6 @@ import java.util.List;
 
 @Builder
 @Data
-@ToString
 @AllArgsConstructor
 @Entity
 @Table(name = "coupons")
@@ -59,6 +58,22 @@ public class CouponEntity implements Serializable {
     private String image;
     @ManyToMany(mappedBy = "coupons", cascade = {CascadeType.REMOVE})
     private List<CustomerEntity> buyers;
+
+    @Override
+    public String toString() {
+        return "CouponEntity{" +
+               "id=" + id +
+               ", companyId=" + companyId +
+               ", category=" + category +
+               ", title='" + title + '\'' +
+               ", description='" + description + '\'' +
+               ", startDate=" + startDate +
+               ", endDate=" + endDate +
+               ", amount=" + amount +
+               ", price=" + price +
+               ", image='" + image + '\'' +
+               '}';
+    }
 
     public CouponEntity(Category category, String title, String description, LocalDate startDate, LocalDate endDate, int amount, double price, String image) {
         this.category = category;

@@ -16,7 +16,7 @@ public class DailyJob {
     private final DailyJobService dailyJobService;
     @Scheduled(fixedDelay = 100000L,fixedRate = 100000L)
     public void checkExpiredCoupons(){
-        log.info("Starting expired deletion");
+        log.info("Starting expired coupons deletion");
         dailyJobService.check();
         log.info("Finished expired deletion");
     }
