@@ -25,7 +25,7 @@ public class CompanyServiceTest implements CommandLineRunner {
     private final Logger logger = LoggerFactory.getLogger(CompanyServiceTest.class);
 
     @Override
-    public void run(String... args){
+    public void run(String... args) {
         try {
             //Tests
             //Login test
@@ -51,11 +51,11 @@ public class CompanyServiceTest implements CommandLineRunner {
                     .price(10)
                     .image("http://image.url.jpg")
                     .build();
-            Long newCouponId = companyService.addCoupon(testCouponDto,1L);
+            Long newCouponId = companyService.addCoupon(testCouponDto, 1L);
             logger.info("Coupon added (id:" + newCouponId + ")");
             logger.info("Add coupon with same title test (throws exception)");
             try {
-                companyService.addCoupon(testCouponDto,1L);
+                companyService.addCoupon(testCouponDto, 1L);
             } catch (ApplicationException e) {
                 e.printStackTrace();
             }
@@ -64,28 +64,28 @@ public class CompanyServiceTest implements CommandLineRunner {
             logger.info("Update coupon test");
             newCoupon.setDescription("updated desc");
             final CouponDto newCouponDto = ObjectMappingUtil.couponEntityToCouponDto(newCoupon);
-            companyService.updateCoupon(newCouponDto,1L);
+            companyService.updateCoupon(newCouponDto, 1L);
             logger.info("Updated coupon description:");
             logger.info(couponRepository.findById(newCouponId).get().toString());
             logger.info("Update coupon id test (throws exception)");
             try {
-                newCouponDto.setTitle("AnotherTestTitle");
-                newCouponDto.setId(3L);
-                companyService.updateCoupon(newCouponDto,1L);
+                CouponDto couponToUpdate = CouponDto.builder()
+                        .id(1L).companyId(newCouponDto.getCompanyId()).build();
+                companyService.updateCoupon(couponToUpdate, 1L);
             } catch (ApplicationException e) {
                 e.printStackTrace();
             }
             // Delete coupon test
             logger.info("Deleting coupon...");
-            companyService.deleteCoupon(2L,1L);
+            companyService.deleteCoupon(2L, 1L);
             logger.info("Coupon deleted");
             //Get company coupons test
             logger.info("All company coupons");
             logger.info(companyService.getCompanyCoupons(1L).toString());
             logger.info("All company coupons from category (ELECTRICITY)");
-            logger.info(companyService.getCompanyCoupons(Category.ELECTRICITY,1L).toString());
+            logger.info(companyService.getCompanyCoupons(Category.ELECTRICITY, 1L).toString());
             logger.info("All company coupons up to 500 (max price)");
-            logger.info(companyService.getCompanyCoupons(500d,1L).toString());
+            logger.info(companyService.getCompanyCoupons(500d, 1L).toString());
         } catch (ApplicationException e) {
             e.printStackTrace();
         }

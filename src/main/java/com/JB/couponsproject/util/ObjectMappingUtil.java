@@ -40,6 +40,7 @@ public class ObjectMappingUtil {
     //Convert Customer Dto to Customer Entity using Builder
     public static CustomerEntity customerDtoToEntity(CustomerDto customerDto){
         return CustomerEntity.builder()
+                .id(customerDto.getId())
                 .email(customerDto.getEmail())
                 .password(customerDto.getPassword())
                 .firstName(customerDto.getFirstName())

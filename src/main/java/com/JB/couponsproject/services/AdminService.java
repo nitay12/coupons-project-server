@@ -114,21 +114,21 @@ public class AdminService implements ClientService {
         if (!customerRepository.existsByEmail(email)){
             throw new ApplicationException("No customer under the email: "+email);
         }
-        return customerRepository.findByEmail(email).get(0);
+        return ObjectMappingUtil.customerEntityToDto(customerRepository.findByEmail(email).get(0));
     }
 
     public CompanyDto getCompanyByEmail(String email) throws ApplicationException {
         if(!companyRepository.existsByEmail(email)){
             throw new ApplicationException("No company under the email: "+email);
         }
-        return companyRepository.findByEmail(email).get(0);
+        return ObjectMappingUtil.companyEntityToCompanyDto(companyRepository.findByEmail(email).get(0));
     }
 
     public CompanyDto getCompanyByName(String name) throws ApplicationException {
         if(!companyRepository.existsByName(name)){
             throw new ApplicationException("No company under the name: "+name);
         }
-        return companyRepository.findByName(name).get(0);
+        return ObjectMappingUtil.companyEntityToCompanyDto(companyRepository.findByName(name).get(0));
     }
 
 }

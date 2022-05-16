@@ -17,7 +17,7 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity,Long> {
 
     List<CompanyEntity> findAllById(long id);
 
-    List<CompanyDto> findByEmail(String email);
+    List<CompanyEntity> findByEmail(String email);
 
-    List<CompanyDto> findByName(String name);
+    List<CompanyEntity> findByName(String name);
 }

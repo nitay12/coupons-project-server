@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class CouponDto {
     private final Long id;
-    private final Long companyId;
+    private Long companyId;
     private Category category;
     private String title;
     private String description;
