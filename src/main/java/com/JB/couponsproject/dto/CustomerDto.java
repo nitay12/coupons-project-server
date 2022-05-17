@@ -14,7 +14,7 @@ public class CustomerDto {
     private String firstName;
     private String lastName;
     private String email;
-    private int password;
+    private String password;
 
     public long getId() {
         return id;
@@ -44,11 +44,11 @@ public class CustomerDto {
         this.email = email;
     }
 
-    public int getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(int password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 }

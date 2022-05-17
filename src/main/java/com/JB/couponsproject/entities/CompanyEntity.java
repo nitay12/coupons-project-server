@@ -16,13 +16,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @ToString
 public class CompanyEntity implements Serializable {
-
-    public CompanyEntity(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password.hashCode();
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -34,7 +27,7 @@ public class CompanyEntity implements Serializable {
     @Column(name = "email", nullable = false)
     private String email;
     @Column(name = "password", nullable = false)
-    private int password;
+    private String password;
 
     //TODO: Check if the coupons list is needed
 //    @OneToMany(fetch = FetchType.EAGER, mappedBy = "companyEntity")
@@ -71,12 +64,14 @@ public class CompanyEntity implements Serializable {
         this.email = email;
     }
 
-    public int getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(int password) {
+    public void setPassword(String password) {
         this.password = password;
     }
-
+    public void hashPassword(){
+        setPassword(String.valueOf(password.hashCode()));
+    }
 }

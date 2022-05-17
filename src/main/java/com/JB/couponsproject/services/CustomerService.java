@@ -1,8 +1,6 @@
 package com.JB.couponsproject.services;
 
 
-import com.JB.couponsproject.dto.CustomerDto;
-import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.Category;
@@ -33,7 +31,7 @@ public class CustomerService implements ClientService {
         final List<CustomerEntity> allCustomers = customerRepository.findAll();
         for (CustomerEntity customer :
                 allCustomers) {
-            if (customer.getEmail().equalsIgnoreCase(email) & customer.getPassword() == password.hashCode()) {
+            if (customer.getEmail().equalsIgnoreCase(email) & Objects.equals(customer.getPassword(), String.valueOf(password.hashCode()))) {
                 return true;
             }
         }
@@ -44,24 +42,23 @@ public class CustomerService implements ClientService {
     //verify values: coupon id exist, user id exist, user coupon relation wasn't established yet
     public void purchaseCoupon(final Long couponId, final Long customerId) throws ApplicationException {
         final Optional<CouponEntity> tmpCoupon = couponRepository.findById(couponId);
-        if (tmpCoupon.isEmpty()){
+        if (tmpCoupon.isEmpty()) {
             throw new ApplicationException("Coupon doesn't exist in the system.");
         }
         final Optional<CustomerEntity> tmpCustomer = customerRepository.findById(customerId);
-        if (tmpCustomer.isEmpty()){
+        if (tmpCustomer.isEmpty()) {
             throw new ApplicationException("Customer ID isn't valid");
         }
-        if (tmpCustomer.get().getCoupons().contains(tmpCoupon.get())){
+        if (tmpCustomer.get().getCoupons().contains(tmpCoupon.get())) {
             throw new ApplicationException("Coupon already in customer's coupons list");
         }
         CouponEntity coupon = tmpCoupon.get();
-        if (coupon.getAmount()<=0){
+        if (coupon.getAmount() <= 0) {
             throw new ApplicationException("Coupon out of stock");
         }
         CustomerEntity customer = tmpCustomer.get();
-        customer.getCoupons().add(coupon);
-        coupon.setAmount(coupon.getAmount()-1);
-        //customer.purchaseCoupon(coupon);
+        coupon.setAmount(coupon.getAmount() - 1);
+        customer.purchaseCoupon(coupon);
         ObjectMappingUtil.customerEntityToDto(customerRepository.save(customer));
 
     }
@@ -69,19 +66,18 @@ public class CustomerService implements ClientService {
     //Methods: get Customer's Coupons - all
     //customer id taken from state
     public List<CouponEntity> getCustomerCoupons(long customerId) {
-        final List<CouponEntity> coupons = couponRepository.getCustomerCoupons(customerId);
-        return coupons;
+//        final List<CouponEntity> coupons = couponRepository.getCustomerCoupons(customerId);
+//        return coupons;
+        return customerRepository.findById(customerId).get().getCoupons();
     }
 
     public List<CouponEntity> getCustomerCoupons(final Long customerId) {
-        final List<CouponEntity> coupons = couponRepository.getCustomerCoupons(customerId);
-        return coupons;
+        return couponRepository.getCustomerCoupons(customerId);
     }
 
     //Methods: get Customer's Coupons - from category id
-    public List<CouponEntity> getCustomerCoupons(final Category category,long customerId) {
-        final List<CouponEntity> coupons = couponRepository.getCustomerCouponsByCategory(customerId, category);
-        return coupons;
+    public List<CouponEntity> getCustomerCoupons(final Category category, long customerId) {
+        return couponRepository.getCustomerCouponsByCategory(customerId, category);
     }
 // seems like duplicate function
 //    public List<CouponEntity> getCustomerCoupons(final Category category, final Long customerId) {
@@ -92,21 +88,16 @@ public class CustomerService implements ClientService {
     //Methods: get Customer's Coupons - up to price x
     //customer id taken from state
     public List<CouponEntity> getCustomerCoupons(final double price, long customerId) {
-        final List<CouponEntity> coupons = couponRepository.findCustomerCouponsByPriceLessThan(customerId, price);
-        return coupons;
+        return couponRepository.findCustomerCouponsByPriceLessThan(customerId, price);
     }
 
     public List<CouponEntity> getCustomerCoupons(final double price, final Long customerId) {
-        final List<CouponEntity> coupons = couponRepository.findCustomerCouponsByPriceLessThan(customerId, price);
-        return coupons;
+        return couponRepository.findCustomerCouponsByPriceLessThan(customerId, price);
     }
 
-    public CustomerEntity getLoggedInCustomer(long customerId) throws ApplicationException {
-        if (Objects.nonNull(customerId)) {
-            return customerRepository.findById(customerId).get();
-        }
-        else{
-            throw new ApplicationException("No customer logged in");
-        }
+    //TODO: Check if customer is logged in with LoginManager
+    //TODO: Check if customer exists
+    public CustomerEntity getLoggedInCustomer(long customerId) {
+        return customerRepository.findById(customerId).get();
     }
 }

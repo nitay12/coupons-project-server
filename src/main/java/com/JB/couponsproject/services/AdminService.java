@@ -39,6 +39,7 @@ public class AdminService implements ClientService {
 
     public CustomerEntity createCustomer(final CustomerEntity customerEntity) throws ApplicationException {
         if(!customerRepository.existsByEmail(customerEntity.getEmail())){
+            customerEntity.hashPassword();
             return customerRepository.save(customerEntity);
         }
         else {
@@ -54,6 +55,7 @@ public class AdminService implements ClientService {
             throw new ApplicationException("Email already exist in the system.");
         }
         else {
+            companyEntity.hashPassword();
             return companyRepository.save(companyEntity);
         }
     }

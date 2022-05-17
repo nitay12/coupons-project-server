@@ -15,13 +15,6 @@ import java.util.List;
 @ToString
 @Builder
 public class CustomerEntity {
-    public CustomerEntity(String firstName, String lastName, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password.hashCode();
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,7 +27,7 @@ public class CustomerEntity {
     @Column(name="email", nullable = false, unique = true)
     private String email;
     @Column(name="password", nullable = false)
-    private int password;
+    private String password;
     @Getter
     @ManyToMany(fetch = FetchType.EAGER, cascade =  { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
@@ -43,9 +36,10 @@ public class CustomerEntity {
             inverseJoinColumns = @JoinColumn(name = "coupon_id")
     )
     private List<CouponEntity> coupons = new ArrayList<>();
-
+    public void hashPassword(){
+        setPassword(String.valueOf(password.hashCode()));
+    }
     public void purchaseCoupon(CouponEntity coupon){
         coupons.add(coupon);
     }
-
 }

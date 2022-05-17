@@ -28,18 +28,16 @@ public class AdminServiceTest implements CommandLineRunner {
         logger.info("Starting Tests...");
         //Add company test
         logger.info("Adding new company");
-        final CompanyEntity company = adminService.createCompany(CompanyEntity.builder().email("COMPANY@TEST.COM").name("Test Company LTD").password(123456).build());
+        final CompanyEntity company = adminService.createCompany(CompanyEntity.builder().email("COMPANY@TEST.COM").name("Test Company LTD").password("123456").build());
         logger.info("Company added, "+company.toString());
         logger.info("Get Company by: name, id, email");
         CompanyDto companyDto = adminService.getCompanyByName("Test Company LTD");
         logger.info("Get Company by: name\n" + companyDto.toString());
         long id = companyDto.getId();
         logger.info("Resetting company.");
-        companyDto  = null;
         companyDto = adminService.getCompanyById(id);
         logger.info("Get Company by: id\n" + companyDto.toString());
         logger.info("Resetting company.");
-        companyDto  = null;
         companyDto = adminService.getCompanyByEmail("COMPANY@TEST.COM");
         logger.info("Get Company by: email\n" + companyDto.toString());
         //Update company test
@@ -50,14 +48,13 @@ public class AdminServiceTest implements CommandLineRunner {
 
         //Add customer test
         logger.info("Adding new customer");
-        final CustomerEntity customer = adminService.createCustomer(CustomerEntity.builder().email("CUSTOMER@TEST.COM").firstName("FTEST").lastName("LTEST").password(123456).build());
+        final CustomerEntity customer = adminService.createCustomer(CustomerEntity.builder().email("CUSTOMER@TEST.COM").firstName("FTEST").lastName("LTEST").password("123456").build());
         logger.info("Customer added, "+customer.toString());
         //Get customer tests
         CustomerDto customerDto = adminService.getCustomerByEmail("CUSTOMER@TEST.COM");
         logger.info("Get Customer by: email\n" + customerDto.toString());
         id = customerDto.getId();
         logger.info("Resetting customer.");
-        customerDto  = null;
         customerDto = adminService.getCustomerById(id);
         logger.info("Get Customer by: Id\n" + customerDto.toString());
         //Update customer test
@@ -65,7 +62,7 @@ public class AdminServiceTest implements CommandLineRunner {
         customerDto.setFirstName("First");
         customerDto.setLastName("Last");
         adminService.updateCustomer(customerDto);
-        logger.info("Customer updated, "+customerDto.toString());
+        logger.info("Customer updated, "+customerDto);
 
         //Get All
         List<CompanyEntity> companies = adminService.getAllCompanies();

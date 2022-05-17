@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -31,7 +32,7 @@ public class CompanyService implements ClientService {
         final List<CompanyEntity> allCompanies = companyRepository.findAll();
         for (CompanyEntity company :
                 allCompanies) {
-            if (company.getEmail().equalsIgnoreCase(email) & company.getPassword() == password.hashCode()) {
+            if (company.getEmail().equalsIgnoreCase(email) & Objects.equals(company.getPassword(), String.valueOf(password.hashCode()))) {
                 return true;
             }
         }
@@ -59,7 +60,7 @@ public class CompanyService implements ClientService {
         }
         //Title already exist (from logged in company coupons)
         if (
-                couponRepository.existsByTitleAndCompanyId(couponDto.getTitle(),companyId)
+                isTitleExistByCompanyId(companyId, couponDto)
         ) {
             throw new TitleExistException("This title is already exist");
         }

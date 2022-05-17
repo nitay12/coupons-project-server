@@ -1,15 +1,10 @@
 package com.JB.couponsproject.util;
 
-import com.JB.couponsproject.dto.CompanyDto;
 import com.JB.couponsproject.dto.CouponDto;
-import com.JB.couponsproject.dto.CustomerDto;
 import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.exceptions.ApplicationException;
-import com.JB.couponsproject.repositories.CompanyRepository;
-import com.JB.couponsproject.repositories.CouponRepository;
-import com.JB.couponsproject.repositories.CustomerRepository;
 import com.JB.couponsproject.services.AdminService;
 import com.JB.couponsproject.services.CompanyService;
 import com.JB.couponsproject.services.CustomerService;
@@ -35,10 +30,10 @@ public class MockDataInserter implements CommandLineRunner {
         logger.info("Inserting mock data to the DB");
         for (int i = 1; i <= 10; i++) {
             final CompanyEntity newCompany = adminService.createCompany
-                    (new CompanyEntity(
-                            "company" + i,
-                            "company" + i + "@email.com",
-                            "123456"));
+                    (CompanyEntity.builder()
+                            .name("company" + i)
+                            .email("company" + i + "@email.com")
+                            .password("123456").build());
             logger.debug("New company added:" + newCompany.toString());
             companyService.login(
                     newCompany.getEmail(), "123456"
@@ -55,16 +50,15 @@ public class MockDataInserter implements CommandLineRunner {
                             .image("https://company/image.jpg")
                             .build()
                     , 1L);
-            final CustomerEntity newCustomer = adminService.createCustomer(new CustomerEntity(
-                    "customer" + i,
-                    "last name",
-                    "customer" + i + "@email.com",
-                    "123456"
-            ));
+            final CustomerEntity newCustomer = adminService.createCustomer(
+                    CustomerEntity.builder()
+                            .firstName("customer" + i)
+                            .lastName("last name")
+                            .email("customer" + i + "@email.com")
+                            .password("123456").build());
             logger.debug("New customer was added to the DB: " + newCustomer.toString());
             customerService.purchaseCoupon(newCouponId, newCustomer.getId());
             logger.debug(newCustomer.getFirstName() + " purchased coupon");
-
         }
     }
 
