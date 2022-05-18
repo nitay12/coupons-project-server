@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -93,6 +94,16 @@ public class CompanyService implements ClientService {
 
     public List<CouponEntity> getCompanyCoupons(double maxPrice,long companyId) {
         return couponRepository.findByCompanyIdAndPriceLessThan(companyId, maxPrice);
+    }
+    public CouponDto getOneCoupon(Long companyId, Long couponId) throws EntityNotFoundException {
+        final List<CouponEntity> companyCoupons = getCompanyCoupons(companyId);
+        final Optional<CouponEntity> coupon = companyCoupons.stream().filter(c -> c.getId().equals(companyId)).findAny();
+        if(coupon.isPresent()){
+            return ObjectMappingUtil.couponEntityToCouponDto(coupon.get());
+        }
+        else {
+            throw new EntityNotFoundException("Coupon not found");
+        }
     }
 
     // Consider Removing this function
