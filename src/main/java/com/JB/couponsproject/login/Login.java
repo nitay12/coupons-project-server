@@ -13,13 +13,13 @@ public class Login {
 
     private final LoginManager loginManager;
     public void login(){
-        System.out.println("Are you admin, company or a n customer? 1,2,3");
-        int loginType = SCANNER.nextInt();
-        System.out.println("Please enter your email: ");
-        String email = SCANNER.next();
-        System.out.println("Please enter your password: ");
-        String password = SCANNER.next();
-        loginManager.login(loginType,email,password);
+//        System.out.println("Are you admin, company or a n customer? 1,2,3");
+//        int loginType = SCANNER.nextInt();
+//        System.out.println("Please enter your email: ");
+//        String email = SCANNER.next();
+//        System.out.println("Please enter your password: ");
+//        String password = SCANNER.next();
+//        loginManager.login(loginType,email,password);
     }
 
     public void askLogout(String email){

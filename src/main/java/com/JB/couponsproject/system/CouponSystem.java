@@ -6,6 +6,7 @@ import com.JB.couponsproject.dto.CustomerDto;
 import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
+import com.JB.couponsproject.enums.UserType;
 import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.login.LoginManager;
 import com.JB.couponsproject.services.AdminService;
@@ -83,7 +84,7 @@ public class CouponSystem implements CommandLineRunner {
         while (!quit) {
             switch (answer) {
                 case "admin":
-                    if (adminService.login(
+                    if (loginManager.login(UserType.ADMIN,
                             getStringInput("Please enter email"),
                             getStringInput("Please enter password")
                     )
@@ -92,8 +93,9 @@ public class CouponSystem implements CommandLineRunner {
                     }
                     break;
                 case "company":
-                    final String email = getStringInput("Please enter email");
-                    if (companyService.login(
+                    String email = getStringInput("Please enter email");
+                    if (loginManager.login(
+                            UserType.COMPANY,
                             email,
                             getStringInput("Please enter password")
                     )) {
@@ -102,7 +104,15 @@ public class CouponSystem implements CommandLineRunner {
                     }
                     break;
                 case "customer":
-                    System.out.println("Sorry the customer menu is not available");
+                    email = getStringInput("Please enter email");
+                    if (loginManager.login(
+                            UserType.CUSTOMER,
+                            email,
+                            getStringInput("Please enter password")
+                    )) {
+                        final CustomerDto loggedInCustomer = adminService.getCustomerByEmail(email);
+                    System.out.println("Hello " + loggedInCustomer.getFirstName() + ", Sorry the customer menu is not available");
+                    }
 //                    openCustomerMenu();
                 case "R":
                     quit = true;

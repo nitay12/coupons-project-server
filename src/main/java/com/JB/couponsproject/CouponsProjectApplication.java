@@ -22,11 +22,9 @@ import java.time.LocalDate;
 @SpringBootApplication
 public class CouponsProjectApplication {
 
-	public static void main(String[] args) throws ApplicationException {
-		ApplicationContext ctx = SpringApplication.run(CouponsProjectApplication.class, args);
-		Login login = ctx.getBean(Login.class);
-		login.login();
-		DailyJob dailyJob = ctx.getBean(DailyJob.class);
-		dailyJob.checkExpiredCoupons();
-	}
+    public static void main(String[] args) throws ApplicationException {
+        ApplicationContext ctx = SpringApplication.run(CouponsProjectApplication.class, args);
+        DailyJob dailyJob = ctx.getBean(DailyJob.class);
+        dailyJob.checkExpiredCoupons();
+    }
 }

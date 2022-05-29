@@ -8,6 +8,7 @@ import com.JB.couponsproject.services.CompanyService;
 import com.JB.couponsproject.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,27 +23,20 @@ public class LoginManager {
     private final Map<String, UserType> users = new HashMap<>();
     private ClientService clientService;
 
-    public void login(int loginType,String email,String password){
-        switch (loginType){
-            case 1:
-                clientService = adminService;
-                break;
-            case 2:
-                clientService = companyService;
-                break;
-            case 3:
-                clientService = customerService;
-                break;
-            default:
-                break;
-        }
-        try{
-            if(clientService.login(email,password)){
-                users.put(email,UserType.values()[loginType -1]);
-                System.out.println("welcome " + email);
+    public boolean login(UserType userType, String email, String password) throws ApplicationException {
+        switch (userType) {
+            case ADMIN -> clientService = adminService;
+            case COMPANY -> clientService = companyService;
+            case CUSTOMER -> clientService = customerService;
+            default -> {
             }
-        }catch (ApplicationException e){
-            System.out.println(e.getMessage());
+        }
+        if (clientService.login(email, password)) {
+            users.put(email, userType);
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
@@ -50,7 +44,7 @@ public class LoginManager {
         return users;
     }
 
-    public void logout(String email){
+    public void logout(String email) {
         users.remove(email);
     }
 }
