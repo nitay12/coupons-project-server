@@ -15,9 +15,8 @@ import org.springframework.stereotype.Component;
 @Order(4)
 @RequiredArgsConstructor
 @Slf4j
-public class CustomerServiceTest implements CommandLineRunner {
+public class CustomerServiceTest implements CommandLineRunner{
     private final CustomerService customerService;
-
     @Override
     public void run(String... args) throws Exception {
         //Login tests
@@ -32,7 +31,7 @@ public class CustomerServiceTest implements CommandLineRunner {
         customerService.login("customer1@email.com", "123456");
         //Purchase coupon test
         log.info("Purchase coupon test");
-        customerService.purchaseCoupon(5L,3L);
+        customerService.purchaseCoupon(9L,3L);
         //Get customer coupons tests (all, category, max price
         log.info("get all customer coupons:");
         log.info(customerService.getCustomerCoupons(3L).toString());

@@ -1,5 +1,6 @@
 package com.JB.couponsproject.services;
 
+import com.JB.couponsproject.dto.CompanyDto;
 import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CouponEntity;
@@ -40,6 +41,10 @@ public class CompanyService implements ClientService {
         throw new WrongCertificationsException("Wrong email or password");
     }
 
+    public long findIdByEmail(String email){
+                return companyRepository.findByEmail(email).get(0).getId();
+
+    }
     public long addCoupon(CouponDto couponDto,long companyId) throws ApplicationException {
         //Verifications
         //Same title

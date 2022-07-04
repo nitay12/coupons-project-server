@@ -6,6 +6,7 @@ import com.JB.couponsproject.services.AdminService;
 import com.JB.couponsproject.services.ClientService;
 import com.JB.couponsproject.services.CompanyService;
 import com.JB.couponsproject.services.CustomerService;
+import com.JB.couponsproject.system.CouponSystem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,6 @@ public class LoginManager {
     private final AdminService adminService;
     private final CompanyService companyService;
     private final CustomerService customerService;
-
     private final Map<String, UserType> users = new HashMap<>();
     private ClientService clientService;
 

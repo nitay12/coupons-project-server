@@ -56,7 +56,7 @@ public class CouponEntity implements Serializable {
     private double price;
     @Column(name = "image")
     private String image;
-    @ManyToMany(mappedBy = "coupons", cascade = {CascadeType.REMOVE})
+    @ManyToMany(mappedBy = "coupons", cascade = CascadeType.REMOVE)
     private List<CustomerEntity> buyers;
 
     @Override

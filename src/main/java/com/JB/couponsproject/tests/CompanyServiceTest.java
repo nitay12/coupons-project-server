@@ -15,17 +15,15 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-
+@Order(3)
 @RequiredArgsConstructor
 @Component
-@Order(3)
 public class CompanyServiceTest implements CommandLineRunner {
     private final CompanyService companyService;
     private final CouponRepository couponRepository;
     private final Logger logger = LoggerFactory.getLogger(CompanyServiceTest.class);
-
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws ApplicationException{
         try {
             //Tests
             //Login test

@@ -51,4 +51,8 @@ public class CustomerDto {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public void hashPassword(){
+        setPassword(String.valueOf(password.hashCode()));
+    }
 }
