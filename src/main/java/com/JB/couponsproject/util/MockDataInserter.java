@@ -1,8 +1,8 @@
 package com.JB.couponsproject.util;
 
+import com.JB.couponsproject.dto.CompanyDto;
 import com.JB.couponsproject.dto.CouponDto;
-import com.JB.couponsproject.entities.CompanyEntity;
-import com.JB.couponsproject.entities.CustomerEntity;
+import com.JB.couponsproject.dto.CustomerDto;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.services.AdminService;
@@ -26,14 +26,16 @@ public class MockDataInserter implements CommandLineRunner {
     private final CompanyService companyService;
     private final Logger logger = LoggerFactory.getLogger(MockDataInserter.class);
 
+
     public void insert() throws ApplicationException {
         logger.info("Inserting mock data to the DB");
         for (int i = 1; i <= 10; i++) {
-            final CompanyEntity newCompany = adminService.createCompany
-                    (CompanyEntity.builder()
+            final CompanyDto newCompany = adminService.createCompany
+                    (CompanyDto.builder()
                             .name("company" + i)
                             .email("company" + i + "@email.com")
-                            .password("123456").build());
+                            .password("123456")
+                            .build());
             logger.debug("New company added:" + newCompany.toString());
             companyService.login(
                     newCompany.getEmail(), "123456"
@@ -50,8 +52,8 @@ public class MockDataInserter implements CommandLineRunner {
                             .image("https://company/image.jpg")
                             .build()
                     , 1L);
-            final CustomerEntity newCustomer = adminService.createCustomer(
-                    CustomerEntity.builder()
+            final CustomerDto newCustomer = adminService.createCustomer(
+                    CustomerDto.builder()
                             .firstName("customer" + i)
                             .lastName("last name")
                             .email("customer" + i + "@email.com")

@@ -11,7 +11,7 @@ import com.JB.couponsproject.exceptions.WrongCertificationsException;
 import com.JB.couponsproject.repositories.CompanyRepository;
 import com.JB.couponsproject.repositories.CouponRepository;
 import com.JB.couponsproject.repositories.CustomerRepository;
-import com.JB.couponsproject.texts.Texts;
+import com.JB.couponsproject.constants.TestData;
 import com.JB.couponsproject.util.ObjectMappingUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -30,64 +30,56 @@ public class AdminService implements ClientService {
     Logger logger = LoggerFactory.getLogger(AdminService.class);
 
     public boolean login(String email, String password) throws ApplicationException {
-        if (email.equals(Texts.ADMIN_EMAIL) & password.equals(Texts.AMDIN_PASSWORD)) {
+        if (email.equals(TestData.ADMIN_EMAIL) & password.equals(TestData.AMDIN_PASSWORD)) {
             logger.info("Administrator logged into the system.");
             return true;
         }
         throw new WrongCertificationsException("Wrong email or password");
     }
 
-    public CustomerEntity createCustomer(final CustomerEntity customerEntity) throws ApplicationException {
-        if(!customerRepository.existsByEmail(customerEntity.getEmail())){
-            customerEntity.hashPassword();
-            return customerRepository.save(customerEntity);
+    public CustomerDto createCustomer(final CustomerDto customerDto) throws ApplicationException {
+        if(!customerRepository.existsByEmail(customerDto.getEmail())){
+            customerDto.hashPassword();
+            return ObjectMappingUtil.customerEntityToDto(
+                    customerRepository.save(
+                            ObjectMappingUtil.customerDtoToEntity(customerDto)));
         }
         else {
             throw new ApplicationException("Email already exist in the system.");
         }
     }
 
-    public CompanyEntity createCompany(final CompanyEntity companyEntity) throws ApplicationException {
-        if (companyRepository.existsByName(companyEntity.getName())){
+    public CompanyDto createCompany(final CompanyDto companyDto) throws ApplicationException {
+        if (companyRepository.existsByName(companyDto.getName())){
             throw new ApplicationException("Name already exist in the system.");
         }
-        if (companyRepository.existsByEmail(companyEntity.getEmail())){
+        if (companyRepository.existsByEmail(companyDto.getEmail())){
             throw new ApplicationException("Email already exist in the system.");
         }
         else {
-            companyEntity.hashPassword();
-            return companyRepository.save(companyEntity);
+            companyDto.hashPassword();
+            return ObjectMappingUtil.companyEntityToCompanyDto(
+                    companyRepository.save(
+                            ObjectMappingUtil.companyDtoToCompanyEntity(companyDto)));
         }
     }
 
-    public void updateCustomer(CustomerDto customerDto) throws ApplicationException {
-        final CustomerEntity customerEntity = ObjectMappingUtil.customerDtoToEntity(customerDto);
-        customerRepository.save(customerEntity);
-        logger.info("Customer " + customerDto.getId() + " was updated");
-    }
-
-    public void updateCompany(CompanyDto companyDto) throws ApplicationException{
-        final CompanyEntity companyEntity = ObjectMappingUtil.companyDtoToCompanyEntity(companyDto);
-        companyRepository.save(companyEntity);
-        logger.info("Company "+ companyDto.getId() +" was updated");
-    }
-
-    public void deleteCustomer(CustomerDto customerDto) throws ApplicationException{
-        if (!customerRepository.existsById(customerDto.getId())){
-            throw new EntityNotFoundException(EntityType.CUSTOMER, customerDto.getId());
+    public void deleteCustomer(final long id) throws ApplicationException{
+        if (!customerRepository.existsById(id)){
+            throw new EntityNotFoundException(EntityType.CUSTOMER, id);
         }
-        logger.info("Customer been deleted, id: "+customerDto.getId());
-        customerRepository.deleteById(customerDto.getId());
+        logger.info("Customer been deleted, id: "+ id);
+        customerRepository.deleteById(id);
     }
 
     @Transactional
-    public void deleteCompany(CompanyDto companyDto) throws ApplicationException{
-        if (!companyRepository.existsById(companyDto.getId())){
-            throw new EntityNotFoundException(EntityType.COMPANY, companyDto.getId());
+    public void deleteCompany(final long id) throws ApplicationException{
+        if (!companyRepository.existsById(id)){
+            throw new EntityNotFoundException(EntityType.COMPANY, id);
         }
-        couponRepository.deleteAllByCompanyId(companyDto.getId());
-        companyRepository.deleteById(companyDto.getId());
-        logger.info("Company been deleted, id: "+companyDto.getId());
+        couponRepository.deleteAllByCompanyId(id);
+        companyRepository.deleteById(id);
+        logger.info("Company been deleted, id: "+ id);
     }
 
     public List<CustomerEntity> getAllCustomers(){
@@ -98,35 +90,35 @@ public class AdminService implements ClientService {
         return companyRepository.findAll();
     }
 
-    public CustomerDto getCustomerById(Long id) throws ApplicationException {
+    public CustomerDto getCustomerById(final long id) throws ApplicationException {
         if (!customerRepository.existsById(id)){
             throw new ApplicationException("No customer under the id: "+id);
         }
         return ObjectMappingUtil.customerEntityToDto(customerRepository.findById(id).get());
     }
 
-    public CompanyDto getCompanyById(Long id) throws ApplicationException {
+    public CompanyDto getCompanyById(final long id) throws ApplicationException {
         if (!companyRepository.existsById(id)){
             throw new ApplicationException("No company under the id: "+id);
         }
         return ObjectMappingUtil.companyEntityToCompanyDto(companyRepository.findById(id).get());
     }
 
-    public CustomerDto getCustomerByEmail(String email) throws ApplicationException {
+    public CustomerDto getCustomerByEmail(final String email) throws ApplicationException {
         if (!customerRepository.existsByEmail(email)){
             throw new ApplicationException("No customer under the email: "+email);
         }
         return ObjectMappingUtil.customerEntityToDto(customerRepository.findByEmail(email).get(0));
     }
 
-    public CompanyDto getCompanyByEmail(String email) throws ApplicationException {
+    public CompanyDto getCompanyByEmail(final String email) throws ApplicationException {
         if(!companyRepository.existsByEmail(email)){
             throw new ApplicationException("No company under the email: "+email);
         }
         return ObjectMappingUtil.companyEntityToCompanyDto(companyRepository.findByEmail(email).get(0));
     }
 
-    public CompanyDto getCompanyByName(String name) throws ApplicationException {
+    public CompanyDto getCompanyByName(final String name) throws ApplicationException {
         if(!companyRepository.existsByName(name)){
             throw new ApplicationException("No company under the name: "+name);
         }

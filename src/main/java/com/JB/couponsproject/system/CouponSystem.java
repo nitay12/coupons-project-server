@@ -11,40 +11,33 @@ import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.login.LoginManager;
 import com.JB.couponsproject.services.AdminService;
 import com.JB.couponsproject.services.CompanyService;
-import com.JB.couponsproject.services.CustomerService;
-import com.JB.couponsproject.tests.AdminServiceTest;
-import com.JB.couponsproject.tests.CompanyServiceTest;
-import com.JB.couponsproject.tests.CustomerServiceTest;
-import com.JB.couponsproject.util.ObjectMappingUtil;
+import com.JB.couponsproject.services.DailyJobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import static com.JB.couponsproject.util.MyScanner.*;
 
 @Component
 @RequiredArgsConstructor
 public class CouponSystem implements CommandLineRunner {
-    private final AdminServiceTest adminServiceTest;
-    private final CompanyServiceTest companyServiceTest;
-    private final CustomerServiceTest customerServiceTest;
     private final AdminService adminService;
     private final CompanyService companyService;
-    private final CustomerService customerService;
-    private final LoginManager loginManager;
 
+    private final LoginManager loginManager;
+    private final DailyJobService dailyJobService;
+
+    private static final Scanner SCANNER = new Scanner(System.in);
     @Override
     public void run(String... args) throws Exception {
         boolean quit = false;
         while (!quit) {
             printMainMenu();
-            String answer = getStringInput("", Arrays.asList("1", "2", "3", "DOCS"));
+            String answer = getStringInput("", Arrays.asList("1", "2"));
             switch (answer) {
                 case "1":
                     try {
@@ -54,21 +47,9 @@ public class CouponSystem implements CommandLineRunner {
                     }
                     break;
                 case "2":
-                    try {
-                        adminServiceTest.run();
-                        companyServiceTest.run();
-                        customerServiceTest.run();
-                    } catch (ApplicationException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case "3":
+                    dailyJobService.stop();
                     quit = true;
-//TODO: make DailyJob stoppable or delete this option
                     break;
-                case "DOCS":
-                    System.out.println("Sorry, the docs is not available");
-//TODO: Create Javadoc html or delete this option
 
 //Uncomment and replace URL if Javadoc file was created
 //                    if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
@@ -79,49 +60,23 @@ public class CouponSystem implements CommandLineRunner {
     }
 
     private void openLoginMenu() throws ApplicationException {
-        String answer = getStringInput("Please choose a client type, press R to return the previous menu", Arrays.asList("admin", "company", "customer", "R"));
-        boolean quit = false;
-        while (!quit) {
-            switch (answer) {
-                case "admin":
-                    if (loginManager.login(UserType.ADMIN,
-                            getStringInput("Please enter email"),
-                            getStringInput("Please enter password")
-                    )
-                    ) {
-                        openAdminMenu();
-                    }
-                    break;
-                case "company":
-                    String email = getStringInput("Please enter email");
-                    if (loginManager.login(
-                            UserType.COMPANY,
-                            email,
-                            getStringInput("Please enter password")
-                    )) {
-                        final CompanyDto loggedInCompany = adminService.getCompanyByEmail(email);
-                        openCompanyMenu(loggedInCompany.getId());
-                    }
-                    break;
-                case "customer":
-                    email = getStringInput("Please enter email");
-                    if (loginManager.login(
-                            UserType.CUSTOMER,
-                            email,
-                            getStringInput("Please enter password")
-                    )) {
-                        final CustomerDto loggedInCustomer = adminService.getCustomerByEmail(email);
-                    System.out.println("Hello " + loggedInCustomer.getFirstName() + ", Sorry the customer menu is not available");
-                    }
-//                    openCustomerMenu();
-                case "R":
-                    quit = true;
-                    break;
+        System.out.println("Are you admin, company or a customer? 1,2,3");
+        int loginType = SCANNER.nextInt();
+        System.out.println("Please enter your email: ");
+        String email = SCANNER.next();
+        System.out.println("Please enter your password: ");
+        String password = SCANNER.next();
+        UserType userType = UserType.values()[loginType -1];
+        if(loginManager.login(userType,email,password)){
+            switch (userType){
+                case ADMIN -> openAdminMenu();
+                case COMPANY -> openCompanyMenu(email);
+                case CUSTOMER -> openCustomerMenu();
             }
         }
     }
 
-    private void openCustomerMenu() {
+    public void openCustomerMenu() {
         boolean quit = false;
         while (!quit) {
             switch (
@@ -142,7 +97,8 @@ public class CouponSystem implements CommandLineRunner {
         }
     }
 
-    private void openCompanyMenu(Long companyId) throws ApplicationException {
+    public void openCompanyMenu(String email) throws ApplicationException {
+        long companyId = companyService.findIdByEmail(email);
         boolean quit = false;
         while (!quit) {
             System.out.println("""
@@ -203,7 +159,7 @@ public class CouponSystem implements CommandLineRunner {
         }
     }
 
-    private void openAdminMenu() throws ApplicationException {
+    public void openAdminMenu() throws ApplicationException {
         boolean quit = false;
         System.out.println("Welcome admin");
         while (!quit) {
@@ -225,10 +181,9 @@ public class CouponSystem implements CommandLineRunner {
             switch (answer) {
                 case "1" -> {
                     //Add company
-                    CompanyDto company = createCompany();
-                    final CompanyEntity companyEntity = ObjectMappingUtil.companyDtoToCompanyEntity(company);
-                    final CompanyEntity newCompany = adminService.createCompany(companyEntity);
-                    System.out.println(company.getName() + " was added to the DB (id:" + newCompany.getId() + ")");
+                    CompanyDto companyDto = createCompany();
+                    final CompanyDto newCompany = adminService.createCompany(companyDto);
+                    System.out.println(companyDto.getName() + " was added to the DB (id:" + newCompany.getId() + ")");
                     break;
                 }
                 case "2" -> {
@@ -239,7 +194,7 @@ public class CouponSystem implements CommandLineRunner {
                     final CompanyDto compToUpdate = adminService.getCompanyById(Long.parseLong(compToUpdateId));
                     final String newEmail = getStringInput("Enter new company email");
                     compToUpdate.setEmail(newEmail);
-                    adminService.updateCompany(compToUpdate);
+                    adminService.createCompany(compToUpdate);
                     System.out.println("Company email was updated");
                 }
                 case "3" -> {
@@ -261,15 +216,13 @@ public class CouponSystem implements CommandLineRunner {
                     final List<CompanyEntity> allCompanies = adminService.getAllCompanies();
                     System.out.println("All companies: " + allCompanies);
                     String compToDeleteId = getStringInput("Select a company id to delete");
-                    final CompanyDto companyToDelete = adminService.getCompanyById(Long.parseLong(compToDeleteId));
-                    adminService.deleteCompany(companyToDelete);
+                    adminService.deleteCompany(Long.parseLong(compToDeleteId));
                     System.out.println("Company with id " + compToDeleteId + " was deleted from the DB");
                 }
                 case "6" -> {
                     //Add customer
                     CustomerDto newCustomer = createCustomer();
-                    final CustomerEntity customerEntity = ObjectMappingUtil.customerDtoToEntity(newCustomer);
-                    final CustomerEntity addedCustomer = adminService.createCustomer(customerEntity);
+                    final CustomerDto addedCustomer = adminService.createCustomer(newCustomer);
                     System.out.println(newCustomer.getFirstName() + " was added to the DB. (id:" + addedCustomer.getId() + ")");
                 }
                 case "7" -> {
@@ -280,7 +233,7 @@ public class CouponSystem implements CommandLineRunner {
                     CustomerDto custToUpdate = adminService.getCustomerById(Long.parseLong(custToUpdateId));
                     String newFirstName = getStringInput("enter new customer first name");
                     custToUpdate.setFirstName(newFirstName);
-                    adminService.updateCustomer(custToUpdate);
+                    adminService.createCustomer(custToUpdate);
                     System.out.println("Customer with id:" + custToUpdateId + " first name is now - " + newFirstName);
                 }
                 case "8" -> {
@@ -299,36 +252,13 @@ public class CouponSystem implements CommandLineRunner {
                     final List<CustomerEntity> allCustomers = adminService.getAllCustomers();
                     System.out.println("All customers" + allCustomers);
                     String custToDeleteId = getStringInput("Please choose a customer id from the list");
-                    CustomerDto custToDelete = adminService.getCustomerById(Long.parseLong(custToDeleteId));
-                    adminService.deleteCustomer(custToDelete);
+                    adminService.deleteCustomer(Long.parseLong(custToDeleteId));
                 }
                 case "R" -> quit = true;
             }
         }
 
     }
-//
-//    private List<String> getAvailableCompId(AdminFacade adminFacade) throws CrudException, InterruptedException {
-//        //Print available companies id
-//        ArrayList<Company> allCompanies = adminFacade.getAllCompanies();
-//        List<String> availableCompsId = new ArrayList<>();
-//        for (Company comp :
-//                allCompanies) {
-//            availableCompsId.add(String.valueOf(comp.getId()));
-//        }
-//        return availableCompsId;
-//    }
-//
-//    private List<String> getAvailableCustId(AdminFacade adminFacade) throws CrudException {
-//        //Print available customers ids
-//        ArrayList<Customer> allCustomers = adminFacade.getAllCustomers();
-//        List<String> availableCustId = new ArrayList<>();
-//        for (Customer customer :
-//                allCustomers) {
-//            availableCustId.add(String.valueOf(customer.getId()));
-//        }
-//        return availableCustId;
-//    }
 
     private static void printMainMenu() {
         System.out.println("************************************\n" +
@@ -336,9 +266,7 @@ public class CouponSystem implements CommandLineRunner {
 
                            "press 0 to change daily job mode \n" +
                            "Press 1 to log in\n" +
-                           "Press 2 to start all tests\n" +
-                           "Press 3 to quit\n" +
-                           "Type DOCS to open the docs on your web browser\n" +
+                           "Press 2 to quit\n" +
                            "************************************");
     }
 

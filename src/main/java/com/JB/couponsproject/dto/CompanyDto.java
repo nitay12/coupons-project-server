@@ -13,8 +13,12 @@ import lombok.*;
 @RequiredArgsConstructor
 public class CompanyDto {
     private final long id;
-    private final String name;
+    private String name;
     private String email;
     private String password;
 
+
+    public void hashPassword(){
+        setPassword(String.valueOf(password.hashCode()));
+    }
 }

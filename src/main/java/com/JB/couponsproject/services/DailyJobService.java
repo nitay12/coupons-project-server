@@ -21,4 +21,7 @@ public class DailyJobService {
             System.out.println("deleted coupon" + expiredCoupon.getId());
         }
     }
+    public void stop(){
+        Thread.interrupted();
+    }
 }

@@ -71,7 +71,4 @@ public class CompanyEntity implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    public void hashPassword(){
-        setPassword(String.valueOf(password.hashCode()));
-    }
 }

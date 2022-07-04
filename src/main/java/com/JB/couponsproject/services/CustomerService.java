@@ -60,12 +60,11 @@ public class CustomerService implements ClientService {
         coupon.setAmount(coupon.getAmount() - 1);
         customer.purchaseCoupon(coupon);
         ObjectMappingUtil.customerEntityToDto(customerRepository.save(customer));
-
     }
 
     //Methods: get Customer's Coupons - all
     //customer id taken from state
-    public List<CouponEntity> getCustomerCoupons(long customerId) {
+    public List<CouponEntity> getCustomerCoupons(final long customerId) {
 //        final List<CouponEntity> coupons = couponRepository.getCustomerCoupons(customerId);
 //        return coupons;
         return customerRepository.findById(customerId).get().getCoupons();
@@ -76,18 +75,13 @@ public class CustomerService implements ClientService {
     }
 
     //Methods: get Customer's Coupons - from category id
-    public List<CouponEntity> getCustomerCoupons(final Category category, long customerId) {
+    public List<CouponEntity> getCustomerCoupons(final Category category, final long customerId) {
         return couponRepository.getCustomerCouponsByCategory(customerId, category);
     }
-// seems like duplicate function
-//    public List<CouponEntity> getCustomerCoupons(final Category category, final Long customerId) {
-//        final List<CouponEntity> coupons = couponRepository.getCustomerCouponsByCategory(customerId, category);
-//        return coupons;
-//    }
 
     //Methods: get Customer's Coupons - up to price x
     //customer id taken from state
-    public List<CouponEntity> getCustomerCoupons(final double price, long customerId) {
+    public List<CouponEntity> getCustomerCoupons(final double price, final long customerId) {
         return couponRepository.findCustomerCouponsByPriceLessThan(customerId, price);
     }
 
@@ -97,7 +91,7 @@ public class CustomerService implements ClientService {
 
     //TODO: Check if customer is logged in with LoginManager
     //TODO: Check if customer exists
-    public CustomerEntity getLoggedInCustomer(long customerId) {
+    public CustomerEntity getLoggedInCustomer(final long customerId) {
         return customerRepository.findById(customerId).get();
     }
 }

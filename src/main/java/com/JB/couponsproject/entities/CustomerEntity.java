@@ -36,9 +36,7 @@ public class CustomerEntity {
             inverseJoinColumns = @JoinColumn(name = "coupon_id")
     )
     private List<CouponEntity> coupons = new ArrayList<>();
-    public void hashPassword(){
-        setPassword(String.valueOf(password.hashCode()));
-    }
+
     public void purchaseCoupon(CouponEntity coupon){
         coupons.add(coupon);
     }
