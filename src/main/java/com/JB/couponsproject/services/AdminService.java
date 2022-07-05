@@ -30,7 +30,7 @@ public class AdminService implements ClientService {
     Logger logger = LoggerFactory.getLogger(AdminService.class);
 
     public boolean login(String email, String password) throws ApplicationException {
-        if (email.equals(TestData.ADMIN_EMAIL) & password.equals(TestData.AMDIN_PASSWORD)) {
+        if (email.equals(TestData.ADMIN_LOGIN_EMAIL) & password.equals(TestData.AMDIN_LOGIN_PASSWORD)) {
             logger.info("Administrator logged into the system.");
             return true;
         }

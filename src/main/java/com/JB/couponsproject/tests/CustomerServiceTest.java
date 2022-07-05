@@ -1,5 +1,6 @@
 package com.JB.couponsproject.tests;
 
+import com.JB.couponsproject.constants.TestData;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.services.CompanyService;
@@ -22,23 +23,23 @@ public class CustomerServiceTest implements CommandLineRunner{
         //Login tests
         //Login failed test
         try {
-            customerService.login("customer2@email.com", "WRONG PASSWORD");
+            customerService.login(TestData.CUSTOMER_LOGIN_EMAIL, TestData.LOGIN_WRONG_PASSWORD);
         } catch (ApplicationException e) {
-            log.info("Login failed test, thrown exception: " + e.getMessage());
+            log.info(TestData.LOGIN_FAILED + e.getMessage());
         }
         //Login succeed test
         log.info("Login succeed test");
-        customerService.login("customer1@email.com", "123456");
+        customerService.login(TestData.CUSTOMER_LOGIN_EMAIL, TestData.CUSTOMER_LOGIN_PASSWORD);
         //Purchase coupon test
         log.info("Purchase coupon test");
-        customerService.purchaseCoupon(9L,3L);
+        customerService.purchaseCoupon(TestData.CUSTOMER_COUPON_ID,TestData.CUSTOMER_ID);
         //Get customer coupons tests (all, category, max price
         log.info("get all customer coupons:");
-        log.info(customerService.getCustomerCoupons(3L).toString());
-        log.info("get all customer coupons up to max price:");
-        log.info(customerService.getCustomerCoupons(Category.ELECTRICITY, 3L).toString());
-        log.info("get all customer coupons filtered by category:");
-        log.info(customerService.getCustomerCoupons(150D, 3L).toString());
-        log.info(customerService.getCustomerCoupons(3L).toString());
+        log.info(customerService.getCustomerCoupons(TestData.CUSTOMER_ID).toString());
+        log.info("get all customer coupons up to max category:");
+        log.info(customerService.getCustomerCoupons(Category.ELECTRICITY, TestData.CUSTOMER_ID).toString());
+        log.info("get all customer coupons filtered by price:");
+        log.info(customerService.getCustomerCoupons(TestData.CUSTOMER_MAX_PRICE, TestData.CUSTOMER_ID).toString());
+        log.info(customerService.getCustomerCoupons(TestData.CUSTOMER_ID).toString());
     }
 }

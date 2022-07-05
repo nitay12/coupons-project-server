@@ -32,39 +32,39 @@ public class AdminServiceTest implements CommandLineRunner
         //Add company test
         logger.info("Adding new company");
         final CompanyDto company = adminService.createCompany(CompanyDto.builder()
-                .email(TestData.COMPANY_EMAIL)
-                .name(COMPANY_NAME)
-                .password(TestData.COMPANY_PASSWORD)
+                .email(TestData.ADMIN_COMPANY_EMAIL)
+                .name(ADMIN_COMPANY_NAME)
+                .password(TestData.ADMIN_COMPANY_PASSWORD)
                 .build());
         logger.info("Company added, "+company.toString());
         logger.info("Get Company by: name, id, email");
-        CompanyDto companyDto = adminService.getCompanyByName(COMPANY_NAME);
+        CompanyDto companyDto = adminService.getCompanyByName(ADMIN_COMPANY_NAME);
         logger.info("Get Company by: name\n" + companyDto.toString());
         long id = companyDto.getId();
         logger.info("Resetting company.");
         companyDto = adminService.getCompanyById(id);
         logger.info("Get Company by: id\n" + companyDto.toString());
         logger.info("Resetting company.");
-        companyDto = adminService.getCompanyByEmail(COMPANY_EMAIL);
+        companyDto = adminService.getCompanyByEmail(ADMIN_COMPANY_EMAIL);
         logger.info("Get Company by: email\n" + companyDto.toString());
         //Update company test
         logger.info("Updating company");
-        companyDto.setName(COMPANY_NAME_UPDATE);
-        companyDto.setEmail(COMPANY_EMAIL_UPDATE);
+        companyDto.setName(ADMIN_COMPANY_NAME_UPDATE);
+        companyDto.setEmail(ADMIN_COMPANY_EMAIL_UPDATE);
         adminService.createCompany(companyDto);
         logger.info("company updated: "+adminService.getCompanyById(company.getId()).toString());
 
         //Add customer test
         logger.info("Adding new customer");
         final CustomerDto customer = adminService.createCustomer(CustomerDto.builder()
-                .email(CUSTOMER_EMAIL)
-                .firstName(CUSTOMER_F_NAME)
-                .lastName(CUSTOMER_L_NAME)
-                .password(CUSTOMER_PASSWORD)
+                .email(ADMIN_CUSTOMER_EMAIL)
+                .firstName(ADMIN_CUSTOMER_F_NAME)
+                .lastName(ADMIN_CUSTOMER_L_NAME)
+                .password(ADMIN_CUSTOMER_PASSWORD)
                 .build());
         logger.info("Customer added, "+customer.toString());
         //Get customer tests
-        CustomerDto customerDto = adminService.getCustomerByEmail(CUSTOMER_EMAIL);
+        CustomerDto customerDto = adminService.getCustomerByEmail(ADMIN_CUSTOMER_EMAIL);
         logger.info("Get Customer by: email\n" + customerDto.toString());
         id = customerDto.getId();
         logger.info("Resetting customer.");
@@ -72,9 +72,9 @@ public class AdminServiceTest implements CommandLineRunner
         logger.info("Get Customer by: Id\n" + customerDto.toString());
         //Update customer test
         logger.info("Updating this customer");
-        customerDto.setFirstName(CUSTOMER_F_NAME_UPDATE);
-        customerDto.setLastName(CUSTOMER_L_NAME_UPDATE);
-        customerDto.setEmail(CUSTOMER_EMAIL_UPDATE);
+        customerDto.setFirstName(ADMIN_CUSTOMER_F_NAME_UPDATE);
+        customerDto.setLastName(ADMIN_CUSTOMER_L_NAME_UPDATE);
+        customerDto.setEmail(ADMIN_CUSTOMER_EMAIL_UPDATE);
         adminService.createCustomer(customerDto);
         logger.info("Customer updated, "+customerDto);
 
