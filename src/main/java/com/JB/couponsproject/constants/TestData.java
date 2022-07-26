@@ -38,10 +38,10 @@ public class TestData {
     public final static double GET_COUPON_MAX_PRICE = 500;
     
     //Customer test variables
-    public final static String CUSTOMER_LOGIN_EMAIL = "customer2@email.com";
+    public final static String CUSTOMER_LOGIN_EMAIL = "customer3@email.com";
     public final static String CUSTOMER_LOGIN_PASSWORD ="123456";
     public final static long CUSTOMER_ID = 3;
-    public final static long CUSTOMER_COUPON_ID = 3;
+    public final static long CUSTOMER_COUPON_ID = 4;
     public final static double CUSTOMER_MAX_PRICE = 150;
      
 }

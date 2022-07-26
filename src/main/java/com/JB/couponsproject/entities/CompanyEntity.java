@@ -1,9 +1,7 @@
 package com.JB.couponsproject.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -11,64 +9,30 @@ import java.io.Serializable;
 
 @Builder
 @AllArgsConstructor
-@Entity
-@Table(name = "companies")
 @NoArgsConstructor
 @ToString
+@Entity
+@Table(name = "companies")
 public class CompanyEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @Setter
     private long id;
 
     @Column(name = "name", nullable = false, unique = true)
+    @Getter
+    @Setter
     private String name;
 
     @Email
     @Column(name = "email", nullable = false)
+    @Getter
+    @Setter
     private String email;
     @Column(name = "password", nullable = false)
+    @Getter
+    @Setter
     private String password;
 
-    //TODO: Check if the coupons list is needed
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "companyEntity")
-//    private List<CouponEntity> coupons;
-
-    //    public List<CouponEntity> getCoupons() {
-//        return coupons;
-//    }
-//
-//    public void setCoupons(List<CouponEntity> coupons) {
-//        this.coupons = coupons;
-//    }
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

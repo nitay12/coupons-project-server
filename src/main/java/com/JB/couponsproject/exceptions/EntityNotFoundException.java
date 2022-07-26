@@ -3,9 +3,6 @@ package com.JB.couponsproject.exceptions;
 import com.JB.couponsproject.enums.EntityType;
 
 public class EntityNotFoundException extends ApplicationException {
-    public EntityNotFoundException() {
-    }
-
     public EntityNotFoundException(String message) {
         super(message);
     }

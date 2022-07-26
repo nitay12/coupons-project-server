@@ -9,81 +9,62 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
-@Builder
-@Data
 @AllArgsConstructor
-@Entity
-@Table(name = "coupons")
+@Builder
 @NoArgsConstructor
+@Entity
+@ToString
+@Table(name = "coupons")
 public class CouponEntity implements Serializable {
-
-    public CouponEntity(Long companyId, Category category, String title, String description, LocalDate startDate, LocalDate endDate, int amount, double price, String image) {
-        this.companyId = companyId;
-        this.category = category;
-        this.title = title;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.amount = amount;
-        this.price = price;
-        this.image = image;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @Setter
     private Long id;
 
     @Column(name = "company_id")
+    @Getter
+    @Setter
     private Long companyId;
     @Column(name = "category", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Getter
+    @Setter
     private Category category;
-    @Column(name="title", nullable = false)
+    @Column(name = "title", nullable = false)
+    @Getter
+    @Setter
     private String title;
-    @Column(name="description", nullable = false)
+    @Column(name = "description", nullable = false)
+    @Getter
+    @Setter
     private String description;
     @Column(name = "start_date", nullable = false)
+    @Getter
+    @Setter
     private LocalDate startDate;
     @Column(name = "end_date", nullable = false)
+    @Getter
+    @Setter
     private LocalDate endDate;
 
     @Positive
     @Column(name = "amount", nullable = false)
+    @Getter
+    @Setter
     private int amount;
     @Positive
     @Column(name = "price", nullable = false)
-
+    @Getter
+    @Setter
     private double price;
     @Column(name = "image")
+    @Getter
+    @Setter
     private String image;
+    @Getter
+    @Setter
+    @ToString.Exclude
     @ManyToMany(mappedBy = "coupons", cascade = CascadeType.REMOVE)
     private List<CustomerEntity> buyers;
-
-    @Override
-    public String toString() {
-        return "CouponEntity{" +
-               "id=" + id +
-               ", companyId=" + companyId +
-               ", category=" + category +
-               ", title='" + title + '\'' +
-               ", description='" + description + '\'' +
-               ", startDate=" + startDate +
-               ", endDate=" + endDate +
-               ", amount=" + amount +
-               ", price=" + price +
-               ", image='" + image + '\'' +
-               '}';
-    }
-
-    public CouponEntity(Category category, String title, String description, LocalDate startDate, LocalDate endDate, int amount, double price, String image) {
-        this.category = category;
-        this.title = title;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.amount = amount;
-        this.price = price;
-        this.image = image;
-    }
-
 }

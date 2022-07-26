@@ -16,30 +16,41 @@ import org.springframework.stereotype.Component;
 @Order(4)
 @RequiredArgsConstructor
 @Slf4j
-public class CustomerServiceTest implements CommandLineRunner{
+public class CustomerServiceTest implements CommandLineRunner {
     private final CustomerService customerService;
+
     @Override
     public void run(String... args) throws Exception {
         //Login tests
         //Login failed test
         try {
-            customerService.login(TestData.CUSTOMER_LOGIN_EMAIL, TestData.LOGIN_WRONG_PASSWORD);
+            try {
+                customerService.login(TestData.CUSTOMER_LOGIN_EMAIL, TestData.LOGIN_WRONG_PASSWORD);
+            } catch (ApplicationException e) {
+                log.info(TestData.LOGIN_FAILED + e.getMessage());
+            }
+            //Login succeed test
+            log.info("Login succeed test");
+            try {
+                customerService.login(TestData.CUSTOMER_LOGIN_EMAIL, TestData.CUSTOMER_LOGIN_PASSWORD);
+            }
+            catch (ApplicationException e){
+                System.out.println("Wrong credentials");
+            }
+            //Purchase coupon test
+            log.info("Purchase coupon test");
+            customerService.purchaseCoupon(TestData.CUSTOMER_COUPON_ID, TestData.CUSTOMER_ID);
+            //Get customer coupons tests (all, category, max price
+            log.info("get all customer coupons:");
+            log.info(customerService.getCustomerCoupons(TestData.CUSTOMER_ID).toString());
+            log.info("get all customer coupons up to max category:");
+            log.info(customerService.getCustomerCoupons(Category.ELECTRICITY, TestData.CUSTOMER_ID).toString());
+            log.info("get all customer coupons filtered by price:");
+            log.info(customerService.getCustomerCoupons(TestData.CUSTOMER_MAX_PRICE, TestData.CUSTOMER_ID).toString());
+            log.info(customerService.getCustomerCoupons(TestData.CUSTOMER_ID).toString());
         } catch (ApplicationException e) {
-            log.info(TestData.LOGIN_FAILED + e.getMessage());
+            e.printStackTrace();
         }
-        //Login succeed test
-        log.info("Login succeed test");
-        customerService.login(TestData.CUSTOMER_LOGIN_EMAIL, TestData.CUSTOMER_LOGIN_PASSWORD);
-        //Purchase coupon test
-        log.info("Purchase coupon test");
-        customerService.purchaseCoupon(TestData.CUSTOMER_COUPON_ID,TestData.CUSTOMER_ID);
-        //Get customer coupons tests (all, category, max price
-        log.info("get all customer coupons:");
-        log.info(customerService.getCustomerCoupons(TestData.CUSTOMER_ID).toString());
-        log.info("get all customer coupons up to max category:");
-        log.info(customerService.getCustomerCoupons(Category.ELECTRICITY, TestData.CUSTOMER_ID).toString());
-        log.info("get all customer coupons filtered by price:");
-        log.info(customerService.getCustomerCoupons(TestData.CUSTOMER_MAX_PRICE, TestData.CUSTOMER_ID).toString());
-        log.info(customerService.getCustomerCoupons(TestData.CUSTOMER_ID).toString());
+
     }
 }

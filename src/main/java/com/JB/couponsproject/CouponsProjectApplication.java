@@ -14,22 +14,6 @@ import org.springframework.context.ApplicationContext;
 public class CouponsProjectApplication {
 
     public static void main(String[] args) {
-        ApplicationContext ctx = SpringApplication.run(CouponsProjectApplication.class, args);
-        DailyJob dailyJob = ctx.getBean(DailyJob.class);
-        dailyJob.checkExpiredCoupons();
-        CouponSystem couponSystem = ctx.getBean(CouponSystem.class);
-        MockDataInserter mockDataInserter = ctx.getBean(MockDataInserter.class);
-        AdminServiceTest adminServiceTest = ctx.getBean(AdminServiceTest.class);
-        CompanyServiceTest companyServiceTest = ctx.getBean(CompanyServiceTest.class);
-        CustomerServiceTest customerServiceTest = ctx.getBean(CustomerServiceTest.class);
-        try {
-            couponSystem.run("123");
-            mockDataInserter.run("123");
-            adminServiceTest.run("123");
-            companyServiceTest.run("123");
-            customerServiceTest.run("123");
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-  }
+        SpringApplication.run(CouponsProjectApplication.class, args);
+    }
 }

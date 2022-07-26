@@ -15,6 +15,7 @@ import com.JB.couponsproject.services.DailyJobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +33,7 @@ public class CouponSystem implements CommandLineRunner {
     private final DailyJobService dailyJobService;
 
     private static final Scanner SCANNER = new Scanner(System.in);
+
     @Override
     public void run(String... args) throws Exception {
         boolean quit = false;
@@ -66,9 +68,9 @@ public class CouponSystem implements CommandLineRunner {
         String email = SCANNER.next();
         System.out.println("Please enter your password: ");
         String password = SCANNER.next();
-        UserType userType = UserType.values()[loginType -1];
-        if(loginManager.login(userType,email,password)){
-            switch (userType){
+        UserType userType = UserType.values()[loginType - 1];
+        if (loginManager.login(userType, email, password)) {
+            switch (userType) {
                 case ADMIN -> openAdminMenu();
                 case COMPANY -> openCompanyMenu(email);
                 case CUSTOMER -> openCustomerMenu();
@@ -168,7 +170,7 @@ public class CouponSystem implements CommandLineRunner {
                     press 2 to update a company's email
                     Press 3 to get a company details
                     Press 4 to get all companies details
-                    press 5 to delete a company 
+                    press 5 to delete a company
                     press 6 to create a new customer
                     press 7 to update a customer's first name
                     Press 8 to get a customer details
@@ -261,13 +263,12 @@ public class CouponSystem implements CommandLineRunner {
     }
 
     private static void printMainMenu() {
-        System.out.println("************************************\n" +
-                           "MAIN MENU\n" +
-
-                           "press 0 to change daily job mode \n" +
-                           "Press 1 to log in\n" +
-                           "Press 2 to quit\n" +
-                           "************************************");
+        System.out.println("""
+                ************************************
+                MAIN MENU
+                Press 1 to log in
+                Press 2 to quit
+                ************************************""");
     }
 
     private static String getExpirationJobStatus(boolean isStopped) {
