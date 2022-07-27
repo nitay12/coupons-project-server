@@ -15,16 +15,20 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
+
 @Order(3)
 @RequiredArgsConstructor
 @Component
+@Transactional
 public class CompanyServiceTest implements CommandLineRunner {
     private final CompanyService companyService;
     private final CouponRepository couponRepository;
     private final Logger logger = LoggerFactory.getLogger(CompanyServiceTest.class);
+
     @Override
-    public void run(String... args) throws ApplicationException{
+    public void run(String... args) {
         try {
             //Tests
             //Login test
@@ -60,20 +64,35 @@ public class CompanyServiceTest implements CommandLineRunner {
             //Update coupon test
             logger.info("Update coupon test");
             newCoupon.setDescription(TestData.COUPON_UPDATED_DESCRIPTION);
-            final CouponDto newCouponDto = ObjectMappingUtil.couponEntityToCouponDto(newCoupon);
+            final CouponDto newCouponDto = newCoupon.toDto();
             companyService.updateCoupon(newCouponDto, TestData.COMPANY_ID);
             logger.info("Updated coupon description:");
             logger.info(couponRepository.findById(newCouponId).get().toString());
             //Update coupon id test (throws exception)
             try {
-                new CouponDto(1L, newCouponDto.getCompanyId(), newCouponDto.getCategory(), newCouponDto.getTitle(),
-                        newCouponDto.getDescription(), newCouponDto.getStartDate(), newCouponDto.getEndDate(),
-                        newCouponDto.getAmount(), newCouponDto.getPrice(), newCouponDto.getImage());
+//                CouponDto(1L, CouponDto.builder()
+//                        .companyId(newCouponDto.getCompanyId())
+//                        .category(newCouponDto.getCategory())
+//                        .title(newCouponDto.getTitle())
+//                        .description(newCouponDto.getDescription())
+//                        .startDate(newCouponDto.getStartDate())
+//                        .endDate(newCouponDto.getEndDate())
+//                        .amount(newCouponDto.getAmount())
+//                        .price(newCouponDto.getPrice())
+//                        .image(newCouponDto.getImage())
 
-                CouponDto couponToUpdate = new CouponDto(newCouponDto.getId(), newCouponDto.getCompanyId(),
-                        newCouponDto.getCategory(), newCouponDto.getTitle(), newCouponDto.getDescription(),
-                        newCouponDto.getStartDate(), newCouponDto.getEndDate(), newCouponDto.getAmount(),
-                        newCouponDto.getPrice(), newCouponDto.getImage());
+                CouponDto couponToUpdate = CouponDto.builder()
+                        .id(newCouponDto.getId())
+                        .companyId(newCouponDto.getCompanyId())
+                        .category(newCouponDto.getCategory())
+                        .title(newCouponDto.getTitle())
+                        .description(newCouponDto.getDescription())
+                        .startDate(newCouponDto.getStartDate())
+                        .endDate(newCouponDto.getEndDate())
+                        .amount(newCouponDto.getAmount())
+                        .price(newCouponDto.getPrice())
+                        .image(newCouponDto.getImage())
+                        .build();
 
                 companyService.updateCoupon(couponToUpdate, TestData.COMPANY_ID);
             } catch (ApplicationException e) {
@@ -88,7 +107,7 @@ public class CompanyServiceTest implements CommandLineRunner {
             logger.info(companyService.getCompanyCoupons(TestData.COMPANY_ID).toString());
             logger.info("All company coupons from category (ELECTRICITY)");
             logger.info(companyService.getCompanyCoupons(Category.ELECTRICITY, TestData.COMPANY_ID).toString());
-            logger.info("All company coupons up to "+ TestData.GET_COUPON_MAX_PRICE +" (max price)");
+            logger.info("All company coupons up to " + TestData.GET_COUPON_MAX_PRICE + " (max price)");
             logger.info(companyService.getCompanyCoupons(TestData.GET_COUPON_MAX_PRICE, TestData.COMPANY_ID).toString());
         } catch (ApplicationException e) {
             e.printStackTrace();

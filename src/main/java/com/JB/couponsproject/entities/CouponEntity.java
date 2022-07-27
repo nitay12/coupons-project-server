@@ -1,5 +1,6 @@
 package com.JB.couponsproject.entities;
 
+import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.enums.Category;
 import lombok.*;
 
@@ -7,7 +8,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Builder
@@ -66,5 +69,24 @@ public class CouponEntity implements Serializable {
     @Setter
     @ToString.Exclude
     @ManyToMany(mappedBy = "coupons", cascade = CascadeType.REMOVE)
-    private List<CustomerEntity> buyers;
+    @Builder.Default private List<CustomerEntity> buyers = new ArrayList<>();
+
+    public CouponDto toDto() {
+        return CouponDto.builder()
+                .id(this.id)
+                .companyId(this.companyId)
+                .category(this.category)
+                .title(this.title)
+                .description(this.description)
+                .startDate(this.startDate)
+                .endDate(this.endDate)
+                .amount(this.amount)
+                .price(this.price)
+                .image(this.image)
+                .buyers(this.buyers
+                        .stream()
+                        .map(CustomerEntity::toDto)
+                        .collect(Collectors.toList()))
+                .build();
+    }
 }

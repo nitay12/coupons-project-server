@@ -1,6 +1,5 @@
 package com.JB.couponsproject.services;
 
-import com.JB.couponsproject.dto.CompanyDto;
 import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CouponEntity;
@@ -9,7 +8,6 @@ import com.JB.couponsproject.enums.EntityType;
 import com.JB.couponsproject.exceptions.*;
 import com.JB.couponsproject.repositories.CompanyRepository;
 import com.JB.couponsproject.repositories.CouponRepository;
-import com.JB.couponsproject.util.ObjectMappingUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +52,7 @@ public class CompanyService implements ClientService {
             throw new TitleExistException("This title is already exist");
         }
         couponDto.setCompanyId(companyId);
-        final CouponEntity newCoupon = couponRepository.save(ObjectMappingUtil.couponDtoToEntity(couponDto));
+        final CouponEntity newCoupon = couponRepository.save(couponDto.toEntity());
         return newCoupon.getId();
     }
 
@@ -74,7 +72,7 @@ public class CompanyService implements ClientService {
         if (!couponRepository.existsByIdAndCompanyId(couponDto.getId(), companyId)) {
             throw new UpdateException("The company id cannot be updated");
         }
-        final CouponEntity couponEntity = ObjectMappingUtil.couponDtoToEntity(couponDto);
+        final CouponEntity couponEntity = couponDto.toEntity();
         couponRepository.save(couponEntity);
         return couponEntity.getId();
     }
@@ -104,7 +102,7 @@ public class CompanyService implements ClientService {
         final List<CouponEntity> companyCoupons = getCompanyCoupons(companyId);
         final Optional<CouponEntity> coupon = companyCoupons.stream().filter(c -> c.getId().equals(companyId)).findAny();
         if(coupon.isPresent()){
-            return ObjectMappingUtil.couponEntityToCouponDto(coupon.get());
+            return coupon.get().toDto();
         }
         else {
             throw new EntityNotFoundException("Coupon not found");

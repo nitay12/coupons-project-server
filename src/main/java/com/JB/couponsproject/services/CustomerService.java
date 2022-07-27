@@ -8,7 +8,6 @@ import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.exceptions.WrongCertificationsException;
 import com.JB.couponsproject.repositories.CouponRepository;
 import com.JB.couponsproject.repositories.CustomerRepository;
-import com.JB.couponsproject.util.ObjectMappingUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +58,7 @@ public class CustomerService implements ClientService {
         CustomerEntity customer = tmpCustomer.get();
         coupon.setAmount(coupon.getAmount() - 1);
         customer.purchaseCoupon(coupon);
-        ObjectMappingUtil.customerEntityToDto(customerRepository.save(customer));
+        customerRepository.save(customer);
     }
 
     //Methods: get Customer's Coupons - all

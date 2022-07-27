@@ -1,14 +1,15 @@
 package com.JB.couponsproject.entities;
 
+import com.JB.couponsproject.dto.CustomerDto;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
-@Data
 @Table(name = "customers")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,27 +18,53 @@ import java.util.List;
 public class CustomerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @Setter
     private Long id;
-    @Column(name="first_name", nullable = false)
+    @Column(name = "first_name", nullable = false)
+    @Getter
+    @Setter
     private String firstName;
-    @Column(name="last_name", nullable = false)
+    @Column(name = "last_name", nullable = false)
+    @Getter
+    @Setter
     private String lastName;
 
     @Email
-    @Column(name="email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
+    @Getter
+    @Setter
     private String email;
-    @Column(name="password", nullable = false)
+    @Column(name = "password", nullable = false)
+    @Getter
+    @Setter
     private String password;
     @Getter
-    @ManyToMany(fetch = FetchType.EAGER, cascade =  { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @Setter
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
-            name="coupon_vs_customer",
-            joinColumns = @JoinColumn(name="customer_id"),
+            name = "coupon_vs_customer",
+            joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "coupon_id")
     )
+    @Builder.Default
     private List<CouponEntity> coupons = new ArrayList<>();
 
-    public void purchaseCoupon(CouponEntity coupon){
+    public void purchaseCoupon(CouponEntity coupon) {
         coupons.add(coupon);
+    }
+
+    public CustomerDto toDto() {
+        return CustomerDto.builder()
+                .id(this.id)
+                .firstName(this.firstName)
+                .lastName(this.lastName)
+                .email(this.email)
+                .password(this.password)
+                .coupons(this.coupons
+                        .stream()
+                        .map(CouponEntity::toDto)
+                        .collect(Collectors.toList()))
+                .build();
     }
 }

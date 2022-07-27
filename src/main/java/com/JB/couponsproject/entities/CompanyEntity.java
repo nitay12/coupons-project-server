@@ -1,5 +1,6 @@
 package com.JB.couponsproject.entities;
 
+import com.JB.couponsproject.dto.CompanyDto;
 import lombok.*;
 import org.springframework.stereotype.Service;
 
@@ -35,4 +36,12 @@ public class CompanyEntity implements Serializable {
     @Setter
     private String password;
 
+    public CompanyDto toDto() {
+        return CompanyDto.builder()
+                .id(this.id)
+                .name(this.name)
+                .email(this.email)
+                .password(this.password)
+                .build();
+    }
 }
