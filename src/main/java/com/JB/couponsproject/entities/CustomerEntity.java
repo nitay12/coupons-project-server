@@ -41,7 +41,7 @@ public class CustomerEntity {
     private String password;
     @Getter
     @Setter
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "coupon_vs_customer",
             joinColumns = @JoinColumn(name = "customer_id"),

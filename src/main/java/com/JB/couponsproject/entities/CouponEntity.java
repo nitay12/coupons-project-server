@@ -68,7 +68,7 @@ public class CouponEntity implements Serializable {
     @Getter
     @Setter
     @ToString.Exclude
-    @ManyToMany(mappedBy = "coupons", cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "coupons")
     @Builder.Default private List<CustomerEntity> buyers = new ArrayList<>();
 
     public CouponDto toDto() {
