@@ -41,7 +41,7 @@ public class CustomerEntity {
     private String password;
     @Getter
     @Setter
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "coupon_vs_customer",
             joinColumns = @JoinColumn(name = "customer_id"),
@@ -52,6 +52,9 @@ public class CustomerEntity {
 
     public void purchaseCoupon(CouponEntity coupon) {
         coupons.add(coupon);
+    }
+    public void deleteCoupon(CouponEntity coupon) {
+        coupons.remove(coupon);
     }
 
     public CustomerDto toDto() {

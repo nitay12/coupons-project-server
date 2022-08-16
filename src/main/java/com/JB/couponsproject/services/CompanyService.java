@@ -3,11 +3,13 @@ package com.JB.couponsproject.services;
 import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CouponEntity;
+import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.enums.EntityType;
 import com.JB.couponsproject.exceptions.*;
 import com.JB.couponsproject.repositories.CompanyRepository;
 import com.JB.couponsproject.repositories.CouponRepository;
+import com.JB.couponsproject.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ public class CompanyService implements ClientService {
     //Dependencies
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
+    private final CustomerRepository customerRepository;
 
     //Methods
     public boolean login(String email, String password) throws ApplicationException {
@@ -83,6 +86,13 @@ public class CompanyService implements ClientService {
         }
         if (!couponRepository.existsByIdAndCompanyId(id, companyId)){
             throw new DeleteException("Only coupon of the logged in company can be deleted");
+        }
+        final CouponEntity coupon = couponRepository.findById(id).get();
+        final List<CustomerEntity> buyers = coupon.getBuyers();
+        for (CustomerEntity customer :
+                buyers) {
+            customer.deleteCoupon(coupon);
+            customerRepository.save(customer);
         }
         couponRepository.deleteById(id);
     }

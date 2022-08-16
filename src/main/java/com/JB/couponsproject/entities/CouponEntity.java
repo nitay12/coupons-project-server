@@ -69,7 +69,16 @@ public class CouponEntity implements Serializable {
     @Setter
     @ToString.Exclude
     @ManyToMany(mappedBy = "coupons")
-    @Builder.Default private List<CustomerEntity> buyers = new ArrayList<>();
+    @Builder.Default
+    private List<CustomerEntity> buyers = new ArrayList<>();
+
+    public void addBuyer(CustomerEntity buyer) {
+        buyers.add(buyer);
+    }
+
+    public void deleteBuyer(CustomerEntity buyer) {
+        buyers.remove(buyer);
+    }
 
     public CouponDto toDto() {
         return CouponDto.builder()
