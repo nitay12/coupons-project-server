@@ -119,20 +119,6 @@ public class CompanyService implements ClientService {
         }
     }
 
-    // Consider Removing this function
-//    public CompanyEntity getLoggedInCompany() throws ApplicationException {
-//        if (Objects.isNull(companyId)) {
-//            throw new ApplicationException("No company logged in");
-//        }
-//        final Optional<CompanyEntity> loggedInCompany = companyRepository.findById(companyId);
-//        if(loggedInCompany.isEmpty()){
-//            throw new ApplicationException("Cannot retrieve logged in company");
-//        }
-//        else{
-//            return loggedInCompany.get();
-//        }
-//    }
-
     //TODO: check if can be done by JPA init methods
     private boolean isTitleExistByCompanyId(long companyId, CouponDto couponDto) {
         final List<CouponEntity> companyCouponsById = couponRepository.getByCompanyId(companyId);

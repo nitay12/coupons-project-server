@@ -1,6 +1,5 @@
 package com.JB.couponsproject.services;
 
-
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.Category;
@@ -69,10 +68,6 @@ public class CustomerService implements ClientService {
         return customerRepository.findById(customerId).get().getCoupons();
     }
 
-    public List<CouponEntity> getCustomerCoupons(final Long customerId) {
-        return couponRepository.getCustomerCoupons(customerId);
-    }
-
     //Methods: get Customer's Coupons - from category id
     public List<CouponEntity> getCustomerCoupons(final Category category, final long customerId) {
         return couponRepository.getCustomerCouponsByCategory(customerId, category);
@@ -81,10 +76,6 @@ public class CustomerService implements ClientService {
     //Methods: get Customer's Coupons - up to price x
     //customer id taken from state
     public List<CouponEntity> getCustomerCoupons(final double price, final long customerId) {
-        return couponRepository.findCustomerCouponsByPriceLessThan(customerId, price);
-    }
-
-    public List<CouponEntity> getCustomerCoupons(final double price, final Long customerId) {
         return couponRepository.findCustomerCouponsByPriceLessThan(customerId, price);
     }
 
