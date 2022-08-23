@@ -16,3 +16,5 @@ spring:
     username: root
     password: ${SQL_PASSWORD}
     driverClassName: com.mysql.cj.jdbc.Driver
+
+jwtsecret: ${JWT_SECRET}
