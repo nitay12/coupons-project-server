@@ -43,4 +43,6 @@ public class LoginManager {
             throw new ApplicationException(); //check for other options
         }
     }
+
+    //ToDo: Signup via adminService to either company or customer entity, and return JwtWrapper token.
 }
