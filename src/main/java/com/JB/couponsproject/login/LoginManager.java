@@ -18,7 +18,6 @@ public class LoginManager {
     private final AdminService adminService;
     private final CompanyService companyService;
     private final CustomerService customerService;
-    //    private final Map<String, UserType> users = new HashMap<>();
     private ClientService clientService;
 
     public boolean login(UserType userType, String email, String password) throws ApplicationException {
