@@ -6,10 +6,12 @@ import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.enums.EntityType;
+import com.JB.couponsproject.enums.UserType;
 import com.JB.couponsproject.exceptions.*;
 import com.JB.couponsproject.repositories.CompanyRepository;
 import com.JB.couponsproject.repositories.CouponRepository;
 import com.JB.couponsproject.repositories.CustomerRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,10 @@ public class CompanyService implements ClientService {
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
     private final CustomerRepository customerRepository;
+    @Getter
+    private static Long companyId;
+    private static String companyEmail;
+    private static UserType userType = UserType.COMPANY;
 
     //Methods
     public boolean login(String email, String password) throws ApplicationException {
@@ -36,10 +42,22 @@ public class CompanyService implements ClientService {
         for (CompanyEntity company :
                 allCompanies) {
             if (company.getEmail().equalsIgnoreCase(email) & Objects.equals(company.getPassword(), String.valueOf(password.hashCode()))) {
+                companyId = company.getId();
+                companyEmail = company.getEmail();
                 return true;
             }
         }
         throw new WrongCertificationsException("Wrong email or password");
+    }
+
+    @Override
+    public UserType getUserType() {
+        return userType;
+    }
+
+    @Override
+    public String getEmail() {
+        return companyEmail;
     }
 
     public long findIdByEmail(String email){

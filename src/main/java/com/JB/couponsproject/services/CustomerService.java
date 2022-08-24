@@ -3,10 +3,12 @@ package com.JB.couponsproject.services;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.Category;
+import com.JB.couponsproject.enums.UserType;
 import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.exceptions.WrongCertificationsException;
 import com.JB.couponsproject.repositories.CouponRepository;
 import com.JB.couponsproject.repositories.CustomerRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,10 @@ public class CustomerService implements ClientService {
     private final CouponRepository couponRepository;
     private final CustomerRepository customerRepository;
     //State
+    @Getter
+    private static Long customerId;
+    private static String customerEmail;
+    private final static UserType userType = UserType.CUSTOMER;
 
     //Methods: Login
     public boolean login(final String email, final String password) throws ApplicationException {
@@ -30,10 +36,22 @@ public class CustomerService implements ClientService {
         for (CustomerEntity customer :
                 allCustomers) {
             if (customer.getEmail().equalsIgnoreCase(email) & Objects.equals(customer.getPassword(), String.valueOf(password.hashCode()))) {
+                customerId = customer.getId();
+                customerEmail = customer.getEmail();
                 return true;
             }
         }
         throw new WrongCertificationsException("Wrong email or password");
+    }
+
+    @Override
+    public UserType getUserType() {
+        return userType;
+    }
+
+    @Override
+    public String getEmail() {
+        return customerEmail;
     }
 
     //Methods: purchaseCoupon

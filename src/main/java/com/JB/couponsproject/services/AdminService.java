@@ -6,6 +6,7 @@ import com.JB.couponsproject.dto.CustomerDto;
 import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.EntityType;
+import com.JB.couponsproject.enums.UserType;
 import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.exceptions.EntityNotFoundException;
 import com.JB.couponsproject.exceptions.WrongCertificationsException;
@@ -29,12 +30,24 @@ public class AdminService implements ClientService {
     private final CustomerRepository customerRepository;
     Logger logger = LoggerFactory.getLogger(AdminService.class);
 
+    private final UserType userType = UserType.ADMIN;
+
     public boolean login(String email, String password) throws ApplicationException {
         if (email.equals(TestData.ADMIN_LOGIN_EMAIL) & password.equals(TestData.AMDIN_LOGIN_PASSWORD)) {
             logger.info("Administrator logged into the system.");
             return true;
         }
         throw new WrongCertificationsException("Wrong email or password");
+    }
+
+    @Override
+    public UserType getUserType() {
+        return userType;
+    }
+
+    @Override
+    public String getEmail() {
+        return TestData.ADMIN_LOGIN_EMAIL;
     }
 
     public CustomerDto createCustomer(final CustomerDto customerDto) throws ApplicationException {

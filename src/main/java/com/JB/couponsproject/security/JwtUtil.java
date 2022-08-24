@@ -1,5 +1,6 @@
 package com.JB.couponsproject.security;
 
+import com.JB.couponsproject.enums.UserType;
 import com.JB.couponsproject.util.YAMLConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -35,12 +36,12 @@ public class JwtUtil {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
-    public static String generateToken(final String email) {
+    public static String generateToken(final String email, UserType uesrType) {
         final Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, email);
+        return createToken(claims, email, uesrType);
     }
 
-    private static String createToken(final Map<String, Object> claims, final String subject) {
+    private static String createToken(final Map<String, Object> claims, final String subject, UserType uesrType) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + ONE_HOUR_IN_MILLIS))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
