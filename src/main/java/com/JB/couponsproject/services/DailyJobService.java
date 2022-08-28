@@ -3,11 +3,13 @@ package com.JB.couponsproject.services;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.repositories.CouponRepository;
+import com.JB.couponsproject.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,21 +20,18 @@ import java.util.List;
 public class DailyJobService {
 
     private final CouponRepository couponRepository;
+    private final CustomerRepository customerRepository;
 
-    public void check(){
+    public void check() {
         List<CouponEntity> expiredCoupons = couponRepository.getExpiredCoupons();
         for (CouponEntity expiredCoupon : expiredCoupons) {
             final List<CustomerEntity> buyers = expiredCoupon.getBuyers();
-            for (CustomerEntity buyer:
-            buyers) {
-                expiredCoupon.deleteBuyer(buyer);
+            for (CustomerEntity customer : buyers) {
+                customer.deleteCoupon(expiredCoupon);
+                customerRepository.save(customer);
             }
-            couponRepository.save(expiredCoupon);
             couponRepository.deleteById(expiredCoupon.getId());
             log.info("deleted coupon" + expiredCoupon.getId());
         }
-    }
-    public void stop(){
-        Thread.interrupted();
     }
 }
