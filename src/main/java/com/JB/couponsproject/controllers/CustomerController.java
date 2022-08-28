@@ -19,7 +19,7 @@ public class CustomerController {
     private final AdminService adminService;
 
     //PurchaseCoupon - POST
-    @PutMapping("purchase/{couponId/{customerId}}")
+    @PutMapping("purchase/{couponId}/{customerId}")
     public void purchaseCoupon(@PathVariable("couponId") long couponId,@PathVariable("customerId") long customerId) throws ApplicationException {
         customerService.purchaseCoupon(couponId, customerId);
     }
