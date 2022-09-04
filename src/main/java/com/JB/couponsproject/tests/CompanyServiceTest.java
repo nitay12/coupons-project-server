@@ -4,7 +4,9 @@ import com.JB.couponsproject.constants.TestData;
 import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.enums.Category;
+import com.JB.couponsproject.enums.UserType;
 import com.JB.couponsproject.exceptions.ApplicationException;
+import com.JB.couponsproject.login.LoginManager;
 import com.JB.couponsproject.repositories.CouponRepository;
 import com.JB.couponsproject.services.CompanyService;
 import com.JB.couponsproject.util.ObjectMappingUtil;
@@ -25,6 +27,7 @@ import java.time.LocalDate;
 public class CompanyServiceTest implements CommandLineRunner {
     private final CompanyService companyService;
     private final CouponRepository couponRepository;
+    private final LoginManager loginManager;
     private final Logger logger = LoggerFactory.getLogger(CompanyServiceTest.class);
 
     @Override
@@ -33,14 +36,12 @@ public class CompanyServiceTest implements CommandLineRunner {
             //Tests
             //Login test
             try {
-                companyService.login(TestData.COMPANY_LOGIN_EMAIL, TestData.LOGIN_WRONG_PASSWORD);
+                loginManager.jwtLogin(UserType.COMPANY, TestData.COMPANY_LOGIN_EMAIL, TestData.LOGIN_WRONG_PASSWORD);
             } catch (ApplicationException e) {
                 logger.info(TestData.LOGIN_FAILED + e.getMessage());
             }
             logger.info("Login succeed test");
-            companyService.login(TestData.COMPANY_LOGIN_EMAIL, TestData.COMPANY_LOGIN_PASSWORD);
-            // consider another way
-            //logger.info("WELCOME " + companyService.getLoggedInCompany().getName().toUpperCase());
+            logger.info(loginManager.jwtLogin(UserType.COMPANY, TestData.COMPANY_LOGIN_EMAIL, TestData.COMPANY_LOGIN_PASSWORD).toString());
             //Add coupon test
             logger.info("Add coupon test");
             final CouponDto testCouponDto = CouponDto.builder()

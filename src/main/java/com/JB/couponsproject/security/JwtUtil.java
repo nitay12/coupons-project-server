@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 public class JwtUtil {
     private static final int ONE_HOUR_IN_MILLIS = 1000 * 60 * 60;
     public static final String SECRET_KEY = YAMLConfig.jwtsecret;
@@ -33,7 +35,9 @@ public class JwtUtil {
     }
 
     private static Claims extractAllClaims(final String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(
+                SECRET_KEY
+        ).parseClaimsJws(token).getBody();
     }
 
     public static String generateToken(final String email, UserType uesrType) {
@@ -42,9 +46,10 @@ public class JwtUtil {
     }
 
     private static String createToken(final Map<String, Object> claims, final String subject, UserType uesrType) {
+
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + ONE_HOUR_IN_MILLIS))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
+                .signWith(SignatureAlgorithm.HS256, "SECRET_KEY").compact();
     }
 
     public static boolean validateToken(final String token, final UserDetails user) {
