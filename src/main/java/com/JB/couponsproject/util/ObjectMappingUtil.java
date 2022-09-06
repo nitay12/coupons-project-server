@@ -6,6 +6,9 @@ import com.JB.couponsproject.dto.CustomerDto;
 import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
 
 public class ObjectMappingUtil {
     public static CouponEntity couponDtoToEntity(CouponDto couponDto){
@@ -66,13 +69,29 @@ public class ObjectMappingUtil {
                 .password(companyEntity.getPassword())
                 .build();
     }
-    public  static CompanyEntity companyDtoToCompanyEntity(CompanyDto companyDto){
+    public static CompanyEntity companyDtoToCompanyEntity(CompanyDto companyDto){
         return CompanyEntity.builder()
                 .id(companyDto.getId())
                 .name(companyDto.getName())
                 .email(companyDto.getEmail())
                 .password(companyDto.getPassword())
                 .build();
+    }
+
+    public static UserDetails CustomerToUserDetails(CustomerEntity customer){
+        return new org.springframework.security.core.userdetails.User(
+                customer.getEmail(),
+                customer.getPassword(),
+                new ArrayList<>()
+        );
+    }
+
+    public static UserDetails CompanyToUserDetails(CompanyEntity company){
+        return new org.springframework.security.core.userdetails.User(
+                company.getEmail(),
+                company.getPassword(),
+                new ArrayList<>()
+        );
     }
 
 

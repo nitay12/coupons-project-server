@@ -16,31 +16,24 @@ import java.util.stream.Collectors;
 @ToString
 @Builder
 public class CustomerEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    @Setter
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter @Setter
     private Long id;
     @Column(name = "first_name", nullable = false)
-    @Getter
-    @Setter
+    @Getter @Setter
     private String firstName;
     @Column(name = "last_name", nullable = false)
-    @Getter
-    @Setter
+    @Getter @Setter
     private String lastName;
 
     @Email
     @Column(name = "email", nullable = false, unique = true)
-    @Getter
-    @Setter
+    @Getter @Setter
     private String email;
     @Column(name = "password", nullable = false)
-    @Getter
-    @Setter
+    @Getter @Setter
     private String password;
-    @Getter
-    @Setter
+    @Getter @Setter
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "coupon_vs_customer",

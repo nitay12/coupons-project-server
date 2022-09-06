@@ -9,7 +9,6 @@ import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.login.LoginManager;
 import com.JB.couponsproject.repositories.CouponRepository;
 import com.JB.couponsproject.services.CompanyService;
-import com.JB.couponsproject.util.ObjectMappingUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
