@@ -26,9 +26,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private static final String COMPANY_URI = "company";
     private static final String CUSTOMER_URI = "customer";
 
-    private ProjUserDetailsService projUserDetailsService;
-    private CustomerService customerService;
-    private CompanyService companyService;
+    private final ProjUserDetailsService projUserDetailsService;
+    private final CustomerService customerService;
+    private final CompanyService companyService;
 
     @Override
     protected void doFilterInternal(

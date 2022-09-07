@@ -30,6 +30,11 @@ public class AdminService implements ClientService {
     private final CustomerRepository customerRepository;
     Logger logger = LoggerFactory.getLogger(AdminService.class);
 
+    @Override
+    public long getId() {
+        return 0;
+    }
+
     private final UserType userType = UserType.ADMIN;
 
     public boolean login(String email, String password) throws ApplicationException {

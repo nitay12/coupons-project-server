@@ -9,6 +9,6 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     public JwtWrapper login(final ClientService loginClientService){
-        return new JwtWrapper(JwtUtil.generateToken(loginClientService.getEmail(), loginClientService.getUserType()));
+        return new JwtWrapper(JwtUtil.generateToken(loginClientService.getId(), loginClientService.getEmail(), loginClientService.getUserType()));
     }
 }

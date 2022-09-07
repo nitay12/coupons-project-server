@@ -6,6 +6,8 @@ import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.exceptions.DeleteException;
 import com.JB.couponsproject.exceptions.EntityNotFoundException;
+import com.JB.couponsproject.security.JwtUtil;
+import com.JB.couponsproject.security.JwtWrapper;
 import com.JB.couponsproject.services.AdminService;
 import com.JB.couponsproject.services.CompanyService;
 import lombok.RequiredArgsConstructor;
@@ -18,19 +20,19 @@ import java.util.List;
 @RequestMapping("company")
 public class CompanyController {
     private final CompanyService companyService;
-    //required for profile manipulation and delete company button.
-    private final AdminService adminService;
 
     //addCoupon - CouponDto couponDto,long companyId - post
-    @PostMapping("addCoupon/{companyId}")
-    public void addCoupon(@RequestBody CouponDto couponDto, @PathVariable("companyId") long companyId) throws ApplicationException {
-        companyService.addCoupon(couponDto,companyId);
+    @PostMapping("addCoupon")
+    public void addCoupon(@RequestBody CouponDto couponDto, @RequestHeader("Authorization")JwtWrapper jwt) throws ApplicationException {
+        companyService.addCoupon(couponDto, Long.parseLong(JwtUtil.extractId(jwt.getJwtToken())));
     }
+    
     //updateCoupon - CouponDto couponDto , long companyId - put
     @PutMapping("update/coupon/{companyId}")
     public void updateCoupon(@RequestBody CouponDto couponDto, @PathVariable("companyId") long companyId) throws ApplicationException {
         companyService.updateCoupon(couponDto,companyId);
     }
+    
     //deleteCoupon - Long id,long companyId - delete
     @DeleteMapping("delete/{id}/{companyId}")
     public void deleteCoupon(@PathVariable("id") long id, @PathVariable("companyId") long companyId) throws DeleteException, EntityNotFoundException {

@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -17,12 +18,17 @@ import java.util.function.Function;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
+@Component
 public class JwtUtil {
     private static final int ONE_HOUR_IN_MILLIS = 1000 * 60 * 60;
-    public static final String SECRET_KEY = YAMLConfig.jwtsecret;
+    public static final String SECRET_KEY = "YAMLConfig.jwtsecret";
 
     public static String extractEmail(final String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public static String extractId(final String token) {
+        return extractClaim(token, Claims::getId);
     }
 
     public static Date extractExpiration(final String token) {
@@ -40,16 +46,19 @@ public class JwtUtil {
         ).parseClaimsJws(token).getBody();
     }
 
-    public static String generateToken(final String email, UserType uesrType) {
+    public static String generateToken(final Long id, final String email, UserType uesrType) {
         final Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, email, uesrType);
+        claims.put("email",email);
+        claims.put("userType", uesrType.name());
+        claims.put("id",id);
+        return createToken(claims, email);
     }
 
-    private static String createToken(final Map<String, Object> claims, final String subject, UserType uesrType) {
+    private static String createToken(final Map<String, Object> claims, final String subject) {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + ONE_HOUR_IN_MILLIS))
-                .signWith(SignatureAlgorithm.HS256, "SECRET_KEY").compact();
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
     public static boolean validateToken(final String token, final UserDetails user) {

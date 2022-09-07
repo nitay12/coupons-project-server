@@ -54,6 +54,11 @@ public class CustomerService implements ClientService {
         return customerEmail;
     }
 
+    @Override
+    public long getId() {
+        return customerId;
+    }
+
     //Methods: purchaseCoupon
     //verify values: coupon id exist, user id exist, user coupon relation wasn't established yet
     public void purchaseCoupon(final Long couponId, final Long customerId) throws ApplicationException {

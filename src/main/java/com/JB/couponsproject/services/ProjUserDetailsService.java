@@ -18,8 +18,8 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class ProjUserDetailsService implements UserDetailsService {
 
-    private CustomerRepository customerRepository;
-    private CompanyRepository companyRepository;
+    private final CustomerRepository customerRepository;
+    private final CompanyRepository companyRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

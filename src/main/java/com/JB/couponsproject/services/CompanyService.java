@@ -33,6 +33,8 @@ public class CompanyService implements ClientService {
     private static String companyEmail;
     private static UserType userType = UserType.COMPANY;
 
+
+
     //Methods
     public boolean login(String email, String password) throws ApplicationException {
         if (!companyRepository.existsByEmail(email)) {
@@ -58,6 +60,11 @@ public class CompanyService implements ClientService {
     @Override
     public String getEmail() {
         return companyEmail;
+    }
+
+    @Override
+    public long getId() {
+        return companyId;
     }
 
     public long findIdByEmail(String email){

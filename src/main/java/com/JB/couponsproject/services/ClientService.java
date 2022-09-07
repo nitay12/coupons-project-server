@@ -7,4 +7,5 @@ public interface ClientService {
     boolean login(String email,String password) throws ApplicationException;
     UserType getUserType();
     String getEmail();
+    long getId();
 }
