@@ -3,6 +3,7 @@ package com.JB.couponsproject.dto;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.Category;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -24,7 +25,9 @@ public class CouponDto {
     private Category category;
     private String title;
     private String description;
+    @JsonValue
     private LocalDate startDate;
+    @JsonValue
     private LocalDate endDate;
     private int amount;
     private double price;

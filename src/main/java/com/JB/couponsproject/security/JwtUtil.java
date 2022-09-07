@@ -49,7 +49,7 @@ public class JwtUtil {
     public static String generateToken(final Long id, final String email, UserType uesrType) {
         final Map<String, Object> claims = new HashMap<>();
         claims.put("email",email);
-        claims.put("userType", uesrType.name());
+        claims.put("userType", uesrType.toString());
         claims.put("id",id);
         return createToken(claims, email);
     }
