@@ -1,7 +1,6 @@
 package com.JB.couponsproject.security;
 
 import com.JB.couponsproject.enums.UserType;
-import com.JB.couponsproject.util.YAMLConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -15,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.ToDoubleBiFunction;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
@@ -27,6 +27,8 @@ public class JwtUtil {
         return extractClaim(token, Claims::getSubject);
     }
 
+
+    // TODO: 18/09/2022  For Nitay:  check if still relevant or should be changed
     public static String extractId(final String token) {
         return extractClaim(token, Claims::getId);
     }
@@ -49,8 +51,6 @@ public class JwtUtil {
     public static String generateToken(final Long id, final String email, UserType uesrType) {
         final Map<String, Object> claims = new HashMap<>();
         claims.put("email",email);
-        claims.put("userType", uesrType.toString());
-        claims.put("id",id);
         return createToken(claims, email);
     }
 

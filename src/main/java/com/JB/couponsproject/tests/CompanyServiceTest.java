@@ -46,6 +46,7 @@ public class CompanyServiceTest implements CommandLineRunner {
             final CouponDto testCouponDto = CouponDto.builder()
                     .category(Category.ELECTRICITY)
                     .title(TestData.COUPON_TITLE)
+                    .companyId(1L)
                     .description(TestData.COUPON_DESCRIPTION)
                     .startDate(LocalDate.now())
                     .endDate(LocalDate.now())
@@ -53,10 +54,10 @@ public class CompanyServiceTest implements CommandLineRunner {
                     .price(TestData.COUPON_PRICE)
                     .image(TestData.COUPON_IMG)
                     .build();
-            Long newCouponId = companyService.addCoupon(testCouponDto, 1L);
+            Long newCouponId = companyService.addCoupon(testCouponDto).getId();
             logger.info("Coupon added (id:" + newCouponId + ")");
             try {
-                companyService.addCoupon(testCouponDto, 1L);
+                companyService.addCoupon(testCouponDto);
             } catch (ApplicationException e) {
                 logger.info("Add coupon with same title test, thrown exception: " + e.getMessage());
             }
@@ -65,7 +66,7 @@ public class CompanyServiceTest implements CommandLineRunner {
             logger.info("Update coupon test");
             newCoupon.setDescription(TestData.COUPON_UPDATED_DESCRIPTION);
             final CouponDto newCouponDto = newCoupon.toDto();
-            companyService.updateCoupon(newCouponDto, TestData.COMPANY_ID);
+            companyService.updateCoupon(newCouponDto);
             logger.info("Updated coupon description:");
             logger.info(couponRepository.findById(newCouponId).get().toString());
             //Update coupon id test (throws exception)
@@ -94,13 +95,13 @@ public class CompanyServiceTest implements CommandLineRunner {
                         .image(newCouponDto.getImage())
                         .build();
 
-                companyService.updateCoupon(couponToUpdate, TestData.COMPANY_ID);
+                companyService.updateCoupon(couponToUpdate);
             } catch (ApplicationException e) {
                 logger.info("Update coupon id test, thrown exception: " + e.getMessage());
             }
             // Delete coupon test
             logger.info("Deleting coupon...");
-            companyService.deleteCoupon(TestData.COUPON_ID, TestData.COMPANY_ID);
+            companyService.deleteCoupon(TestData.COUPON_ID);
             logger.info("Coupon deleted");
             //Get company coupons test
             logger.info("All company coupons");

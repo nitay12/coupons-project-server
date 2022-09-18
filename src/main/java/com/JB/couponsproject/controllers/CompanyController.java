@@ -11,6 +11,11 @@ import com.JB.couponsproject.security.JwtWrapper;
 import com.JB.couponsproject.services.AdminService;
 import com.JB.couponsproject.services.CompanyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.json.GsonJsonParser;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,21 +27,22 @@ public class CompanyController {
     private final CompanyService companyService;
 
     //addCoupon - CouponDto couponDto,long companyId - post
-    @PostMapping("addCoupon")
-    public void addCoupon(@RequestBody CouponDto couponDto, @RequestHeader("Authorization")JwtWrapper jwt) throws ApplicationException {
-        companyService.addCoupon(couponDto, Long.parseLong(JwtUtil.extractId(jwt.getJwtToken())));
+    @PostMapping(value = "addCoupon", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseStatus(HttpStatus.CREATED)
+    public CouponEntity addCoupon(@RequestBody CouponDto couponDto, @RequestHeader("Authorization")JwtWrapper jwt) throws ApplicationException {
+        return companyService.addCoupon(couponDto);
     }
     
     //updateCoupon - CouponDto couponDto , long companyId - put
     @PutMapping("update/coupon/{companyId}")
     public void updateCoupon(@RequestBody CouponDto couponDto, @PathVariable("companyId") long companyId) throws ApplicationException {
-        companyService.updateCoupon(couponDto,companyId);
+        companyService.updateCoupon(couponDto);
     }
     
     //deleteCoupon - Long id,long companyId - delete
     @DeleteMapping("delete/{id}/{companyId}")
     public void deleteCoupon(@PathVariable("id") long id, @PathVariable("companyId") long companyId) throws DeleteException, EntityNotFoundException {
-        companyService.deleteCoupon(id, companyId);
+        companyService.deleteCoupon(id);
     }
     //getCompanyCoupons - companyId - get
     @GetMapping("coupon/{id}")

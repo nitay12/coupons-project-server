@@ -71,20 +71,15 @@ public class CompanyService implements ClientService {
                 return companyRepository.findByEmail(email).get(0).getId();
 
     }
-    public long addCoupon(CouponDto couponDto,long companyId) throws ApplicationException {
-        //Verifications
+    public CouponEntity addCoupon(CouponDto couponDto) throws ApplicationException {
         //Same title
-        if (
-                couponRepository.existsByTitleAndCompanyId(couponDto.getTitle(),companyId)
-        ) {
+        if (couponRepository.existsByTitleAndCompanyId(couponDto.getTitle(),companyId)) {
             throw new TitleExistException("This title is already exist");
         }
-        couponDto.setCompanyId(companyId);
-        final CouponEntity newCoupon = couponRepository.save(couponDto.toEntity());
-        return newCoupon.getId();
+        return couponRepository.save(couponDto.toEntity());
     }
 
-    public long updateCoupon(CouponDto couponDto, long companyId) throws ApplicationException {
+    public long updateCoupon(CouponDto couponDto) throws ApplicationException {
         //Verifications
         //Coupon not exist
         if (!couponRepository.existsById(couponDto.getId())) {
@@ -105,7 +100,7 @@ public class CompanyService implements ClientService {
         return couponEntity.getId();
     }
 
-    public void deleteCoupon(Long id,long companyId) throws EntityNotFoundException, DeleteException {
+    public void deleteCoupon(Long id) throws EntityNotFoundException, DeleteException {
         if (!couponRepository.existsById(id)) {
             throw new EntityNotFoundException(EntityType.COUPON, id);
         }

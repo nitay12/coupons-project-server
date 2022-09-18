@@ -3,9 +3,12 @@ package com.JB.couponsproject.dto;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.Category;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +22,8 @@ import java.util.stream.Collectors;
 @ToString
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class CouponDto {
-    private final Long id;
+public class CouponDto implements Serializable {
+    private Long id;
     private Long companyId;
     private Category category;
     private String title;

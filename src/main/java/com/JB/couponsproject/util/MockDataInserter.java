@@ -3,6 +3,7 @@ package com.JB.couponsproject.util;
 import com.JB.couponsproject.dto.CompanyDto;
 import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.dto.CustomerDto;
+import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.services.AdminService;
@@ -40,18 +41,19 @@ public class MockDataInserter implements CommandLineRunner {
             companyService.login(
                     newCompany.getEmail(), "123456"
             );
-            final Long newCouponId = companyService.addCoupon(
+            final CouponEntity coupon = companyService.addCoupon(
                     CouponDto.builder()
                             .category(Category.ELECTRICITY)
                             .title("title" + i)
                             .description("desc")
+                            .companyId(1L)
                             .startDate(LocalDate.of(2022, 2, 2))
                             .endDate(LocalDate.of(2022, 5, 10))
                             .amount(300)
                             .price(100)
                             .image("https://company/image.jpg")
                             .build()
-                    , 1L);
+                    );
             final CustomerDto newCustomer = adminService.createCustomer(
                     CustomerDto.builder()
                             .firstName("customer" + i)
@@ -59,7 +61,7 @@ public class MockDataInserter implements CommandLineRunner {
                             .email("customer" + i + "@email.com")
                             .password("123456").build());
             logger.debug("New customer was added to the DB: " + newCustomer.toString());
-            customerService.purchaseCoupon(newCouponId, newCustomer.getId());
+            customerService.purchaseCoupon(coupon.getId(), newCustomer.getId());
             logger.debug(newCustomer.getFirstName() + " purchased coupon");
         }
     }

@@ -1,5 +1,6 @@
-package com.JB.couponsproject.security;
+package com.JB.couponsproject.conf;
 
+import com.JB.couponsproject.security.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

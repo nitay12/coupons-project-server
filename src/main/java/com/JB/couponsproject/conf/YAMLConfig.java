@@ -1,4 +1,4 @@
-package com.JB.couponsproject.util;
+package com.JB.couponsproject.conf;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
