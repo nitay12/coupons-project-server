@@ -29,34 +29,40 @@ public class CompanyController {
     //addCoupon - CouponDto couponDto,long companyId - post
     @PostMapping(value = "addCoupon", consumes = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public CouponEntity addCoupon(@RequestBody CouponDto couponDto, @RequestHeader("Authorization")JwtWrapper jwt) throws ApplicationException {
+    public CouponEntity addCoupon(@RequestBody CouponDto couponDto, @RequestHeader("Authorization") JwtWrapper jwtHeader) throws ApplicationException {
+        final String token = jwtHeader.getJwtToken();
+        final Long companyId = JwtUtil.extractId(token);
+        couponDto.setCompanyId(companyId);
         return companyService.addCoupon(couponDto);
     }
-    
+
     //updateCoupon - CouponDto couponDto , long companyId - put
     @PutMapping("update/coupon/{companyId}")
     public void updateCoupon(@RequestBody CouponDto couponDto, @PathVariable("companyId") long companyId) throws ApplicationException {
         companyService.updateCoupon(couponDto);
     }
-    
+
     //deleteCoupon - Long id,long companyId - delete
     @DeleteMapping("delete/{id}/{companyId}")
     public void deleteCoupon(@PathVariable("id") long id, @PathVariable("companyId") long companyId) throws DeleteException, EntityNotFoundException {
         companyService.deleteCoupon(id);
     }
+
     //getCompanyCoupons - companyId - get
     @GetMapping("coupon/{id}")
-    public List<CouponEntity> getCoupon(@PathVariable("id") final long id){
+    public List<CouponEntity> getCoupon(@PathVariable("id") final long id) {
         return companyService.getCompanyCoupons(id);
     }
+
     //getCompanyCoupons - category , companyId - get
     @GetMapping("coupon/{id}/{category}")
-    public List<CouponEntity> getCoupon(@PathVariable("id") final long id, @PathVariable("category") final Category category){
+    public List<CouponEntity> getCoupon(@PathVariable("id") final long id, @PathVariable("category") final Category category) {
         return companyService.getCompanyCoupons(category, id);
     }
+
     //getCompanyCoupons - maxPrice , companyId - get
     @GetMapping("coupon/{id}/{maxPrice}")
-    public List<CouponEntity> getCoupon(@PathVariable("id") final long id, @PathVariable("maxPrice") final double maxPrice){
+    public List<CouponEntity> getCoupon(@PathVariable("id") final long id, @PathVariable("maxPrice") final double maxPrice) {
         return companyService.getCompanyCoupons(maxPrice, id);
     }
 }
