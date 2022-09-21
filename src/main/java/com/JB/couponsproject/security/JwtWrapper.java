@@ -11,4 +11,11 @@ import lombok.ToString;
 @NoArgsConstructor
 public class JwtWrapper {
     private String jwtToken;
+
+    public String getJwtToken() {
+        if (jwtToken.startsWith("Bearer ")) {
+            jwtToken = jwtToken.substring(7);
+        }
+        return jwtToken;
+    }
 }

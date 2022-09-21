@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.ToDoubleBiFunction;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
@@ -29,8 +28,9 @@ public class JwtUtil {
 
 
     // TODO: 18/09/2022  For Nitay:  check if still relevant or should be changed
-    public static String extractId(final String token) {
-        return extractClaim(token, Claims::getId);
+    public static Long extractId(final String token) {
+        final Claims claims = extractAllClaims(token);
+        return claims.get("id", Long.class);
     }
 
     public static Date extractExpiration(final String token) {
@@ -50,12 +50,11 @@ public class JwtUtil {
 
     public static String generateToken(final Long id, final String email, UserType uesrType) {
         final Map<String, Object> claims = new HashMap<>();
-        claims.put("email",email);
+        claims.put("id", id);
         return createToken(claims, email);
     }
 
     private static String createToken(final Map<String, Object> claims, final String subject) {
-
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + ONE_HOUR_IN_MILLIS))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
