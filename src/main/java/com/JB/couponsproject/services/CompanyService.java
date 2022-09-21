@@ -91,12 +91,13 @@ public class CompanyService implements ClientService {
         ) {
             throw new TitleExistException("This title is already exist");
         }
-        //Company Id updated
+        //Company ID not match
         if (!couponRepository.existsByIdAndCompanyId(couponDto.getId(), companyId)) {
-            throw new UpdateException("The company id cannot be updated");
+            //TODO: change to AuthException
+            throw new UpdateException("Wrong company ID");
         }
         final CouponEntity couponEntity = couponDto.toEntity();
-        couponRepository.save(couponEntity);
+        couponRepository.saveAndFlush(couponEntity);
         return couponEntity.getId();
     }
 
