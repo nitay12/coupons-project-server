@@ -23,7 +23,7 @@ public class CompanyController {
     private final CompanyService companyService;
 
     private void setCompanyIdFromToken(CouponDto couponDto, JwtWrapper jwtHeader) {
-        final String token = jwtHeader.getJwtToken();
+        final String token = jwtHeader.getToken();
         final Long companyId = JwtUtil.extractId(token);
         couponDto.setCompanyId(companyId);
     }

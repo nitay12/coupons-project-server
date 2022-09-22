@@ -10,12 +10,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JwtWrapper {
-    private String jwtToken;
+    private String token;
 
-    public String getJwtToken() {
-        if (jwtToken.startsWith("Bearer ")) {
-            jwtToken = jwtToken.substring(7);
+    public String getToken() {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
         }
-        return jwtToken;
+        return token;
     }
 }

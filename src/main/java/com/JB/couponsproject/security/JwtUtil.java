@@ -27,7 +27,7 @@ public class JwtUtil {
     }
 
 
-    // TODO: 18/09/2022  For Nitay:  check if still relevant or should be changed
+    //TODO: 18/09/2022  For Nitay:  check if still relevant or should be changed
     public static Long extractId(final String token) {
         final Claims claims = extractAllClaims(token);
         return claims.get("id", Long.class);
@@ -47,10 +47,11 @@ public class JwtUtil {
                 SECRET_KEY
         ).parseClaimsJws(token).getBody();
     }
-
     public static String generateToken(final Long id, final String email, UserType uesrType) {
         final Map<String, Object> claims = new HashMap<>();
         claims.put("id", id);
+        claims.put("userType", uesrType);
+        claims.put("email", email);
         return createToken(claims, email);
     }
 
