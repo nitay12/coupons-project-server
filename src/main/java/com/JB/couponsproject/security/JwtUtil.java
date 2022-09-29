@@ -33,6 +33,11 @@ public class JwtUtil {
         return claims.get("id", Long.class);
     }
 
+    public static UserType extractUserType(final String token) {
+        final Claims claims = extractAllClaims(token);
+        return UserType.valueOf(claims.get("userType", String.class));
+    }
+
     public static Date extractExpiration(final String token) {
         return extractClaim(token, Claims::getExpiration);
     }
@@ -47,6 +52,8 @@ public class JwtUtil {
                 SECRET_KEY
         ).parseClaimsJws(token).getBody();
     }
+
+    //TODO: Create ProjClaims
     public static String generateToken(final Long id, final String email, UserType uesrType) {
         final Map<String, Object> claims = new HashMap<>();
         claims.put("id", id);
