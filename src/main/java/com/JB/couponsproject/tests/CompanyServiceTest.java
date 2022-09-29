@@ -35,12 +35,12 @@ public class CompanyServiceTest implements CommandLineRunner {
             //Tests
             //Login test
             try {
-                loginManager.jwtLogin(UserType.COMPANY, TestData.COMPANY_LOGIN_EMAIL, TestData.LOGIN_WRONG_PASSWORD);
+                loginManager.login(UserType.COMPANY, TestData.COMPANY_LOGIN_EMAIL, TestData.LOGIN_WRONG_PASSWORD);
             } catch (ApplicationException e) {
                 logger.info(TestData.LOGIN_FAILED + e.getMessage());
             }
             logger.info("Login succeed test");
-            logger.info(loginManager.jwtLogin(UserType.COMPANY, TestData.COMPANY_LOGIN_EMAIL, TestData.COMPANY_LOGIN_PASSWORD).toString());
+            logger.info(loginManager.login(UserType.COMPANY, TestData.COMPANY_LOGIN_EMAIL, TestData.COMPANY_LOGIN_PASSWORD).toString());
             //Add coupon test
             logger.info("Add coupon test");
             final CouponDto testCouponDto = CouponDto.builder()

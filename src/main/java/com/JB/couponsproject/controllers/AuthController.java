@@ -16,6 +16,6 @@ public class AuthController {
 
     @PostMapping("login")
     public JwtWrapper login(@RequestBody ClientLoginDto client) throws ApplicationException {
-        return loginManager.jwtLogin(client.getUserType(), client.getEmail(), client.getPassword());
+        return loginManager.login(client.getUserType(), client.getEmail(), client.getPassword());
     }
 }
