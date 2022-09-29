@@ -30,10 +30,12 @@ public class LoginManager {
             case COMPANY -> clientService = companyService;
             case CUSTOMER -> clientService = customerService;
         }
-        if (clientService.login(email, password)){
+        //Admin credentials hard coded
+        if (clientService.getUserType().equals(UserType.ADMIN) && (password.equals(AMDIN_LOGIN_PASSWORD) && email.equals(ADMIN_LOGIN_EMAIL))) {
+            return new JwtWrapper(JwtUtil.generateToken(0L, ADMIN_LOGIN_EMAIL, clientService.getUserType()));
+        } else if (clientService.login(email, password)) {
             return authService.login(clientService);
-        }
-        else {
+        } else {
             throw new ApplicationException(); //check for other options
         }
     }
