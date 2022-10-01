@@ -19,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("admin")
+@CrossOrigin()
 public class AdminController {
     private final AdminService adminService;
 
@@ -57,6 +58,7 @@ public class AdminController {
     @GetMapping("companies")
     public List<CompanyEntity> getAllCompanies(@RequestHeader("Authorization") JwtWrapper jwtHeader) throws ApplicationException {
         isAdminOrForbidden(jwtHeader);
+
         return adminService.getAllCompanies();
     }
 
