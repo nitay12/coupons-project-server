@@ -11,7 +11,6 @@ import com.JB.couponsproject.security.JwtUtil;
 import com.JB.couponsproject.security.JwtWrapper;
 import com.JB.couponsproject.services.AdminService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
