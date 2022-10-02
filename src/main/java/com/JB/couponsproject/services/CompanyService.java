@@ -13,6 +13,8 @@ import com.JB.couponsproject.repositories.CouponRepository;
 import com.JB.couponsproject.repositories.CustomerRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -32,7 +34,7 @@ public class CompanyService implements ClientService {
     private static Long companyId;
     private static String companyEmail;
     private static UserType userType = UserType.COMPANY;
-
+    Logger LOGGER = LoggerFactory.getLogger(AdminService.class);
 
 
     //Methods
@@ -105,17 +107,8 @@ public class CompanyService implements ClientService {
         if (!couponRepository.existsById(id)) {
             throw new EntityNotFoundException(EntityType.COUPON, id);
         }
-        if (!couponRepository.existsByIdAndCompanyId(id, companyId)){
-            throw new DeleteException("Only coupon of the logged in company can be deleted");
-        }
-        final CouponEntity coupon = couponRepository.findById(id).get();
-        final List<CustomerEntity> buyers = coupon.getBuyers();
-        for (CustomerEntity customer :
-                buyers) {
-            customer.deleteCoupon(coupon);
-            customerRepository.save(customer);
-        }
-        couponRepository.deleteById(id);
+        LOGGER.info("Deleting coupon: "+id);
+        companyRepository.deleteById(id);
     }
 
     public List<CouponEntity> getCompanyCoupons(long companyId) {

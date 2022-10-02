@@ -64,24 +64,14 @@ public class CompanyServiceTest implements CommandLineRunner {
             CouponEntity newCoupon = couponRepository.findById(newCouponId).get();
             //Update coupon test
             logger.info("Update coupon test");
-            newCoupon.setDescription(TestData.COUPON_UPDATED_DESCRIPTION);
-            final CouponDto newCouponDto = newCoupon.toDto();
-            companyService.updateCoupon(newCouponDto);
-            logger.info("Updated coupon description:");
-            logger.info(couponRepository.findById(newCouponId).get().toString());
+
             //Update coupon id test (throws exception)
             try {
-//                CouponDto(1L, CouponDto.builder()
-//                        .companyId(newCouponDto.getCompanyId())
-//                        .category(newCouponDto.getCategory())
-//                        .title(newCouponDto.getTitle())
-//                        .description(newCouponDto.getDescription())
-//                        .startDate(newCouponDto.getStartDate())
-//                        .endDate(newCouponDto.getEndDate())
-//                        .amount(newCouponDto.getAmount())
-//                        .price(newCouponDto.getPrice())
-//                        .image(newCouponDto.getImage())
-
+                newCoupon.setDescription(TestData.COUPON_UPDATED_DESCRIPTION);
+                final CouponDto newCouponDto = newCoupon.toDto();
+                companyService.updateCoupon(newCouponDto);
+                logger.info("Updated coupon description:");
+                logger.info(couponRepository.findById(newCouponId).get().toString());
                 CouponDto couponToUpdate = CouponDto.builder()
                         .id(newCouponDto.getId())
                         .companyId(newCouponDto.getCompanyId())

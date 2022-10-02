@@ -48,7 +48,7 @@ public class MockDataInserter implements CommandLineRunner {
                             .description("desc")
                             .companyId(1L)
                             .startDate(LocalDate.of(2022, 2, 2))
-                            .endDate(LocalDate.of(2022, 5, 10))
+                            .endDate(LocalDate.of(2023, 5, 10))
                             .amount(300)
                             .price(100)
                             .image("https://company/image.jpg")

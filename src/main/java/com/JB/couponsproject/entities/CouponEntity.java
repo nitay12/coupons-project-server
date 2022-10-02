@@ -3,6 +3,8 @@ package com.JB.couponsproject.entities;
 import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.enums.Category;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
@@ -65,20 +67,15 @@ public class CouponEntity implements Serializable {
     @Getter
     @Setter
     private String image;
-    @Getter
-    @Setter
-    @ToString.Exclude
-    @ManyToMany(mappedBy = "coupons")
-    @Builder.Default
+    @ToString.Exclude @Builder.Default
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinTable(
+            name = "coupon_vs_customer",
+            joinColumns = @JoinColumn(name = "coupon_id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id")
+    )
     private List<CustomerEntity> buyers = new ArrayList<>();
-
-    public void addBuyer(CustomerEntity buyer) {
-        buyers.add(buyer);
-    }
-
-    public void deleteBuyer(CustomerEntity buyer) {
-        buyers.remove(buyer);
-    }
 
     public CouponDto toDto() {
         return CouponDto.builder()

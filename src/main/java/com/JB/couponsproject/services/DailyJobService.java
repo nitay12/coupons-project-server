@@ -26,13 +26,8 @@ public class DailyJobService {
         log.info("Starting expired coupons daily deletion");
         List<CouponEntity> expiredCoupons = couponRepository.getExpiredCoupons();
         for (CouponEntity expiredCoupon : expiredCoupons) {
-            final List<CustomerEntity> buyers = expiredCoupon.getBuyers();
-            for (CustomerEntity customer : buyers) {
-                customer.deleteCoupon(expiredCoupon);
-                customerRepository.save(customer);
-            }
-            couponRepository.deleteById(expiredCoupon.getId());
             log.info("deleted coupon" + expiredCoupon.getId() + ", expired at:" + expiredCoupon.getEndDate());
+            couponRepository.deleteById(expiredCoupon.getId());
         }
         log.info("Expired coupons daily deletion finished");
     }

@@ -28,6 +28,7 @@ public class AdminService implements ClientService {
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
     private final CustomerRepository customerRepository;
+
     Logger logger = LoggerFactory.getLogger(AdminService.class);
 
     @Override

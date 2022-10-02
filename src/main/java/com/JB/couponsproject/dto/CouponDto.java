@@ -50,10 +50,6 @@ public class CouponDto implements Serializable {
                 .amount(this.amount)
                 .price(this.price)
                 .image(this.image)
-                .buyers(this.buyers
-                        .stream()
-                        .map(CustomerDto::toEntity)
-                        .collect(Collectors.toList()))
                 .build();
     }
 }

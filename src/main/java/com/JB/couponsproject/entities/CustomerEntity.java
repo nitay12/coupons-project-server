@@ -3,6 +3,8 @@ package com.JB.couponsproject.entities;
 import com.JB.couponsproject.dto.CustomerDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
+@Getter @Setter
 @Table(name = "customers")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,25 +21,21 @@ import java.util.stream.Collectors;
 @Builder
 public class CustomerEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter @Setter
     private Long id;
     @Column(name = "first_name", nullable = false)
-    @Getter @Setter
     private String firstName;
     @Column(name = "last_name", nullable = false)
-    @Getter @Setter
     private String lastName;
 
     @Email
     @Column(name = "email", nullable = false, unique = true)
-    @Getter @Setter
     private String email;
     @Column(name = "password", nullable = false)
     @JsonIgnore
-    @Getter @Setter
     private String password;
-    @Getter @Setter
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinTable(
             name = "coupon_vs_customer",
             joinColumns = @JoinColumn(name = "customer_id"),
