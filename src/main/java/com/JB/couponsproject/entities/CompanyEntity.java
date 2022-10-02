@@ -1,6 +1,7 @@
 package com.JB.couponsproject.entities;
 
 import com.JB.couponsproject.dto.CompanyDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,7 @@ public class CompanyEntity implements Serializable {
     @Column(name = "password", nullable = false)
     @Getter
     @Setter
+    @JsonIgnore
     private String password;
 
     public CompanyDto toDto() {

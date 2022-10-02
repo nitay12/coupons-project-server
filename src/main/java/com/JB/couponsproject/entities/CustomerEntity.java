@@ -1,6 +1,7 @@
 package com.JB.couponsproject.entities;
 
 import com.JB.couponsproject.dto.CustomerDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,6 +32,7 @@ public class CustomerEntity {
     @Getter @Setter
     private String email;
     @Column(name = "password", nullable = false)
+    @JsonIgnore
     @Getter @Setter
     private String password;
     @Getter @Setter
