@@ -11,5 +11,5 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 public class ExceptionDetailsDto {
-    private String printedMsg;
+    private String message;
 }

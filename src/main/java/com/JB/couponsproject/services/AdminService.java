@@ -9,7 +9,7 @@ import com.JB.couponsproject.enums.EntityType;
 import com.JB.couponsproject.enums.UserType;
 import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.exceptions.EntityNotFoundException;
-import com.JB.couponsproject.exceptions.WrongCertificationsException;
+import com.JB.couponsproject.exceptions.WrongCredentialsException;
 import com.JB.couponsproject.repositories.CompanyRepository;
 import com.JB.couponsproject.repositories.CouponRepository;
 import com.JB.couponsproject.repositories.CustomerRepository;
@@ -43,7 +43,7 @@ public class AdminService implements ClientService {
             logger.info("Administrator logged into the system.");
             return true;
         }
-        throw new WrongCertificationsException("Wrong email or password");
+        throw new WrongCredentialsException("Wrong email or password");
     }
 
     @Override

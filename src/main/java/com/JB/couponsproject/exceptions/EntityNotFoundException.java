@@ -1,7 +1,10 @@
 package com.JB.couponsproject.exceptions;
 
 import com.JB.couponsproject.enums.EntityType;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
+@ResponseStatus(HttpStatus.NOT_FOUND)
 public class EntityNotFoundException extends ApplicationException {
     public EntityNotFoundException(String message) {
         super(message);

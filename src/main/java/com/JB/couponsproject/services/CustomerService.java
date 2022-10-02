@@ -5,7 +5,7 @@ import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.enums.UserType;
 import com.JB.couponsproject.exceptions.ApplicationException;
-import com.JB.couponsproject.exceptions.WrongCertificationsException;
+import com.JB.couponsproject.exceptions.WrongCredentialsException;
 import com.JB.couponsproject.repositories.CouponRepository;
 import com.JB.couponsproject.repositories.CustomerRepository;
 import lombok.Getter;
@@ -41,7 +41,7 @@ public class CustomerService implements ClientService {
                 return true;
             }
         }
-        throw new WrongCertificationsException("Wrong email or password");
+        throw new WrongCredentialsException("Wrong email or password");
     }
 
     @Override

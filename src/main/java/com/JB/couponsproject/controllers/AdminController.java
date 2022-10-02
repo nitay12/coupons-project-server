@@ -6,7 +6,7 @@ import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.UserType;
 import com.JB.couponsproject.exceptions.ApplicationException;
-import com.JB.couponsproject.exceptions.UnauthorizedException;
+import com.JB.couponsproject.exceptions.ForbiddenException;
 import com.JB.couponsproject.security.JwtUtil;
 import com.JB.couponsproject.security.JwtWrapper;
 import com.JB.couponsproject.services.AdminService;
@@ -27,9 +27,9 @@ public class AdminController {
         return JwtUtil.extractUserType(token).equals(UserType.ADMIN);
     }
 
-    private void isAdminOrForbidden(JwtWrapper jwtHeader) throws UnauthorizedException {
+    private void isAdminOrForbidden(JwtWrapper jwtHeader) throws ForbiddenException {
         if (!isAdmin(jwtHeader)) {
-            throw new UnauthorizedException(JwtUtil.extractUserType(jwtHeader.getToken()));
+            throw new ForbiddenException(JwtUtil.extractUserType(jwtHeader.getToken()));
         }
     }
 

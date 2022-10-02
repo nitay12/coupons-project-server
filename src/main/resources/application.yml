@@ -1,6 +1,9 @@
 logging:
   level:
     root: INFO
+server:
+  error:
+    include-message: always
 spring:
   jpa:
     debug: true

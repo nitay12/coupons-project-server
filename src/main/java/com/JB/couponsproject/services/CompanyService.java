@@ -3,7 +3,6 @@ package com.JB.couponsproject.services;
 import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CouponEntity;
-import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.enums.EntityType;
 import com.JB.couponsproject.enums.UserType;
@@ -51,7 +50,7 @@ public class CompanyService implements ClientService {
                 return true;
             }
         }
-        throw new WrongCertificationsException("Wrong email or password");
+        throw new WrongCredentialsException("Wrong email or password");
     }
 
     @Override
@@ -103,7 +102,7 @@ public class CompanyService implements ClientService {
         return couponEntity.getId();
     }
 
-    public void deleteCoupon(Long id) throws EntityNotFoundException, DeleteException {
+    public void deleteCoupon(Long id) throws EntityNotFoundException {
         if (!couponRepository.existsById(id)) {
             throw new EntityNotFoundException(EntityType.COUPON, id);
         }
