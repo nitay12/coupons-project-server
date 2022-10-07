@@ -1,8 +1,11 @@
 package com.JB.couponsproject.controllers;
 
+import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.exceptions.ApplicationException;
+import com.JB.couponsproject.security.JwtUtil;
+import com.JB.couponsproject.security.JwtWrapper;
 import com.JB.couponsproject.services.AdminService;
 import com.JB.couponsproject.services.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -18,31 +21,35 @@ public class CustomerController {
     //required for profile manipulation and delete account button.
     private final AdminService adminService;
 
+    private long setCustomerIdFromToken(JwtWrapper jwtHeader) {
+        final String token = jwtHeader.getToken();
+        return JwtUtil.extractId(token);
+    }
     //PurchaseCoupon - POST
-    @PutMapping("purchase/{couponId}/{customerId}")
-    public void purchaseCoupon(@PathVariable("couponId") long couponId,@PathVariable("customerId") long customerId) throws ApplicationException {
-        customerService.purchaseCoupon(couponId, customerId);
+    @PutMapping("purchase/{couponId}")
+    public void purchaseCoupon(@PathVariable("couponId") long couponId,@RequestHeader("Authorization") JwtWrapper jwtHeader) throws ApplicationException {
+        customerService.purchaseCoupon(couponId, setCustomerIdFromToken(jwtHeader));
     }
     //GetCustomerCoupons - by customerId long - GET
-    @GetMapping("coupons/{id}")
-    public List<CouponEntity> getCoupons(@PathVariable("id") final long id) {
-        return customerService.getCustomerCoupons(id);
+    @GetMapping("coupons")
+    public List<CouponEntity> getCoupons(@RequestHeader("Authorization") JwtWrapper jwtHeader) {
+        return customerService.getCustomerCoupons(setCustomerIdFromToken(jwtHeader));
     }
     //GetCustomerCoupons - by customerId long && Category - GET
-    @GetMapping("coupon/{id}/{category}")
-    public List<CouponEntity> getCoupon(@PathVariable("id") final long id, @PathVariable("category") final Category category){
-        return customerService.getCustomerCoupons(category, id);
+    @GetMapping("coupon/{category}")
+    public List<CouponEntity> getCoupon(@RequestHeader("Authorization") JwtWrapper jwtHeader, @PathVariable("category") final Category category){
+        return customerService.getCustomerCoupons(category, setCustomerIdFromToken(jwtHeader));
     }
     //GetCustomerCoupons - by customerId long && maxPrice double - GET
-    @GetMapping("coupon/{id}/{maxPrice}")
-    public List<CouponEntity> getCoupon(@PathVariable("id") final long id, @PathVariable("maxPrice") final double maxPrice){
-        return customerService.getCustomerCoupons(maxPrice, id);
+    @GetMapping("coupon/{maxPrice}")
+    public List<CouponEntity> getCoupon(@RequestHeader("Authorization") JwtWrapper jwtHeader, @PathVariable("maxPrice") final double maxPrice){
+        return customerService.getCustomerCoupons(maxPrice, setCustomerIdFromToken(jwtHeader));
     }
     //Personal Bonus - Delete my account option - DELETE - add protection with userId to confirm
-    @DeleteMapping("DeleteCustomer/{id}/{password}")
-    public void deleteCustomer(long id, String password) throws ApplicationException {
-        if (adminService.getCustomerById(id).getPassword().equals(password)){
-            adminService.deleteCustomer(id);
+    @DeleteMapping("DeleteCustomer/{password}")
+    public void deleteCustomer(@RequestHeader("Authorization") JwtWrapper jwtHeader, String password) throws ApplicationException {
+        if (adminService.getCustomerById(setCustomerIdFromToken(jwtHeader)).getPassword().equals(password)){
+            adminService.deleteCustomer(setCustomerIdFromToken(jwtHeader));
         }
     }
 
