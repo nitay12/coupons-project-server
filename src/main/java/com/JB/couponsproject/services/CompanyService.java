@@ -110,6 +110,18 @@ public class CompanyService implements ClientService {
         companyRepository.deleteById(id);
     }
 
+    public void deleteCompanyCoupon(Long id, Long companyId) throws EntityNotFoundException {
+        if (!couponRepository.existsById(id)) {
+            throw new EntityNotFoundException(EntityType.COUPON, id);
+        }
+        if (companyId == couponRepository.findById(id).get().getCompanyId()){
+            LOGGER.info("Deleting coupon: "+id);
+            companyRepository.deleteById(id);
+        }
+        LOGGER.info("Cannot perform delete action");
+    }
+
+
     public List<CouponEntity> getCompanyCoupons(long companyId) {
         return couponRepository.getByCompanyId(companyId);
     }
