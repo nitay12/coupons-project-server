@@ -11,6 +11,6 @@ public class EntityNotFoundException extends ApplicationException {
     }
 
     public EntityNotFoundException(EntityType entityType, Long id) {
-        System.out.println(entityType.name() + " with id: " + id + " not found in the database");
+        super(entityType.name() + " with id: " + id + " not found in the database");
     }
 }
