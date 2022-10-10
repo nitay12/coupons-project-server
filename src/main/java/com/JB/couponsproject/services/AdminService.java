@@ -9,6 +9,7 @@ import com.JB.couponsproject.enums.EntityType;
 import com.JB.couponsproject.enums.UserType;
 import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.exceptions.EntityNotFoundException;
+import com.JB.couponsproject.exceptions.UpdateException;
 import com.JB.couponsproject.exceptions.WrongCredentialsException;
 import com.JB.couponsproject.repositories.CompanyRepository;
 import com.JB.couponsproject.repositories.CouponRepository;
@@ -138,4 +139,17 @@ public class AdminService implements ClientService {
         return companyRepository.findByName(name).get(0).toDto();
     }
 
+    public CompanyDto updateCompany(CompanyDto company) throws EntityNotFoundException, UpdateException {
+        if (!companyRepository.existsById(company.getId())) {
+            throw new EntityNotFoundException(EntityType.COMPANY, company.getId());
+        }
+        if (companyRepository.existsByName(company.getName())) {
+            throw new UpdateException("Name already exist in the system.");
+        }
+        if (companyRepository.existsByEmail(company.getEmail())) {
+            throw new UpdateException("Email already exist in the system.");
+        }
+        final CompanyEntity updatedCompany = companyRepository.saveAndFlush(company.toEntity());
+        return updatedCompany.toDto();
+    }
 }

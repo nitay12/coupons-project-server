@@ -43,8 +43,7 @@ public class AdminController {
     public CompanyDto updateCompany(@RequestBody CompanyDto company, @RequestHeader("Authorization") JwtWrapper jwtHeader) throws ApplicationException {
         //TODO: return the update company method to adminService
         isAdminOrForbidden(jwtHeader);
-        return CompanyDto.builder().build();
-//        return adminService.updateCompany;
+        return adminService.updateCompany(company);
     }
 
     @DeleteMapping("companies/{id}")
