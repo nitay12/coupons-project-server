@@ -152,4 +152,14 @@ public class AdminService implements ClientService {
         final CompanyEntity updatedCompany = companyRepository.saveAndFlush(company.toEntity());
         return updatedCompany.toDto();
     }
+
+    public CustomerDto updateCustomer(CustomerDto customer) throws UpdateException {
+        if (!customerRepository.existsByEmail(customer.getEmail())) {
+            return customerRepository
+                    .save(customer.toEntity())
+                    .toDto();
+        } else {
+            throw new UpdateException("Email already exist in the system.");
+        }
+    }
 }

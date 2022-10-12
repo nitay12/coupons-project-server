@@ -58,10 +58,7 @@ public class CustomerEntity {
                 .lastName(this.lastName)
                 .email(this.email)
                 .password(this.password)
-                .coupons(this.coupons
-                        .stream()
-                        .map(CouponEntity::toDto)
-                        .collect(Collectors.toList()))
+                .coupons(this.coupons)
                 .build();
     }
 }

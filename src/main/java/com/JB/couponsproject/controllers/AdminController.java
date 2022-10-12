@@ -7,6 +7,7 @@ import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.UserType;
 import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.exceptions.ForbiddenException;
+import com.JB.couponsproject.exceptions.UpdateException;
 import com.JB.couponsproject.security.JwtUtil;
 import com.JB.couponsproject.security.JwtWrapper;
 import com.JB.couponsproject.services.AdminService;
@@ -72,10 +73,8 @@ public class AdminController {
     }
 
     @PutMapping("customers")
-    public CustomerDto updateCustomer(@RequestBody CustomerDto customer) {
-        //TODO: return the update customer method to adminService
-        return CustomerDto.builder().build();
-//        return adminService.updateCustomer;
+    public CustomerDto updateCustomer(@RequestBody CustomerDto customer) throws UpdateException {
+        return adminService.updateCustomer(customer);
     }
 
     @DeleteMapping("customers/{id}")

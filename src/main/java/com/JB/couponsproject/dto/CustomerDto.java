@@ -22,7 +22,7 @@ public class CustomerDto {
     private String lastName;
     private String email;
     private String password;
-    @Builder.Default private List<CouponDto> coupons = new ArrayList<>();
+    private List<CouponEntity> coupons;
 
     public CustomerEntity toEntity() {
         return CustomerEntity.builder()
@@ -31,10 +31,7 @@ public class CustomerDto {
                 .lastName(this.lastName)
                 .email(this.email)
                 .password(this.password)
-                .coupons(this.coupons
-                        .stream()
-                        .map(CouponDto::toEntity)
-                        .collect(Collectors.toList()))
+                .coupons(this.coupons)
                 .build();
     }
 
