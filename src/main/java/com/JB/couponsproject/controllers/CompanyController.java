@@ -18,13 +18,18 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("company")
+@CrossOrigin()
 public class CompanyController {
     private final CompanyService companyService;
 
     private void setCompanyIdFromToken(CouponDto couponDto, JwtWrapper jwtHeader) {
-        final String token = jwtHeader.getToken();
-        final Long companyId = JwtUtil.extractId(token);
+        final Long companyId = getCompanyId(jwtHeader);
         couponDto.setCompanyId(companyId);
+    }
+
+    private Long getCompanyId(JwtWrapper jwtHeader) {
+        final String token = jwtHeader.getToken();
+        return JwtUtil.extractId(token);
     }
 
     //addCoupon - CouponDto couponDto - POST
@@ -52,8 +57,9 @@ public class CompanyController {
     }
 
     //getCompanyCoupons - companyId - get
-    @GetMapping("coupon/{id}")
-    public List<CouponEntity> getCoupon(@PathVariable("id") final long id) {
+    @GetMapping("coupons")
+    public List<CouponEntity> getCoupons(@RequestHeader("Authorization") JwtWrapper jwtHeader) {
+        Long id = getCompanyId(jwtHeader);
         return companyService.getCompanyCoupons(id);
     }
 
