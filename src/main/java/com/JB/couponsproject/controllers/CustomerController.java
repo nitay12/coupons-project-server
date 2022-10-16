@@ -1,6 +1,5 @@
 package com.JB.couponsproject.controllers;
 
-import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.exceptions.ApplicationException;
@@ -36,13 +35,13 @@ public class CustomerController {
         return customerService.getCustomerCoupons(setCustomerIdFromToken(jwtHeader));
     }
     //GetCustomerCoupons - by customerId long && Category - GET
-    @GetMapping("coupon/{category}")
-    public List<CouponEntity> getCoupon(@RequestHeader("Authorization") JwtWrapper jwtHeader, @PathVariable("category") final Category category){
-        return customerService.getCustomerCoupons(category, setCustomerIdFromToken(jwtHeader));
+    @GetMapping("coupons/category/{category}")
+    public List<CouponEntity> getCouponByCategory(@RequestHeader("Authorization") JwtWrapper jwtHeader, @PathVariable("category") final Category category){
+        return customerService.getCustomerCouponsByCategory(category, setCustomerIdFromToken(jwtHeader));
     }
     //GetCustomerCoupons - by customerId long && maxPrice double - GET
-    @GetMapping("coupon/{maxPrice}")
-    public List<CouponEntity> getCoupon(@RequestHeader("Authorization") JwtWrapper jwtHeader, @PathVariable("maxPrice") final double maxPrice){
+    @GetMapping("coupons/maxprice/{maxPrice}")
+    public List<CouponEntity> getCouponByMaxPrice(@RequestHeader("Authorization") JwtWrapper jwtHeader, @PathVariable("maxPrice") final double maxPrice){
         return customerService.getCustomerCoupons(maxPrice, setCustomerIdFromToken(jwtHeader));
     }
     //Personal Bonus - Delete my account option - DELETE - add protection with userId to confirm

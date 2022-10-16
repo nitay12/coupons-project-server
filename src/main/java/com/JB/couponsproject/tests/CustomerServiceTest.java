@@ -43,10 +43,11 @@ public class CustomerServiceTest implements CommandLineRunner {
             //Get customer coupons tests (all, category, max price
             log.info("get all customer coupons:");
             log.info(customerService.getCustomerCoupons(TestData.CUSTOMER_ID).toString());
-            log.info("get all customer coupons up to max category:");
-            log.info(customerService.getCustomerCoupons(Category.ELECTRICITY, TestData.CUSTOMER_ID).toString());
-            log.info("get all customer coupons filtered by price:");
+            log.info("get all customer coupons filtered by category:" + Category.ELECTRICITY);
+            log.info(customerService.getCustomerCouponsByCategory(Category.ELECTRICITY, TestData.CUSTOMER_ID).toString());
+            log.info("get all customer coupons up to max price: "+TestData.CUSTOMER_MAX_PRICE);
             log.info(customerService.getCustomerCoupons(TestData.CUSTOMER_MAX_PRICE, TestData.CUSTOMER_ID).toString());
+            log.info("get all customer coupons:");
             log.info(customerService.getCustomerCoupons(TestData.CUSTOMER_ID).toString());
         } catch (ApplicationException e) {
             e.printStackTrace();

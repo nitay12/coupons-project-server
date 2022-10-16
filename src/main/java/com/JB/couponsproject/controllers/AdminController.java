@@ -53,7 +53,6 @@ public class AdminController {
         adminService.deleteCompany(id);
     }
 
-    //TODO: change the getAllCompanies in admin service to List<CompanyDto> for consistency?
     @GetMapping("companies")
     public List<CompanyEntity> getAllCompanies(@RequestHeader("Authorization") JwtWrapper jwtHeader) throws ApplicationException {
         isAdminOrForbidden(jwtHeader);
@@ -81,8 +80,7 @@ public class AdminController {
     public void deleteCustomer(@PathVariable("id") final Long id) throws ApplicationException {
         adminService.deleteCustomer(id);
     }
-
-    //TODO: change the getAllCompanies in admin service to List<CompanyDto> for consistency?
+    
     @GetMapping("customers")
     public List<CustomerEntity> getAllCustomers() {
         return adminService.getAllCustomers();

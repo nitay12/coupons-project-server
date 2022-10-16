@@ -17,6 +17,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Random;
 
 @Component
 @RequiredArgsConstructor
@@ -27,6 +28,12 @@ public class MockDataInserter implements CommandLineRunner {
     private final CompanyService companyService;
     private final Logger logger = LoggerFactory.getLogger(MockDataInserter.class);
 
+    private static final Random random = new Random();
+
+    public static Category getRandomCategory(){
+        Category[] categories = Category.values();
+        return categories[random.nextInt(categories.length)];
+    }
 
     public void insert() throws ApplicationException {
         logger.info("Inserting mock data to the DB");
@@ -43,14 +50,14 @@ public class MockDataInserter implements CommandLineRunner {
             );
             final CouponEntity coupon = companyService.addCoupon(
                     CouponDto.builder()
-                            .category(Category.ELECTRICITY)
+                            .category(getRandomCategory())
                             .title("title" + i)
                             .description("desc")
                             .companyId(1L)
                             .startDate(LocalDate.of(2022, 2, 2))
                             .endDate(LocalDate.of(2023, 5, 10))
                             .amount(300)
-                            .price(100)
+                            .price(random.nextInt(300)+50)
                             .image("https://company/image.jpg")
                             .build()
                     );

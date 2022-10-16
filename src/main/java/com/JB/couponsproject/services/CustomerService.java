@@ -92,14 +92,14 @@ public class CustomerService implements ClientService {
     }
 
     //Methods: get Customer's Coupons - from category id
-    public List<CouponEntity> getCustomerCoupons(final Category category, final long customerId) {
-        return couponRepository.getCustomerCouponsByCategory(customerId, category);
+    public List<CouponEntity> getCustomerCouponsByCategory(final Category category, final long customerId) {
+        return couponRepository.getCustomerCoupons(customerId).stream().filter(x -> x.getCategory().equals(category)).toList();
     }
 
     //Methods: get Customer's Coupons - up to price x
     //customer id taken from state
     public List<CouponEntity> getCustomerCoupons(final double price, final long customerId) {
-        return couponRepository.findCustomerCouponsByPriceLessThan(customerId, price);
+        return couponRepository.getCustomerCoupons(customerId).stream().filter(x -> x.getPrice() <= price).toList();
     }
 
     //TODO: Check if customer is logged in with LoginManager

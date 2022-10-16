@@ -12,13 +12,11 @@ import java.util.List;
 public interface CouponRepository extends JpaRepository<CouponEntity, Long> {
     //Company methods
     boolean existsByIdAndCompanyId(Long id, Long companyId);
-
     boolean existsByTitleAndCompanyId(String title, Long companyId);
-
     List<CouponEntity> findByCompanyIdAndPriceLessThan(Long companyId, double maxPrice);
-
+    List<CouponEntity> findByPriceLessThan(double maxPrice);
     List<CouponEntity> getByCompanyId(long companyID);
-
+    List<CouponEntity> getByCategory(Category category);
     List<CouponEntity> getByCompanyIdAndCategory(long companyID, Category category);
 
     void deleteAllByCompanyId(long id);
@@ -27,14 +25,6 @@ public interface CouponRepository extends JpaRepository<CouponEntity, Long> {
     @Query(value = "SELECT * FROM coupons AS c JOIN coupon_vs_customer AS cc ON cc.coupon_id = c.id WHERE " +
                    "cc.customer_id = ?1", nativeQuery = true)
     List<CouponEntity> getCustomerCoupons(long customerID);
-
-    @Query(value = "SELECT * FROM coupons AS c JOIN coupon_vs_customer AS cc" +
-                   " ON c.id = cc.coupon_id WHERE cc.customer_id = ?1", nativeQuery = true)
-    List<CouponEntity> getCustomerCouponsByCategory(long customerID, Category category);
-
-    @Query(value = "SELECT * FROM coupons AS c JOIN coupon_vs_customer AS cc" +
-                   " ON c.id = cc.coupon_id WHERE cc.customer_id = ?1", nativeQuery = true)
-    List<CouponEntity> findCustomerCouponsByPriceLessThan(long customerID, double maxPrice);
 
     @Query(value = "SELECT * FROM coupons AS c WHERE end_date < CURDATE()", nativeQuery = true)
     List<CouponEntity> getExpiredCoupons();
