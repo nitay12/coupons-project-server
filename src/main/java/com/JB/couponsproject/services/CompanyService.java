@@ -69,7 +69,7 @@ public class CompanyService implements ClientService {
     }
 
     public long findIdByEmail(String email){
-                return companyRepository.findByEmail(email).get(0).getId();
+        return companyRepository.findByEmail(email).get(0).getId();
 
     }
     public CouponEntity addCoupon(CouponDto couponDto) throws ApplicationException {
@@ -107,18 +107,15 @@ public class CompanyService implements ClientService {
             throw new EntityNotFoundException(EntityType.COUPON, id);
         }
         LOGGER.info("Deleting coupon: "+id);
-        companyRepository.deleteById(id);
+        couponRepository.deleteById(id);
     }
 
     public void deleteCompanyCoupon(Long id, Long companyId) throws EntityNotFoundException {
-        if (!couponRepository.existsById(id)) {
-            throw new EntityNotFoundException(EntityType.COUPON, id);
+        if (couponRepository.existsById(id) &&
+                couponRepository.findById(id).get().getCompanyId()==companyId) {
+            couponRepository.deleteById(id);
         }
-        if (companyId == couponRepository.findById(id).get().getCompanyId()){
-            LOGGER.info("Deleting coupon: "+id);
-            companyRepository.deleteById(id);
-        }
-        LOGGER.info("Cannot perform delete action");
+        else LOGGER.info("Cannot perform delete action");
     }
 
 

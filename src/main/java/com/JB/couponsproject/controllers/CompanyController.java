@@ -51,8 +51,7 @@ public class CompanyController {
     //deleteCoupon - Long id,long companyId - delete
     @DeleteMapping("delete/{id}")
     public void deleteCoupon(@PathVariable("id") long id, @RequestHeader("Authorization") JwtWrapper jwtHeader) throws EntityNotFoundException {
-        final String token = jwtHeader.getToken();
-        final Long companyId = JwtUtil.extractId(token);
+        final Long companyId = getCompanyId(jwtHeader);
         companyService.deleteCompanyCoupon(id, companyId);
     }
 
@@ -64,14 +63,16 @@ public class CompanyController {
     }
 
     //getCompanyCoupons - category , companyId - get
-    @GetMapping("coupon/{id}/{category}")
-    public List<CouponEntity> getCoupon(@PathVariable("id") final long id, @PathVariable("category") final Category category) {
+    @GetMapping("coupons/category/{category}")
+    public List<CouponEntity> getCoupon(@RequestHeader("Authorization") JwtWrapper jwtHeader, @PathVariable("category") final Category category) {
+        Long id = getCompanyId(jwtHeader);
         return companyService.getCompanyCoupons(category, id);
     }
 
     //getCompanyCoupons - maxPrice , companyId - get
-    @GetMapping("coupon/{id}/{maxPrice}")
-    public List<CouponEntity> getCoupon(@PathVariable("id") final long id, @PathVariable("maxPrice") final double maxPrice) {
+    @GetMapping("coupons/maxPrice/{maxPrice}")
+    public List<CouponEntity> getCoupon(@RequestHeader("Authorization") JwtWrapper jwtHeader, @PathVariable("maxPrice") final double maxPrice) {
+        Long id = getCompanyId(jwtHeader);
         return companyService.getCompanyCoupons(maxPrice, id);
     }
 }

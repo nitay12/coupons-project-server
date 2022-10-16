@@ -40,12 +40,12 @@ public class CustomerController {
         return customerService.getCustomerCouponsByCategory(category, setCustomerIdFromToken(jwtHeader));
     }
     //GetCustomerCoupons - by customerId long && maxPrice double - GET
-    @GetMapping("coupons/maxprice/{maxPrice}")
+    @GetMapping("coupons/maxPrice/{maxPrice}")
     public List<CouponEntity> getCouponByMaxPrice(@RequestHeader("Authorization") JwtWrapper jwtHeader, @PathVariable("maxPrice") final double maxPrice){
         return customerService.getCustomerCoupons(maxPrice, setCustomerIdFromToken(jwtHeader));
     }
     //Personal Bonus - Delete my account option - DELETE - add protection with userId to confirm
-    @DeleteMapping("DeleteCustomer/{password}")
+    @DeleteMapping("deleteCustomer/{password}")
     public void deleteCustomer(@RequestHeader("Authorization") JwtWrapper jwtHeader, String password) throws ApplicationException {
         if (adminService.getCustomerById(setCustomerIdFromToken(jwtHeader)).getPassword().equals(password)){
             adminService.deleteCustomer(setCustomerIdFromToken(jwtHeader));
