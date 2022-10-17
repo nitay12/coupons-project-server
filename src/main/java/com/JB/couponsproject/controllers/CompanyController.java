@@ -1,5 +1,6 @@
 package com.JB.couponsproject.controllers;
 
+import com.JB.couponsproject.dto.CompanyDto;
 import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.enums.Category;
@@ -48,6 +49,12 @@ public class CompanyController {
         return companyService.updateCoupon(couponDto);
     }
 
+    @PutMapping("coupons")
+    public Long updateCompany(@RequestBody CompanyDto companyDto, @RequestHeader("Authorization") JwtWrapper jwtHeader) throws ApplicationException {
+        return companyService.updateCompany(companyDto, getCompanyId(jwtHeader));
+    }
+
+
     //deleteCoupon - Long id,long companyId - delete
     @DeleteMapping("delete/{id}")
     public void deleteCoupon(@PathVariable("id") long id, @RequestHeader("Authorization") JwtWrapper jwtHeader) throws EntityNotFoundException {
@@ -65,8 +72,7 @@ public class CompanyController {
     //getCompanyCoupons - category , companyId - get
     @GetMapping("coupons/category/{category}")
     public List<CouponEntity> getCoupon(@RequestHeader("Authorization") JwtWrapper jwtHeader, @PathVariable("category") final Category category) {
-        Long id = getCompanyId(jwtHeader);
-        return companyService.getCompanyCoupons(category, id);
+        return companyService.getCompanyCoupons(category, getCompanyId(jwtHeader));
     }
 
     //getCompanyCoupons - maxPrice , companyId - get

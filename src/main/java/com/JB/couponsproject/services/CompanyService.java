@@ -1,5 +1,6 @@
 package com.JB.couponsproject.services;
 
+import com.JB.couponsproject.dto.CompanyDto;
 import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.entities.CompanyEntity;
 import com.JB.couponsproject.entities.CouponEntity;
@@ -110,7 +111,7 @@ public class CompanyService implements ClientService {
         couponRepository.deleteById(id);
     }
 
-    public void deleteCompanyCoupon(Long id, Long companyId) throws EntityNotFoundException {
+    public void deleteCompanyCoupon(Long id, Long companyId) {
         if (couponRepository.existsById(id) &&
                 couponRepository.findById(id).get().getCompanyId()==companyId) {
             couponRepository.deleteById(id);
@@ -154,5 +155,17 @@ public class CompanyService implements ClientService {
             }
         }
         return false;
+    }
+
+    public Long updateCompany(CompanyDto companyDto, Long id) throws ApplicationException {
+        if (companyRepository.existsById(companyDto.getId())){
+            throw new EntityNotFoundException(EntityType.COMPANY, companyDto.getId());
+        }
+        if (companyDto.getId()!=id){
+            throw new ApplicationException("You are not the one");
+        }
+        final CompanyEntity companyEntity = companyDto.toEntity();
+        companyRepository.saveAndFlush(companyEntity);
+        return companyEntity.getId();
     }
 }
