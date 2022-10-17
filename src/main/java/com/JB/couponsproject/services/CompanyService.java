@@ -33,7 +33,7 @@ public class CompanyService implements ClientService {
     @Getter
     private static Long companyId;
     private static String companyEmail;
-    private static UserType userType = UserType.COMPANY;
+    private static final UserType userType = UserType.COMPANY;
     Logger LOGGER = LoggerFactory.getLogger(AdminService.class);
 
 
@@ -69,13 +69,14 @@ public class CompanyService implements ClientService {
         return companyId;
     }
 
-    public long findIdByEmail(String email){
+    public long findIdByEmail(String email) {
         return companyRepository.findByEmail(email).get(0).getId();
 
     }
+
     public CouponEntity addCoupon(CouponDto couponDto) throws ApplicationException {
         //Same title
-        if (couponRepository.existsByTitleAndCompanyId(couponDto.getTitle(),companyId)) {
+        if (couponRepository.existsByTitleAndCompanyId(couponDto.getTitle(), companyId)) {
             throw new TitleExistException("This title is already exist");
         }
         return couponRepository.save(couponDto.toEntity());
@@ -107,16 +108,18 @@ public class CompanyService implements ClientService {
         if (!couponRepository.existsById(id)) {
             throw new EntityNotFoundException(EntityType.COUPON, id);
         }
-        LOGGER.info("Deleting coupon: "+id);
+        LOGGER.info("Deleting coupon: " + id);
         couponRepository.deleteById(id);
     }
 
-    public void deleteCompanyCoupon(Long id, Long companyId) {
-        if (couponRepository.existsById(id) &&
-                couponRepository.findById(id).get().getCompanyId()==companyId) {
-            couponRepository.deleteById(id);
+    public void deleteCompanyCoupon(Long id, Long companyId) throws EntityNotFoundException, ForbiddenException {
+        if (!couponRepository.existsById(id)) {
+            throw new EntityNotFoundException(EntityType.COUPON, id);
         }
-        else LOGGER.info("Cannot perform delete action");
+        if (!(couponRepository.findById(id).get().getCompanyId() == companyId)) {
+            throw new ForbiddenException("This coupon is not belong to the logged-in company");
+        }
+        couponRepository.deleteById(id);
     }
 
 
@@ -124,20 +127,20 @@ public class CompanyService implements ClientService {
         return couponRepository.getByCompanyId(companyId);
     }
 
-    public List<CouponEntity> getCompanyCoupons(Category category,long companyId) {
+    public List<CouponEntity> getCompanyCoupons(Category category, long companyId) {
         return couponRepository.getByCompanyIdAndCategory(companyId, category);
     }
 
-    public List<CouponEntity> getCompanyCoupons(double maxPrice,long companyId) {
+    public List<CouponEntity> getCompanyCoupons(double maxPrice, long companyId) {
         return couponRepository.findByCompanyIdAndPriceLessThan(companyId, maxPrice);
     }
+
     public CouponDto getOneCoupon(Long companyId, Long couponId) throws EntityNotFoundException {
         final List<CouponEntity> companyCoupons = getCompanyCoupons(companyId);
         final Optional<CouponEntity> coupon = companyCoupons.stream().filter(c -> c.getId().equals(companyId)).findAny();
-        if(coupon.isPresent()){
+        if (coupon.isPresent()) {
             return coupon.get().toDto();
-        }
-        else {
+        } else {
             throw new EntityNotFoundException("Coupon not found");
         }
     }
@@ -148,7 +151,7 @@ public class CompanyService implements ClientService {
         for (CouponEntity companyCoupon :
                 companyCouponsById) {
             if (companyCoupon.getTitle().equalsIgnoreCase(couponDto.getTitle())) {
-                if(companyCoupon.getId().equals(couponDto.getId())){
+                if (companyCoupon.getId().equals(couponDto.getId())) {
                     continue;
                 }
                 return true;
@@ -158,10 +161,10 @@ public class CompanyService implements ClientService {
     }
 
     public Long updateCompany(CompanyDto companyDto, Long id) throws ApplicationException {
-        if (companyRepository.existsById(companyDto.getId())){
+        if (companyRepository.existsById(companyDto.getId())) {
             throw new EntityNotFoundException(EntityType.COMPANY, companyDto.getId());
         }
-        if (companyDto.getId()!=id){
+        if (companyDto.getId() != id) {
             throw new ApplicationException("You are not the one");
         }
         final CompanyEntity companyEntity = companyDto.toEntity();

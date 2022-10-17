@@ -6,6 +6,7 @@ import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.exceptions.ApplicationException;
 import com.JB.couponsproject.exceptions.EntityNotFoundException;
+import com.JB.couponsproject.exceptions.ForbiddenException;
 import com.JB.couponsproject.security.JwtUtil;
 import com.JB.couponsproject.security.JwtWrapper;
 import com.JB.couponsproject.services.CompanyService;
@@ -56,8 +57,8 @@ public class CompanyController {
 
 
     //deleteCoupon - Long id,long companyId - delete
-    @DeleteMapping("delete/{id}")
-    public void deleteCoupon(@PathVariable("id") long id, @RequestHeader("Authorization") JwtWrapper jwtHeader) throws EntityNotFoundException {
+    @DeleteMapping("coupons/{id}")
+    public void deleteCoupon(@PathVariable("id") long id, @RequestHeader("Authorization") JwtWrapper jwtHeader) throws EntityNotFoundException, ForbiddenException {
         final Long companyId = getCompanyId(jwtHeader);
         companyService.deleteCompanyCoupon(id, companyId);
     }
