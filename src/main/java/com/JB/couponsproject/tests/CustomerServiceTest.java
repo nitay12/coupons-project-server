@@ -49,7 +49,7 @@ public class CustomerServiceTest implements CommandLineRunner {
             log.info(customerService.getCustomerCoupons(TestData.CUSTOMER_MAX_PRICE, TestData.CUSTOMER_ID).toString());
             log.info("get all customer coupons:");
             log.info(customerService.getCustomerCoupons(TestData.CUSTOMER_ID).toString());
-        } catch (ApplicationException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

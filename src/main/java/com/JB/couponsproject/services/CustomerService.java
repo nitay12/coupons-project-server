@@ -11,8 +11,11 @@ import com.JB.couponsproject.exceptions.EntityNotFoundException;
 import com.JB.couponsproject.exceptions.WrongCredentialsException;
 import com.JB.couponsproject.repositories.CouponRepository;
 import com.JB.couponsproject.repositories.CustomerRepository;
+import com.JB.couponsproject.tests.CompanyServiceTest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -32,7 +35,7 @@ public class CustomerService implements ClientService {
     private static Long customerId;
     private static String customerEmail;
     private final static UserType userType = UserType.CUSTOMER;
-
+    private final Logger logger = LoggerFactory.getLogger(CompanyServiceTest.class);
     //Methods: Login
     public boolean login(final String email, final String password) throws ApplicationException {
         final List<CustomerEntity> allCustomers = customerRepository.findAll();
@@ -64,21 +67,25 @@ public class CustomerService implements ClientService {
 
     //Methods: purchaseCoupon
     //verify values: coupon id exist, user id exist, user coupon relation wasn't established yet
-    public void purchaseCoupon(final Long couponId, final Long customerId) throws ApplicationException {
+    public void purchaseCoupon(final Long couponId, final Long customerId) {
         final Optional<CouponEntity> tmpCoupon = couponRepository.findById(couponId);
         if (tmpCoupon.isEmpty()) {
-            throw new ApplicationException("Coupon doesn't exist in the system.");
+            logger.info("Coupon "+couponId+" doesn't exist in the system.");
+            return;
         }
         final Optional<CustomerEntity> tmpCustomer = customerRepository.findById(customerId);
         if (tmpCustomer.isEmpty()) {
-            throw new ApplicationException("Customer ID isn't valid");
+            logger.info("Customer ID isn't valid");
+            return;
         }
         if (tmpCustomer.get().getCoupons().contains(tmpCoupon.get())) {
-            throw new ApplicationException("Coupon already in customer's coupons list");
+            logger.info("Coupon already in customer's coupons list");
+            return;
         }
         CouponEntity coupon = tmpCoupon.get();
         if (coupon.getAmount() <= 0) {
-            throw new ApplicationException("Coupon out of stock");
+            logger.info("Coupon out of stock");
+            return;
         }
         CustomerEntity customer = tmpCustomer.get();
         coupon.setAmount(coupon.getAmount() - 1);
