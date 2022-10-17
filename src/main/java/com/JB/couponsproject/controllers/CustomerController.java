@@ -1,5 +1,6 @@
 package com.JB.couponsproject.controllers;
 
+import com.JB.couponsproject.dto.CustomerDto;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.exceptions.ApplicationException;
@@ -53,6 +54,11 @@ public class CustomerController {
     }
 
     //Update profile - PUT
+    @PutMapping("update")
+    public Long updateCustomer(@RequestBody CustomerDto customerDto, @RequestHeader("Authorization") JwtWrapper jwtHeader) throws ApplicationException {
+        return customerService.updateCustomer(customerDto, setCustomerIdFromToken(jwtHeader));
+    }
+
 
 
 }

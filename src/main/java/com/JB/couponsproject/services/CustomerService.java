@@ -1,10 +1,13 @@
 package com.JB.couponsproject.services;
 
+import com.JB.couponsproject.dto.CustomerDto;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.entities.CustomerEntity;
 import com.JB.couponsproject.enums.Category;
+import com.JB.couponsproject.enums.EntityType;
 import com.JB.couponsproject.enums.UserType;
 import com.JB.couponsproject.exceptions.ApplicationException;
+import com.JB.couponsproject.exceptions.EntityNotFoundException;
 import com.JB.couponsproject.exceptions.WrongCredentialsException;
 import com.JB.couponsproject.repositories.CouponRepository;
 import com.JB.couponsproject.repositories.CustomerRepository;
@@ -106,5 +109,17 @@ public class CustomerService implements ClientService {
     //TODO: Check if customer exists
     public CustomerEntity getLoggedInCustomer(final long customerId) {
         return customerRepository.findById(customerId).get();
+    }
+
+    public Long updateCustomer(CustomerDto customerDto, long id) throws ApplicationException {
+        if (!customerRepository.existsById(customerDto.getId())){
+            throw new EntityNotFoundException(EntityType.CUSTOMER, customerDto.getId());
+        }
+        if (customerDto.getId()!=id){
+            throw new ApplicationException("You are not the one!");
+        }
+        final CustomerEntity customer = customerDto.toEntity();
+        customerRepository.saveAndFlush(customer);
+        return customer.getId();
     }
 }
