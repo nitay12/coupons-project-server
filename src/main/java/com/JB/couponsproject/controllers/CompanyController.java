@@ -49,7 +49,7 @@ public class CompanyController {
         return companyService.updateCoupon(couponDto);
     }
 
-    @PutMapping("coupons")
+    @PutMapping("update")
     public Long updateCompany(@RequestBody CompanyDto companyDto, @RequestHeader("Authorization") JwtWrapper jwtHeader) throws ApplicationException {
         return companyService.updateCompany(companyDto, getCompanyId(jwtHeader));
     }
