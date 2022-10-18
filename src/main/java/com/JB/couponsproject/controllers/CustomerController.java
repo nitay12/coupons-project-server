@@ -1,6 +1,5 @@
 package com.JB.couponsproject.controllers;
 
-import com.JB.couponsproject.dto.CompanyDto;
 import com.JB.couponsproject.dto.CustomerDto;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.enums.Category;
