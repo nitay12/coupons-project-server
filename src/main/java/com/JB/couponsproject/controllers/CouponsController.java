@@ -1,5 +1,6 @@
 package com.JB.couponsproject.controllers;
 
+import com.JB.couponsproject.dto.CouponDto;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.enums.Category;
 import com.JB.couponsproject.repositories.CouponRepository;
@@ -19,6 +20,11 @@ public class CouponsController {
     @GetMapping("all")
     public List<CouponEntity> getAllCoupons(){
         return couponRepository.findAll();
+    }
+
+    @GetMapping("single/{id}")
+    public CouponDto getSingleCoupon(@PathVariable("category") final long id){
+        return couponRepository.findById(id).get().toDto();
     }
 
     @GetMapping("category/{category}")
