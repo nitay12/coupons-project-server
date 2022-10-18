@@ -32,7 +32,6 @@ public class CompanyServiceTest implements CommandLineRunner {
     @Override
     public void run(String... args) {
         try {
-            //Tests
             //Login test
             try {
                 loginManager.login(UserType.COMPANY, TestData.COMPANY_LOGIN_EMAIL, TestData.LOGIN_WRONG_PASSWORD);
