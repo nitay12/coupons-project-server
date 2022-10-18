@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("customer")
+@CrossOrigin
 public class CustomerController {
     private final CustomerService customerService;
     //required for profile manipulation and delete account button.
