@@ -27,10 +27,8 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class CustomerService implements ClientService {
-    //Dependencies
     private final CouponRepository couponRepository;
     private final CustomerRepository customerRepository;
-    //State
     @Getter
     private static Long customerId;
     private static String customerEmail;
@@ -93,8 +91,6 @@ public class CustomerService implements ClientService {
         customerRepository.save(customer);
     }
 
-    //Methods: get Customer's Coupons - all
-    //customer id taken from state
     public List<CouponEntity> getCustomerCoupons(final long customerId) {
 //        final List<CouponEntity> coupons = couponRepository.getCustomerCoupons(customerId);
 //        return coupons;
@@ -112,8 +108,6 @@ public class CustomerService implements ClientService {
         return couponRepository.getCustomerCoupons(customerId).stream().filter(x -> x.getPrice() <= price).toList();
     }
 
-    //TODO: Check if customer is logged in with LoginManager
-    //TODO: Check if customer exists
     public CustomerEntity getLoggedInCustomer(final long customerId) {
         return customerRepository.findById(customerId).get();
     }

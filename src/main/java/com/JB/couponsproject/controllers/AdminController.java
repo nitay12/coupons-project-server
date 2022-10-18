@@ -42,7 +42,6 @@ public class AdminController {
 
     @PutMapping("companies")
     public CompanyDto updateCompany(@RequestBody CompanyDto company, @RequestHeader("Authorization") JwtWrapper jwtHeader) throws ApplicationException {
-        //TODO: return the update company method to adminService
         isAdminOrForbidden(jwtHeader);
         return adminService.updateCompany(company);
     }

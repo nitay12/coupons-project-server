@@ -76,8 +76,7 @@ public class CompanyService implements ClientService {
     }
 
     public long updateCoupon(CouponDto couponDto) throws ApplicationException {
-        //Verifications
-        //Coupon not exist
+        //Coupon id already exist
         if (!couponRepository.existsById(couponDto.getId())) {
             throw new EntityNotFoundException(EntityType.COUPON, couponDto.getId());
         }
@@ -89,7 +88,6 @@ public class CompanyService implements ClientService {
         }
         //Company ID not match
         if (!couponRepository.existsByIdAndCompanyId(couponDto.getId(), companyId)) {
-            //TODO: change to AuthException
             throw new UpdateException("Wrong company ID");
         }
         final CouponEntity couponEntity = couponDto.toEntity();
@@ -138,7 +136,6 @@ public class CompanyService implements ClientService {
         }
     }
 
-    //TODO: check if can be done by JPA init methods
     private boolean isTitleExistByCompanyId(long companyId, CouponDto couponDto) {
         final List<CouponEntity> companyCouponsById = couponRepository.getByCompanyId(companyId);
         for (CouponEntity companyCoupon :
