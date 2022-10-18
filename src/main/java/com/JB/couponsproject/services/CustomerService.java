@@ -129,4 +129,8 @@ public class CustomerService implements ClientService {
         customerRepository.saveAndFlush(customer);
         return customer.getId();
     }
+
+    public CustomerDto getCustomerDetails(Long customerId) {
+        return customerRepository.findById(customerId).get().toDto();
+    }
 }

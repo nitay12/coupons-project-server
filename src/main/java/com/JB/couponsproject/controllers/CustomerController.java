@@ -1,5 +1,6 @@
 package com.JB.couponsproject.controllers;
 
+import com.JB.couponsproject.dto.CompanyDto;
 import com.JB.couponsproject.dto.CustomerDto;
 import com.JB.couponsproject.entities.CouponEntity;
 import com.JB.couponsproject.enums.Category;
@@ -59,6 +60,9 @@ public class CustomerController {
         return customerService.updateCustomer(customerDto, setCustomerIdFromToken(jwtHeader));
     }
 
-
+    @GetMapping("details")
+    public CustomerDto getDetails(@RequestHeader("Authorization") JwtWrapper jwtHeader) {
+        return customerService.getCustomerDetails(setCustomerIdFromToken(jwtHeader));
+    }
 
 }

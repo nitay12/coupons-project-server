@@ -69,6 +69,11 @@ public class CompanyController {
         return companyService.getCompanyCoupons(id);
     }
 
+    @GetMapping("details")
+    public CompanyDto getDetails(@RequestHeader("Authorization") JwtWrapper jwtHeader) {
+        return companyService.getCompanyDetails(getCompanyId(jwtHeader));
+    }
+
     @GetMapping("coupon/{id}")
     public CouponDto getCoupon(@PathVariable("id") long id, @RequestHeader("Authorization") JwtWrapper jwtHeader) throws EntityNotFoundException {
         Long companyId = getCompanyId(jwtHeader);

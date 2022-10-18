@@ -29,13 +29,11 @@ public class CompanyService implements ClientService {
     //Dependencies
     private final CompanyRepository companyRepository;
     private final CouponRepository couponRepository;
-    private final CustomerRepository customerRepository;
     @Getter
     private static Long companyId;
     private static String companyEmail;
     private static final UserType userType = UserType.COMPANY;
     Logger LOGGER = LoggerFactory.getLogger(AdminService.class);
-
 
     //Methods
     public boolean login(String email, String password) throws ApplicationException {
@@ -67,11 +65,6 @@ public class CompanyService implements ClientService {
     @Override
     public long getId() {
         return companyId;
-    }
-
-    public long findIdByEmail(String email) {
-        return companyRepository.findByEmail(email).get(0).getId();
-
     }
 
     public CouponEntity addCoupon(CouponDto couponDto) throws ApplicationException {
@@ -170,5 +163,9 @@ public class CompanyService implements ClientService {
         final CompanyEntity companyEntity = companyDto.toEntity();
         companyRepository.saveAndFlush(companyEntity);
         return companyEntity.getId();
+    }
+
+    public CompanyDto getCompanyDetails(long companyId){
+        return companyRepository.findById(companyId).get().toDto();
     }
 }
