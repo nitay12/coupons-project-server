@@ -23,7 +23,7 @@ public class CouponsController {
     }
 
     @GetMapping("single/{id}")
-    public CouponDto getSingleCoupon(@PathVariable("category") final long id){
+    public CouponDto getSingleCoupon(@PathVariable("id") final long id){
         return couponRepository.findById(id).get().toDto();
     }
 
